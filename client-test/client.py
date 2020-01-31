@@ -9,4 +9,8 @@ client_socket= socket.socket(socket.AF_INET,socket.SOCK_STREAM);
 client_socket.bind(("127.0.0.1",0))
 client_socket.connect((server_address,server_port))
 
-client_socket.send(b'123')
+for item in range(0,100):
+    client_socket.send(b'123')
+
+
+print("test-success!")

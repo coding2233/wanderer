@@ -9,8 +9,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Run a multi-line script
+    - name: Run build-test script
       run: |
         mkdir build && cd build
         cmake ../ && make
-        ./wanderer
+        ./wanderer&
+        python3 ../client-test/client.py
+    
+
+  

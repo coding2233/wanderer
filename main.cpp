@@ -9,10 +9,33 @@
 #define SERVER_PORT 2233
 #define BUFFER_MAX_SIZE 1024
 
+//设置非阻塞模式
+int setnonblocking(int sfd)
+{
+    int flags, s;
+
+    //得到文件状态标志
+    flags = fcntl(sfd, F_GETFL, 0);
+    if (flags == -1)
+    {
+        return -1;
+    }
+
+    //设置文件状态标志
+    flags |= O_NONBLOCK;
+    s = fcntl(sfd, F_SETFL, flags);
+    if (s == -1)
+    {
+        return -1;
+    }
+
+    return 0;
+}
+
 int main()
 {
 
-    struct epoll_event ev, *events;
+    struct epoll_event ev, events[MAX_EVENTS];
 
     int nfds;
     int conn_sock;
@@ -29,26 +52,59 @@ int main()
     server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
     //绑定
-    bind(lisenSocket, (struct sockaddr *)&server_addr, sizeof(server_addr));
-    listen(lisenSocket, 20);
+    if (bind(lisenSocket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+    {
+        throw std::runtime_error("lisenSocket bind error");
+    }
+    //监听
+    if (listen(lisenSocket, 20) < 0)
+    {
+        throw std::runtime_error("lisenSocket listen error");
+    }
 
     //创建epoll
     int epollfd = epoll_create(MAX_EVENTS);
-    ev.events = EPOLLIN;
+    ev.events = EPOLLIN | EPOLLET;
     ev.data.fd = lisenSocket;
-    epoll_ctl(epollfd, EPOLL_CTL_ADD, lisenSocket, &ev);
+    if (epoll_ctl(epollfd, EPOLL_CTL_ADD, lisenSocket, &ev) < 0)
+    {
+        throw std::runtime_error("epoll ctrl error");
+    }
 
-    std::cout << " _____ ____   ___  _     _   " << std::endl;
-    std::cout << "| ____|  _ \\ / _ \\| |   | |    " << std::endl;
-    std::cout << "|  _| | |_) | | | | |   | |    " << std::endl;
-    std::cout << "| |___|  __/| |_| | |___| |___ " << std::endl;
-    std::cout << "|_____|_|    \\___/|_____|_____|" << std::endl;
+    std::cout << "**"
+              << "*******************************"
+              << "**" << std::endl;
+    std::cout << "**"
+              << " _____ ____   ___  _     _     "
+              << "**" << std::endl;
+    std::cout << "**"
+              << "| ____|  _ \\ / _ \\| |   | |    "
+              << "**" << std::endl;
+    std::cout << "**"
+              << "|  _| | |_) | | | | |   | |    "
+              << "**" << std::endl;
+    std::cout << "**"
+              << "| |___|  __/| |_| | |___| |___ "
+              << "**" << std::endl;
+    std::cout << "**"
+              << "|_____|_|    \\___/|_____|_____|"
+              << "**" << std::endl;
+    std::cout << "**"
+              << "*******************************"
+              << "**" << std::endl;
 
     std::cout << "main hello world!!!" << std::endl;
+
+    // events = calloc(MAX_EVENTS, sizeof(ev));
 
     while (true)
     {
         nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
+
+        if (nfds == -1)
+        {
+            throw std::runtime_error("epoll wait error :-1");
+        }
 
         for (int i = 0; i < nfds; i++)
         {
@@ -84,6 +140,8 @@ int main()
 
         //    epoll_wait(epfd,event,)
     }
+
+    shutdown(lisenSocket, SHUT_RD);
 
     return 0;
 }
