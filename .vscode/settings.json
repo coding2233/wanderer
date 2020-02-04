@@ -2,6 +2,8 @@
     "files.associations": {
         "stdexcept": "cpp",
         "future": "cpp",
-        "new": "cpp"
-    }
+        "new": "cpp",
+        "functional": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

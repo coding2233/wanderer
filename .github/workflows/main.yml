@@ -13,7 +13,7 @@ jobs:
       run: |
         mkdir build && cd build
         cmake ../ && make
-        ./wanderer&
+        ./wanderer &
         python3 ../client-test/client.py
     
 

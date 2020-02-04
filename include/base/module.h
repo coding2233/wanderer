@@ -1,6 +1,8 @@
 #ifndef __MODULE_H__
 #define __MODULE_H__
 
+#include "base/reflector.h"
+
 class Module
 {
 private:
