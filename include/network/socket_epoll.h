@@ -17,12 +17,12 @@ private:
     //服务端监听的socket
     int listen_socket_;
     //epoll的事件
-    struct epoll_event ev_, events_[MAX_EVENTS];
+    struct epoll_event ev_, *events_;
     //sock 地址
     struct sockaddr_in server_addr_, client_addr_;
     //客户端的长度
     socklen_t client_len_;
-    //epoll install
+    //epoll instance
     int epoll_fd_;
     //有fd待处理数据的数目
     int nfds_;

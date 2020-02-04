@@ -1,11 +1,16 @@
-#include "socket/socket_epoll.h"
+#include "network/socket_epoll.h"
 
 SocketEpoll::SocketEpoll(/* args */)
 {
+    //地址长度
+    client_len_ = sizeof(struct sockaddr);
+    //事件
+    events_ = new epoll_event[MAX_EVENTS];
 }
 
 SocketEpoll::~SocketEpoll()
 {
+    delete[] events_;
 }
 
 void SocketEpoll::SetLogo()
@@ -37,8 +42,6 @@ void SocketEpoll::SetLogo()
 
 void SocketEpoll::Setup(int port)
 {
-    //地址长度
-    client_len_ = sizeof(struct sockaddr);
     //设置tcp 非阻塞模式 ，0: 为根据传输类型，选择对应的协议
     listen_socket_ = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
     bzero(&server_addr_, sizeof(server_addr_));
@@ -100,14 +103,15 @@ void SocketEpoll::Loop()
                 if (size > 0)
                 {
                     std::cout << buffer_ << std::endl;
+                    //          send(events_[i].data.fd, buffer_, size, 0);
                     /* code */
                 }
             }
-            //发送
-            else if (events_[i].events & EPOLLOUT)
-            {
-                /* code */
-            }
+            // //发送
+            // else if (events_[i].events & EPOLLOUT)
+            // {
+            //     /* code */
+            // }
         }
     }
 }

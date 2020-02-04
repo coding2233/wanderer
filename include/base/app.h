@@ -1,16 +1,17 @@
 #ifndef __APP_H__
 #define __APP_H__
 
-#include "socket/socket_epoll.h"
+#include "base/module.h"
+#include "network/network_module.h"
 
 #include <iostream>
-
-#define SERVER_PORT 2233
+#include <map>
 
 class App
 {
 private:
-    SocketEpoll *socket_epoll_;
+    std::map<std::string, Module *> modules_;
+    std::map<std::string, Module *>::iterator module_iter_;
 
 private:
     //初始化
@@ -24,7 +25,7 @@ public:
     App(/* args */);
     ~App();
     //运行
-    void Run();
+    void Run(int argc, char *args[]);
 };
 
 #endif

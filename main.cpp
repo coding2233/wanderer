@@ -7,7 +7,7 @@ int main(int argc, char *args[])
     App app;
     try
     {
-        app.Run();
+        app.Run(argc, args);
     }
     catch (const std::exception &e)
     {
