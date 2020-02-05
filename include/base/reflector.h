@@ -5,23 +5,28 @@
 #include <memory>
 #include <functional>
 
-#define FUNC std::function<void *(void)>
-//#define REGISTER(CLASS_NAME)
+#define FUNC std::function<void *()>
 
 class Reflector
 {
 private:
     //函数类
-    static std::map<std::string, FUNC> class_function_map_;
-    // std::shared_ptr
+    std::map<std::string, FUNC> class_function_map_;
+
 public:
     Reflector(/* args */);
     ~Reflector();
 
+    static Reflector *GetInstance()
+    {
+        static Reflector instance;
+        return &instance;
+    }
+
     //注册类名
-    static void Register(const std::string &class_name, FUNC create_function);
+    void Register(const std::string &class_name, FUNC create_function);
     //创建对象
-    static void Create(const std::string &class_name);
+    void Create(const std::string &class_name);
 };
 
 #endif

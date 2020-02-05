@@ -23,4 +23,14 @@ public:
     void OnClose() override;
 };
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+    void *CreateNetworkModule();
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

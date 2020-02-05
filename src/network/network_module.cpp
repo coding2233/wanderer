@@ -24,3 +24,8 @@ void NetworkModule::OnClose()
     socket_epoll_->Close();
     delete socket_epoll_;
 }
+
+void *CreateNetworkModule()
+{
+    return new NetworkModule();
+}
