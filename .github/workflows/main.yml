@@ -14,7 +14,7 @@ jobs:
         mkdir build && cd build
         cmake ../ && make
         ./wanderer &
-        python3 ../client-test/client.py
+        python3 ../client-test/client.py &
     
 
   

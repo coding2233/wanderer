@@ -1,5 +1,5 @@
-#ifndef __EPOLLSOCKET_H__
-#define __EPOLLSOCKET_H__
+#ifndef __SOCKET_EPOLL_H__
+#define __SOCKET_EPOLL_H__
 
 #include <iostream>
 #include <sys/socket.h>

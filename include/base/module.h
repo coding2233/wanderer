@@ -1,14 +1,15 @@
 #ifndef __MODULE_H__
 #define __MODULE_H__
 
-#include "base/reflector.h"
+class App;
 
 class Module
 {
 private:
     /* data */
+protected:
 public:
-    Module(/* args */);
+    Module();
     ~Module();
 
     //初始化
@@ -18,5 +19,4 @@ public:
     //关闭
     virtual void OnClose();
 };
-
 #endif

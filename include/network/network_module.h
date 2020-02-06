@@ -1,5 +1,5 @@
-#ifndef __NETWORKMODULE_H__
-#define __NETWORKMODULE_H__
+#ifndef __NETWORK_MODULE_H__
+#define __NETWORK_MODULE_H__
 
 #include "base/module.h"
 #include "network/socket_epoll.h"
@@ -12,8 +12,8 @@ private:
     SocketEpoll *socket_epoll_;
 
 public:
-    NetworkModule(
-        /* args */);
+    NetworkModule();
+
     ~NetworkModule();
     //初始化函数
     void OnInit() override;
@@ -23,14 +23,14 @@ public:
     void OnClose() override;
 };
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-    void *CreateNetworkModule();
+// #ifdef __cplusplus
+// extern "C"
+// {
+// #endif
+//     void *CreateNetworkModule();
 
-#ifdef __cplusplus
-}
-#endif
+// #ifdef __cplusplus
+// }
+// #endif
 
 #endif

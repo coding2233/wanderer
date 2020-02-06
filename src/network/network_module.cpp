@@ -1,6 +1,6 @@
 #include "network/network_module.h"
 
-NetworkModule::NetworkModule(/* args */)
+NetworkModule::NetworkModule()
 {
 }
 
@@ -12,6 +12,8 @@ void NetworkModule::OnInit()
 {
     socket_epoll_ = new SocketEpoll;
     socket_epoll_->Setup(SERVER_PORT);
+
+    // app_->GetModule("network");
 }
 
 void NetworkModule::OnUpdate()
@@ -25,7 +27,7 @@ void NetworkModule::OnClose()
     delete socket_epoll_;
 }
 
-void *CreateNetworkModule()
-{
-    return new NetworkModule();
-}
+// void *CreateNetworkModule()
+// {
+//     return new NetworkModule();
+// }

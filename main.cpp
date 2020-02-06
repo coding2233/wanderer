@@ -1,6 +1,7 @@
+#include "base/app.h"
+
 #include <iostream>
 #include <cstdlib>
-#include "base/app.h"
 
 int main(int argc, char *args[])
 {
