@@ -5,8 +5,9 @@ class App;
 
 class Module
 {
-private:
+protected:
     /* data */
+
 protected:
 public:
     Module();

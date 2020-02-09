@@ -1,8 +1,5 @@
 #include "base/app.h"
 
-std::map<std::string, Module *> App::modules_;
-std::map<std::string, Module *>::iterator App::module_iter_;
-
 App::App()
 {
 }
@@ -19,15 +16,15 @@ void App::Run(int argc, char *args[])
     CleanUp();
 }
 
-Module *App::GetModule(const std::string &name)
-{
-    module_iter_ = modules_.find(name);
-    if (module_iter_ != modules_.end())
-    {
-        return module_iter_->second;
-    }
-    return nullptr;
-}
+// Module *App::GetModule(const std::string &name)
+// {
+//     module_iter_ = modules_.find(name);
+//     if (module_iter_ != modules_.end())
+//     {
+//         return module_iter_->second;
+//     }
+//     return nullptr;
+// }
 
 void App::InitModule()
 {

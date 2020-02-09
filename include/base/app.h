@@ -10,8 +10,8 @@
 class App
 {
 private:
-    static std::map<std::string, Module *> modules_;
-    static std::map<std::string, Module *>::iterator module_iter_;
+    std::map<std::string, Module *> modules_;
+    std::map<std::string, Module *>::iterator module_iter_;
 
 private:
     //初始化模块
@@ -29,7 +29,7 @@ public:
     //运行
     void Run(int argc, char *args[]);
     //获取模块
-    static Module *GetModule(const std::string &name);
+    //Module *GetModule(const std::string &name);
 };
 
 #endif

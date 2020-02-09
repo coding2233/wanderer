@@ -28,7 +28,6 @@ public:
 // {
 // #endif
 //     void *CreateNetworkModule();
-
 // #ifdef __cplusplus
 // }
 // #endif

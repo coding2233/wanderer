@@ -1,5 +1,9 @@
 # wanderer
 
+### 架构设计
+* 使用在线网站: [https://www.draw.io/](https://www.draw.io/)
+* 打开本地`doc/develop.drawio`文件
+
 ### 规范
 
 * `c++`命名约束

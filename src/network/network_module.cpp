@@ -12,8 +12,6 @@ void NetworkModule::OnInit()
 {
     socket_epoll_ = new SocketEpoll;
     socket_epoll_->Setup(SERVER_PORT);
-
-    // app_->GetModule("network");
 }
 
 void NetworkModule::OnUpdate()
