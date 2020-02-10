@@ -4,12 +4,16 @@
 #include "base/module.h"
 #include "network/socket_epoll.h"
 
+#include <functional>
+
 #define SERVER_PORT 2233
 
 class NetworkModule : public Module
 {
 private:
     SocketEpoll *socket_epoll_;
+
+    void OnReceiveData(int fd, unsigned char *data, int size);
 
 public:
     NetworkModule();

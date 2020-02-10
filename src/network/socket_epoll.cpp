@@ -40,8 +40,10 @@ void SocketEpoll::SetLogo()
     std::cout << "server runing ..." << std::endl;
 }
 
-void SocketEpoll::Setup(int port)
+void SocketEpoll::Setup(int port, std::function<void(int, unsigned char *data, int size)> callback)
 {
+    callback_ = callback;
+
     //设置tcp 非阻塞模式 ，0: 为根据传输类型，选择对应的协议
     listen_socket_ = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
     bzero(&server_addr_, sizeof(server_addr_));
@@ -102,7 +104,10 @@ void SocketEpoll::Loop()
                 auto size = recv(events_[i].data.fd, buffer_, BUFFER_MAX_SIZE, 0);
                 if (size > 0)
                 {
-                    std::cout << buffer_ << std::endl;
+                    std::cout
+                        << buffer_ << std::endl;
+                    callback_(events_[i].data.fd, buffer_, size);
+
                     //          send(events_[i].data.fd, buffer_, size, 0);
                     /* code */
                 }

@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <string.h>
+#include <functional>
 
 #define MAX_EVENTS 1024
 #define BUFFER_MAX_SIZE 1024
@@ -31,6 +32,8 @@ private:
     //缓存数据
     unsigned char buffer_[BUFFER_MAX_SIZE];
 
+    std::function<void(int, unsigned char *data, int size)> callback_;
+
 private:
     //设置非阻塞模式
     int SetNonblocking(int sfd);
@@ -41,7 +44,7 @@ public:
     SocketEpoll(/* args */);
     ~SocketEpoll();
     //设置
-    void Setup(int port);
+    void Setup(int port, std::function<void(int, unsigned char *data, int size)> callback);
     //循环
     void Loop();
     //关闭
