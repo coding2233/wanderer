@@ -1,4 +1,5 @@
 #include "base/app.h"
+
 namespace wanderer
 {
 App::App()
@@ -63,4 +64,4 @@ void App::CleanUp()
     }
     modules_.clear();
 }
-}
+} // namespace wanderer
