@@ -1,18 +1,21 @@
 #ifndef __SOCKET_EPOLL_H__
 #define __SOCKET_EPOLL_H__
 
+#include "network/socket_base.h"
+
 #include <iostream>
 #include <sys/socket.h>
 #include <sys/epoll.h>
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <string.h>
-#include <functional>
+
+namespace wanderer
+{
 
 #define MAX_EVENTS 1024
-#define BUFFER_MAX_SIZE 1024
 
-class SocketEpoll
+class SocketEpoll : public SocketBase
 {
 private:
     //服务端监听的socket
@@ -29,26 +32,27 @@ private:
     int nfds_;
     //连接的sock
     int conn_sock_;
-    //缓存数据
-    unsigned char buffer_[BUFFER_MAX_SIZE];
-
-    std::function<void(int, unsigned char *data, int size)> callback_;
 
 private:
     //设置非阻塞模式
     int SetNonblocking(int sfd);
-    //设置logo
-    void SetLogo();
 
 public:
     SocketEpoll(/* args */);
     ~SocketEpoll();
     //设置
-    void Setup(int port, std::function<void(int, unsigned char *data, int size)> callback);
+    virtual void Setup(int port, std::function<void(int)> connectedCallback, std::function<void(int, const char *data, int size)> receiveCallback) override;
     //循环
-    void Loop();
+    void Loop() override;
     //关闭
-    void Close();
+    void Close() override;
+    //发送数据
+    int SendData(int fd, const char *data, int size) override;
+
+protected:
+    //设置logo
+    void SetLogo() override;
 };
 
+} // namespace wanderer
 #endif

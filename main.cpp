@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cstdlib>
 
+using namespace wanderer;
+
 int main(int argc, char *args[])
 {
     App app;

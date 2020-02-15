@@ -1,5 +1,6 @@
 #include "base/module.h"
-
+namespace wanderer
+{
 Module::Module()
 {
 }
@@ -18,4 +19,5 @@ void Module::OnUpdate()
 
 void Module::OnClose()
 {
+}
 }

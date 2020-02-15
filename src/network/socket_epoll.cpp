@@ -1,4 +1,6 @@
 #include "network/socket_epoll.h"
+namespace wanderer
+{
 
 SocketEpoll::SocketEpoll(/* args */)
 {
@@ -11,6 +13,11 @@ SocketEpoll::SocketEpoll(/* args */)
 SocketEpoll::~SocketEpoll()
 {
     delete[] events_;
+}
+
+int SocketEpoll::SendData(int fd, const char *data, int size)
+{
+    return send(fd, data, size, 0);
 }
 
 void SocketEpoll::SetLogo()
@@ -40,9 +47,12 @@ void SocketEpoll::SetLogo()
     std::cout << "server runing ..." << std::endl;
 }
 
-void SocketEpoll::Setup(int port, std::function<void(int, unsigned char *data, int size)> callback)
+void SocketEpoll::Setup(int port, std::function<void(int)> connectedCallback, std::function<void(int, const char *data, int size)> receiveCallback)
 {
-    callback_ = callback;
+    // connectedCallback_ = connectedCallback;
+    // receiveCallback_ = receiveCallback;
+
+    SocketBase::Setup(port, connectedCallback, receiveCallback);
 
     //设置tcp 非阻塞模式 ，0: 为根据传输类型，选择对应的协议
     listen_socket_ = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
@@ -95,6 +105,7 @@ void SocketEpoll::Loop()
             ev_.events = EPOLLIN | EPOLLOUT;
             ev_.data.fd = conn_sock_;
             epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, conn_sock_, &ev_);
+            connectedCallback_(conn_sock_);
         }
         else
         {
@@ -104,11 +115,7 @@ void SocketEpoll::Loop()
                 auto size = recv(events_[i].data.fd, buffer_, BUFFER_MAX_SIZE, 0);
                 if (size > 0)
                 {
-                    std::cout
-                        << buffer_ << std::endl;
-                    callback_(events_[i].data.fd, buffer_, size);
-
-                    //          send(events_[i].data.fd, buffer_, size, 0);
+                    receiveCallback_(events_[i].data.fd, buffer_, size);
                     /* code */
                 }
             }
@@ -125,3 +132,4 @@ void SocketEpoll::Close()
 {
     shutdown(listen_socket_, SHUT_RD);
 }
+} // namespace wanderer

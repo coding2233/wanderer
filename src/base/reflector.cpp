@@ -1,5 +1,6 @@
 #include "base/reflector.h"
-
+namespace wanderer
+{
 Reflector::Reflector(/* args */)
 {
 }
@@ -21,4 +22,5 @@ void Reflector::Create(const std::string &class_name)
         iter->second();
         /* code */
     }
+}
 }

@@ -5,6 +5,8 @@
 #include <memory>
 #include <functional>
 
+namespace wanderer
+{
 #define FUNC std::function<void *()>
 
 class Reflector
@@ -28,5 +30,6 @@ public:
     //创建对象
     void Create(const std::string &class_name);
 };
+} // namespace wanderer
 
 #endif

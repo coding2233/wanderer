@@ -1,6 +1,8 @@
 #ifndef __MODULE_H__
 #define __MODULE_H__
 
+namespace wanderer
+{
 class App;
 
 class Module
@@ -20,4 +22,5 @@ public:
     //关闭
     virtual void OnClose();
 };
+} // namespace wanderer
 #endif

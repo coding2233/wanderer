@@ -6,7 +6,8 @@
 
 #include <iostream>
 #include <map>
-
+namespace wanderer
+{
 class App
 {
 private:
@@ -31,5 +32,5 @@ public:
     //获取模块
     //Module *GetModule(const std::string &name);
 };
-
+} // namespace wanderer
 #endif
