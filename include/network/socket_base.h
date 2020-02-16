@@ -23,7 +23,7 @@ public:
     //关闭
     virtual void Close() = 0;
     //发送数据
-    virtual int SendData(int fd, const char *data, int size) = 0;
+    virtual int SendData(int fd, const char *data, size_t size) = 0;
 
 protected:
     //缓存数据

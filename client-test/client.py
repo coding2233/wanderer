@@ -11,7 +11,8 @@ client_socket.connect((server_address,server_port))
 #client_socket.setblocking(False)
 
 for item in range(0,100):
-    client_socket.send(b'123')
+    data="0010223345"
+    client_socket.send(str.encode(data))
 
 
 print("test-success!")

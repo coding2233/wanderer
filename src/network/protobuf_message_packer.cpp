@@ -11,13 +11,19 @@ ProtobufMessagePacker::~ProtobufMessagePacker()
 {
 }
 
-int ProtobufMessagePacker::ToBytes(const google::protobuf::Message *message)
+size_t ProtobufMessagePacker::ToBytes(const google::protobuf::Message &message)
 {
-    const size_t size = message->ByteSizeLong();
-    char data[size];
-    message->SerializeToArray(&data, size);
+    //清理原来的数据
+    if (buffer_ != nullptr)
+    {
+        delete buffer_;
+    }
 
-    return 0;
+    const size_t size = message.ByteSizeLong();
+    buffer_ = new char[size];
+    message.SerializeToArray(buffer_, size);
+
+    return size;
 }
 
 } // namespace wanderer

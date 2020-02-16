@@ -15,7 +15,7 @@ SocketEpoll::~SocketEpoll()
     delete[] events_;
 }
 
-int SocketEpoll::SendData(int fd, const char *data, int size)
+int SocketEpoll::SendData(int fd, const char *data, size_t size)
 {
     return send(fd, data, size, 0);
 }

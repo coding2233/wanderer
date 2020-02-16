@@ -20,10 +20,10 @@ private:
     //socket epoll
     SocketBase *socket_;
     //session map
-    std::map<int, Session> sessions_;
-    std::map<int, Session>::iterator sessions_iter_;
+    std::map<int, Session *> sessions_;
+    std::map<int, Session *>::iterator sessions_iter_;
     //消息打包
-    MessagePacker<google::protobuf::Message> *message_packer_;
+    ProtobufMessagePacker *message_packer_;
     //接收数据
     void OnReceiveData(int fd, const char *data, int size);
     //发送数据

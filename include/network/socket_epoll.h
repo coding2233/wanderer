@@ -47,7 +47,7 @@ public:
     //关闭
     void Close() override;
     //发送数据
-    int SendData(int fd, const char *data, int size) override;
+    int SendData(int fd, const char *data, size_t size) override;
 
 protected:
     //设置logo

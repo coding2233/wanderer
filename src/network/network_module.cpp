@@ -34,19 +34,28 @@ void NetworkModule::OnClose()
 
 void NetworkModule::OnReceiveData(int fd, const char *data, int size)
 {
-    std::cout << "NetworkModule OnReceive Data" << fd << "  ##  " << data << "  ##  " << size << std::endl;
+    // std::cout << "NetworkModule OnReceive Data" << fd << "  ##  " << data << "  ##  " << size << std::endl;
+    sessions_iter_ = sessions_.find(fd);
+    if (sessions_iter_ != sessions_.end())
+    {
+        sessions_iter_->second->Receive(data, size);
+    }
+    else
+    {
+        throw std::runtime_error("can't find session: " + fd);
+    }
 }
 
 void NetworkModule::OnConnected(int fd)
 {
     std::cout << "OnConnected: " << fd << std::endl;
-    // sessions_iter_ = sessions_.find(fd);
-    // if (sessions_iter_ == sessions_.end())
-    // {
-    //     Session *session = new Session;
-    //     session->Setup(fd);
-    //     sessions_.insert(std::make_pair(fd, session));
-    // }
+    sessions_iter_ = sessions_.find(fd);
+    if (sessions_iter_ == sessions_.end())
+    {
+        Session *session = new Session;
+        session->Setup(fd, socket_, message_packer_);
+        sessions_.insert(std::make_pair(fd, session));
+    }
 }
 
 // void *CreateNetworkModule()

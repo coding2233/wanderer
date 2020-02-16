@@ -14,7 +14,7 @@ public:
     ProtobufMessagePacker(/* args */);
     ~ProtobufMessagePacker();
 
-    int ToBytes(const google::protobuf::Message *message) override;
+    size_t ToBytes(const google::protobuf::Message &message) override;
 };
 } // namespace wanderer
 
