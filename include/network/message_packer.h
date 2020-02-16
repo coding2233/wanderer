@@ -5,16 +5,22 @@
 
 namespace wanderer
 {
+template <class T>
 class MessagePacker
 {
 private:
     /* data */
 public:
-    MessagePacker(/* args */);
-    ~MessagePacker();
+    MessagePacker(/* args */)
+    {
+        
+    }
+    ~MessagePacker()
+    {
+    }
 
-    // //转数据
-    // int ToBytes(Message *message) = 0;
+    //转数据
+    virtual int ToBytes(const T *message) = 0;
 
     // //转消息结构
     // Message *ToMessage(const char *buffer, int size) = 0;

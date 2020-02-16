@@ -11,10 +11,14 @@ NetworkModule::~NetworkModule()
 
 void NetworkModule::OnInit()
 {
+    message_packer_ = new ProtobufMessagePacker;
     socket_ = new SocketEpoll;
+
     auto receiveCallback = std::bind(&NetworkModule::OnReceiveData, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     auto connectCallback = std::bind(&NetworkModule::OnConnected, this, std::placeholders::_1);
     socket_->Setup(SERVER_PORT, connectCallback, receiveCallback);
+
+    //message_packer_
 }
 
 void NetworkModule::OnUpdate()

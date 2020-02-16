@@ -1,11 +1,14 @@
 #include "network/message_packer.h"
+
 namespace wanderer
 {
-MessagePacker::MessagePacker(/* args */)
-{
-}
 
-MessagePacker::~MessagePacker()
-{
-}
-}
+// MessagePacker<T>::MessagePacker(/* args */)
+// {
+// }
+
+// MessagePacker<T>::~MessagePacker()
+// {
+// }
+
+} // namespace wanderer

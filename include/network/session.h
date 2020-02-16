@@ -2,6 +2,7 @@
 #define __SESSION_H__
 
 #include "network/socket_base.h"
+#include "network/message_packer.h"
 
 namespace wanderer
 {
