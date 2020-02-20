@@ -3,10 +3,13 @@ namespace wanderer
 {
 NetworkModule::NetworkModule()
 {
+    message_callback_ = std::bind(&NetworkModule::OnMessageDispatcher, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+    dispatcher_ = new MessageDispatcher;
 }
 
 NetworkModule::~NetworkModule()
 {
+    delete dispatcher_;
 }
 
 void NetworkModule::OnInit()
@@ -53,9 +56,14 @@ void NetworkModule::OnConnected(int fd)
     if (sessions_iter_ == sessions_.end())
     {
         Session *session = new Session;
-        session->Setup(fd, socket_, message_packer_);
+        session->Setup(fd, socket_, message_packer_, message_callback_);
         sessions_.insert(std::make_pair(fd, session));
     }
+}
+
+void NetworkModule::OnMessageDispatcher(const Session *session, int type, const char *data, int size)
+{
+    dispatcher_->Dispatcher(session, type, data, size);
 }
 
 // void *CreateNetworkModule()

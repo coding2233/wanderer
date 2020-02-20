@@ -5,12 +5,14 @@
 #include "network/socket_epoll.h"
 #include "network/session.h"
 #include "network/protobuf_message_packer.h"
+#include "network/message_dispatcher.h"
 
 #include <functional>
 #include <map>
 
 namespace wanderer
 {
+
 #define SERVER_PORT 2233
 
 class NetworkModule : public Module
@@ -28,6 +30,12 @@ private:
     void OnReceiveData(int fd, const char *data, int size);
     //发送数据
     void OnConnected(int fd);
+    //处理消息
+    void OnMessageDispatcher(const Session *session, int type, const char *data, int size);
+    //消息绑定回调
+    MESSAGE_CALLBACK message_callback_;
+    //消息分发管理
+    MessageDispatcher *dispatcher_;
 
 public:
     NetworkModule();

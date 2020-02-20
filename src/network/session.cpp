@@ -5,17 +5,20 @@ namespace wanderer
 
 Session::Session(/* args */)
 {
+    circle_buffer_ = new CircleBuffer;
 }
 
 Session::~Session()
 {
+    delete circle_buffer_;
 }
 
-void Session::Setup(int fd, SocketBase *socket, ProtobufMessagePacker *message_packer)
+void Session::Setup(int fd, SocketBase *socket, ProtobufMessagePacker *message_packer, MESSAGE_CALLBACK message_callback)
 {
     fd_ = fd;
     socket_ = socket;
     message_packer_ = message_packer;
+    message_callback_ = message_callback;
 }
 
 void Session::Send(const google::protobuf::Message &message)
@@ -26,23 +29,24 @@ void Session::Send(const google::protobuf::Message &message)
 
 void Session::Receive(const char *data, int size)
 {
-    char temp[4];
-    memcpy(temp, data, 4);
-    int data_size = atoi(temp);
-    memset(temp, 0, 4);
-    memcpy(temp, data + 4, 2);
-    int type = atoi(temp);
-    // data_size |= data[1] - 48 << 16;
-    // data_size |= data[2] - 48 << 8;
-    // data_size |= data[3] - 48 << 0;
-    // char *size_data;
-    // int data_size = atoi(size_data);
-    // // *data << 8;
-    // int type = *(data + 4) << 8;
-    // int *type = static_cast<short *>(data + 2);
-    std::cout << "session receive: " << data_size << "  " << type << "  " << size << std::endl;
+    circle_buffer_->Write(data, size);
+    const char *read = circle_buffer_->Read();
 
-    // memcpy(data,)
+    char temp[4];
+    memcpy(temp, read, 4);
+    int data_size = atoi(temp);
+    if (data_size <= circle_buffer_->Length())
+    {
+        memset(temp, 0, 4);
+        memcpy(temp, read + 4, 2);
+        int message_type = atoi(temp);
+        //消息回调
+        message_callback_(this, message_type, read, data_size - 6);
+        //清理数据
+        circle_buffer_->Flush(data_size);
+    }
+
+    //   std::cout << "session receive: " << data_size << "  " << type << "  " << size << std::endl;
 }
 
 } // namespace wanderer

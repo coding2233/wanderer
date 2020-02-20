@@ -2,6 +2,7 @@
 
 namespace wanderer
 {
+
 App::App()
 {
 }
