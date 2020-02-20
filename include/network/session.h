@@ -8,7 +8,7 @@
 namespace wanderer
 {
 
-#define MESSAGE_CALLBACK std::function<void(const Session *, int, const char *, int)>
+//#define MESSAGE_CALLBACK std::function<void(const Session *, int, const char *, int)>
 
 class Session
 {
@@ -17,7 +17,7 @@ private:
     int fd_;
     SocketBase *socket_;
     ProtobufMessagePacker *message_packer_;
-    MESSAGE_CALLBACK message_callback_;
+    //  MESSAGE_CALLBACK message_callback_;
 
     //circle buffer
     CircleBuffer *circle_buffer_;
@@ -26,7 +26,7 @@ public:
     Session(/* args */);
     ~Session();
 
-    void Setup(int fd, SocketBase *socket, ProtobufMessagePacker *message_packer, MESSAGE_CALLBACK message_callback);
+    void Setup(int fd, SocketBase *socket, ProtobufMessagePacker *message_packer);
 
     //发送信息
     void Send(const google::protobuf::Message &message);
