@@ -22,6 +22,8 @@ private:
     //circle buffer
     CircleBuffer *circle_buffer_;
 
+    int CharPointer2Int(const char *data);
+
 public:
     Session(/* args */);
     ~Session();

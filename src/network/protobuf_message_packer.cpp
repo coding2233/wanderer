@@ -7,13 +7,13 @@ ProtobufMessagePacker::ProtobufMessagePacker(/* args */)
 {
     data_ = buffer_;
 
-    BindMessageCode(1, new tutorial::Person);
+    BindMessageCode(1, new wanderer::TestMessage);
 }
 
 ProtobufMessagePacker::~ProtobufMessagePacker()
 {
-    std::map<int, google::protobuf::Message *>::iterator iter;
-    for (iter = message_.begin(); iter != message_.end(); iter++)
+    //  std::map<int, google::protobuf::Message *>::iterator iter;
+    for (auto iter = message_.begin(); iter != message_.end(); iter++)
     {
         delete iter->second;
     }
@@ -50,6 +50,14 @@ void ProtobufMessagePacker::Dispatcher(const Session *session, int type, const c
     if (iter != message_.end())
     {
         iter->second->ParseFromArray(data, size);
+
+        TestMessage *msg = dynamic_cast<TestMessage *>(iter->second);
+        if (msg != nullptr)
+        {
+            std::cout << msg->id() << std::endl;
+            std::cout << msg->name() << std::endl;
+            std::cout << msg->content() << std::endl;
+        }
         /* code */
     }
 }

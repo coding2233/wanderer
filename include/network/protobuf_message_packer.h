@@ -3,7 +3,7 @@
 
 #include "network/message_packer.h"
 //#include "network/session.h"
-#include "addressbook.pb.h"
+#include "test.pb.h"
 
 #include <google/protobuf/message.h>
 

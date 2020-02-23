@@ -32,14 +32,14 @@ void Session::Receive(const char *data, int size)
     circle_buffer_->Write(data, size);
     const char *read = circle_buffer_->Read();
 
-    char temp[4];
-    memcpy(temp, read, 4);
-    int data_size = atoi(temp);
-    if (data_size <= circle_buffer_->Length())
+    // char temp[4];
+    // memcpy(temp, read, 4);
+    int data_size = CharPointer2Int(read); //atoi(temp);
+    if (data_size > 0 && data_size <= circle_buffer_->Length())
     {
-        memset(temp, 0, 4);
-        memcpy(temp, read + 4, 4);
-        int message_type = atoi(temp);
+        // memset(temp, 0, 4);
+        // memcpy(temp, read + 4, 4);
+        int message_type = CharPointer2Int(read + 4); // atoi(temp);
         //消息回调
         message_packer_->Dispatcher(this, message_type, read + 8, data_size - 8);
         //  message_callback_(this, message_type, read, data_size - 6);
@@ -48,6 +48,16 @@ void Session::Receive(const char *data, int size)
     }
 
     //   std::cout << "session receive: " << data_size << "  " << type << "  " << size << std::endl;
+}
+
+int Session::CharPointer2Int(const char *data)
+{
+    int result = 0;
+    for (size_t i = 0; i < 4; i++)
+    {
+        result |= (data[i] & 0xFF) << ((3 - i) * 8);
+    }
+    return result;
 }
 
 } // namespace wanderer

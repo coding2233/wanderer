@@ -11,6 +11,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: Run build-test script
       run: |
+        apt install -y python3-protobuf
         mkdir build && cd build
         cmake ../ && make
         ./wanderer &
