@@ -22,8 +22,6 @@ void Session::Setup(int fd, MESSAGE_SEND message_send, MESSAGE_RECEIVE message_r
 
 void Session::Send(const google::protobuf::Message &message)
 {
-    // size_t size = message_packer_->ToBytes(message);
-    // socket_->SendData(fd_, message_packer_->Read(), size);
     message_send_(fd_, message);
 }
 
@@ -47,14 +45,14 @@ void Session::Receive(const char *data, int size)
     }
 }
 
-int Session::CharPointer2Int(const char *data)
-{
-    int result = 0;
-    for (size_t i = 0; i < 4; i++)
-    {
-        result |= (data[i] & 0xFF) << ((3 - i) * 8);
-    }
-    return result;
-}
+// int Session::CharPointer2Int(const char *data)
+// {
+//     int result = 0;
+//     for (size_t i = 0; i < 4; i++)
+//     {
+//         result |= (data[i] & 0xFF) << ((3 - i) * 8);
+//     }
+//     return result;
+// }
 
 } // namespace wanderer

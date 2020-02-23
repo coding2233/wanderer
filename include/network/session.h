@@ -3,6 +3,7 @@
 
 #include "network/circle_buffer.h"
 #include "google/protobuf/message.h"
+#include "utility/utility.h"
 
 namespace wanderer
 {
@@ -22,7 +23,7 @@ private:
     //circle buffer
     CircleBuffer *circle_buffer_;
 
-    int CharPointer2Int(const char *data);
+    //  int CharPointer2Int(const char *data);
 
     MESSAGE_SEND message_send_;
     MESSAGE_RECEIVE message_receive_;
