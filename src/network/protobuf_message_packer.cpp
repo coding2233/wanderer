@@ -8,6 +8,7 @@ ProtobufMessagePacker::ProtobufMessagePacker(/* args */)
     data_ = buffer_;
 
     BindMessageCode(1, new wanderer::TestMessage);
+    BindMessageHandler(1, new wanderer::TestMessageHandler);
 }
 
 ProtobufMessagePacker::~ProtobufMessagePacker()
@@ -18,12 +19,23 @@ ProtobufMessagePacker::~ProtobufMessagePacker()
         delete iter->second;
     }
     message_.clear();
+
+    for (auto iter = message_hander_.begin(); iter != message_hander_.end(); iter++)
+    {
+        delete iter->second;
+    }
+    message_hander_.clear();
 }
 
 void ProtobufMessagePacker::BindMessageCode(int type, google::protobuf::Message *message)
 {
     message_.insert(std::make_pair(type, message));
     message_typeid_.insert(std::make_pair(typeid(message).name(), type));
+}
+
+void ProtobufMessagePacker::BindMessageHandler(int type, MessageHandlerBase *message_handle)
+{
+    message_hander_.insert(std::make_pair(type, message_handle));
 }
 
 size_t ProtobufMessagePacker::ToBytes(const google::protobuf::Message &message)
@@ -51,14 +63,11 @@ void ProtobufMessagePacker::Dispatcher(const Session *session, int type, const c
     {
         iter->second->ParseFromArray(data, size);
 
-        TestMessage *msg = dynamic_cast<TestMessage *>(iter->second);
-        if (msg != nullptr)
+        auto message_hander_iter = message_hander_.find(type);
+        if (message_hander_iter != message_hander_.end())
         {
-            std::cout << msg->id() << std::endl;
-            std::cout << msg->name() << std::endl;
-            std::cout << msg->content() << std::endl;
+            message_hander_iter->second->HandleMessage(session, iter->second);
         }
-        /* code */
     }
 }
 

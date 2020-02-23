@@ -13,18 +13,18 @@ Session::~Session()
     delete circle_buffer_;
 }
 
-void Session::Setup(int fd, SocketBase *socket, ProtobufMessagePacker *message_packer)
+void Session::Setup(int fd, MESSAGE_SEND message_send, MESSAGE_RECEIVE message_receive)
 {
     fd_ = fd;
-    socket_ = socket;
-    message_packer_ = message_packer;
-    //  message_callback_ = message_callback;
+    message_send_ = message_send;
+    message_receive_ = message_receive;
 }
 
 void Session::Send(const google::protobuf::Message &message)
 {
-    size_t size = message_packer_->ToBytes(message);
-    socket_->SendData(fd_, message_packer_->Read(), size);
+    // size_t size = message_packer_->ToBytes(message);
+    // socket_->SendData(fd_, message_packer_->Read(), size);
+    message_send_(fd_, message);
 }
 
 void Session::Receive(const char *data, int size)
@@ -41,13 +41,10 @@ void Session::Receive(const char *data, int size)
         // memcpy(temp, read + 4, 4);
         int message_type = CharPointer2Int(read + 4); // atoi(temp);
         //消息回调
-        message_packer_->Dispatcher(this, message_type, read + 8, data_size - 8);
-        //  message_callback_(this, message_type, read, data_size - 6);
+        message_receive_(this, message_type, read + 8, data_size - 8);
         //清理数据
         circle_buffer_->Flush(data_size);
     }
-
-    //   std::cout << "session receive: " << data_size << "  " << type << "  " << size << std::endl;
 }
 
 int Session::CharPointer2Int(const char *data)

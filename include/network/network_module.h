@@ -5,7 +5,6 @@
 #include "network/socket_epoll.h"
 #include "network/session.h"
 #include "network/protobuf_message_packer.h"
-//#include "network/message_dispatcher.h"
 
 #include <functional>
 #include <map>
@@ -26,16 +25,18 @@ private:
     std::map<int, Session *>::iterator sessions_iter_;
     //消息打包
     ProtobufMessagePacker *message_packer_;
+    //消息发送绑定
+    MESSAGE_SEND message_send_;
+    //消息绑定回调
+    MESSAGE_RECEIVE message_receive_;
     //接收数据
     void OnReceiveData(int fd, const char *data, int size);
     //发送数据
     void OnConnected(int fd);
+    //消息发送
+    void OnMessageSend(int fd, const google::protobuf::Message &message);
     //处理消息
-    void OnMessageDispatcher(const Session *session, int type, const char *data, int size);
-    //消息绑定回调
-    // MESSAGE_CALLBACK message_callback_;
-    //消息分发管理
-    // MessageDispatcher *dispatcher_;
+    void OnMessageReceive(const Session *session, int type, const char *data, int size);
 
 public:
     NetworkModule();
