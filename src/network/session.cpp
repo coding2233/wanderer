@@ -32,7 +32,7 @@ void Session::Receive(const char *data, int size)
 
     // char temp[4];
     // memcpy(temp, read, 4);
-    int data_size = CharPointer2Int(read); //atoi(temp);
+    int data_size = CharPointer2Int(read);
     if (data_size > 0 && data_size <= circle_buffer_->Length())
     {
         // memset(temp, 0, 4);

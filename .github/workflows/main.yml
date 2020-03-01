@@ -11,11 +11,11 @@ jobs:
     - uses: actions/checkout@v1
     - name: Run build-test script
       run: |
-        pip3 install protobuf
+       # pip3 install protobuf
         mkdir build && cd build
-        cmake ../ && make
+        cmake --no-warn-unused-cli -DCMAKE_TOOLCHAIN_FILE=../cmake/linux_clang.cmake ../ && make
         ./wanderer &
-        python3 ../client-test/client.py &
+       # python3 ../client-test/client.py &
     
 
   
