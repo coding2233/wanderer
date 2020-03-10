@@ -15,7 +15,6 @@ NetworkModule::~NetworkModule()
 void NetworkModule::OnInit()
 {
     message_packer_ = new ProtobufMessagePacker;
-
 #if WIN32
     throw std::runtime_error("IOCP not implemented yet!!");
 #elif unix
@@ -26,7 +25,7 @@ void NetworkModule::OnInit()
     auto connectCallback = std::bind(&NetworkModule::OnConnected, this, std::placeholders::_1);
     socket_->Setup(connectCallback, receiveCallback);
 
-    CreateServer(SERVER_PORT);
+    CreateServer("127.0.0.1", SERVER_PORT);
     CreateInnerSession("ALL", "127.0.0.1", 2233);
 }
 
@@ -78,9 +77,9 @@ void NetworkModule::OnMessageReceive(const Session *session, int type, const cha
     // dispatcher_->Dispatcher(session, type, data, size);
 }
 
-void NetworkModule::CreateServer(int server_port)
+void NetworkModule::CreateServer(const char *server_ip, int server_port)
 {
-    socket_->CreateListenSocket(server_port);
+    socket_->CreateListenSocket(server_ip, server_port);
 }
 
 void NetworkModule::CreateInnerSession(const char *name, const char *server_ip, int server_port)

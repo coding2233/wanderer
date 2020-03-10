@@ -25,7 +25,7 @@ public:
     //发送数据
     virtual int SendData(int fd, const char *data, size_t size) = 0;
     //创建监听socket
-    virtual int CreateListenSocket(int server_port);
+    virtual int CreateListenSocket(const char *server_ip, int server_port);
     //创建客户端的socket
     virtual int CreateConnectSocket(const char *server_ip, int server_port);
 

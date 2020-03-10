@@ -50,7 +50,7 @@ public:
     //发送数据
     int SendData(int fd, const char *data, size_t size) override;
     //创建服务端监听socket
-    int CreateListenSocket(int server_port) override;
+    int CreateListenSocket(const char *server_ip, int server_port) override;
     //创建客户端的socket
     int CreateConnectSocket(const char *server_ip, int server_port) override;
 

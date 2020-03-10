@@ -52,7 +52,7 @@ public:
     //关闭
     void OnClose() override;
     //创建服务器
-    void CreateServer(int server_port);
+    void CreateServer(const char *server_ip, int server_port);
     //创建内部的交流通信
     void CreateInnerSession(const char *name, const char *server_ip, int server_port);
 };

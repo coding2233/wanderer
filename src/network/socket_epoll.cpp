@@ -99,13 +99,13 @@ void SocketEpoll::Loop()
     }
 }
 
-int SocketEpoll::CreateListenSocket(int server_port)
+int SocketEpoll::CreateListenSocket(const char *server_ip, int server_port)
 {
     //设置tcp 非阻塞模式 ，0: 为根据传输类型，选择对应的协议
     listen_socket_ = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
     bzero(&server_addr_, sizeof(server_addr_));
     server_addr_.sin_family = AF_INET;
-    server_addr_.sin_addr.s_addr = htonl(INADDR_ANY);
+    server_addr_.sin_addr.s_addr = inet_addr(server_ip);
     server_addr_.sin_port = htons(server_port);
 
     //绑定
