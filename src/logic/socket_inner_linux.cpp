@@ -16,12 +16,14 @@ void SocketInnerLinux::Setup(const char *server_ip, int server_port, std::functi
 
     socket_client_ = socket(AF_INET, SOCK_STREAM, 0);
     sockaddr_in addr, server_addr;
+    bzero(&addr, sizeof(addr));
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port = htons(0);
     if (bind(socket_client_, (struct sockaddr *)&addr, sizeof(addr)) < 0)
     {
         throw std::runtime_error("inner socket bind error!");
     }
+    bzero(&server_addr, sizeof(server_addr));
     server_addr.sin_addr.s_addr = inet_addr(server_ip);
     server_addr.sin_port = htons(server_port);
     int reseult = connect(socket_client_, (struct sockaddr *)&server_addr, sizeof(server_addr));
@@ -45,6 +47,11 @@ void SocketInnerLinux::Loop()
     {
         receiveCallback_(socket_client_, buffer_, size);
     }
+}
+
+int SocketInnerLinux::GetSocket()
+{
+    return socket_client_;
 }
 
 int SocketInnerLinux::SendData(const char *data, size_t size)

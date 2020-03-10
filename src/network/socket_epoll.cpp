@@ -102,6 +102,7 @@ void SocketEpoll::Loop()
         {
             conn_sock_ = accept(listen_socket_, (sockaddr *)&client_addr_, &client_len_);
             // fcntl(conn_sock,)
+            //epoll_event ev;
             ev_.events = EPOLLIN | EPOLLOUT;
             ev_.data.fd = conn_sock_;
             epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, conn_sock_, &ev_);
@@ -116,7 +117,6 @@ void SocketEpoll::Loop()
                 if (size > 0)
                 {
                     receiveCallback_(events_[i].data.fd, buffer_, size);
-                    /* code */
                 }
             }
             // //发送

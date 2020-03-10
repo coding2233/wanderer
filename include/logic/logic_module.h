@@ -2,14 +2,15 @@
 #define __LOGIC_MODULE_H__
 
 #include "base/module.h"
+#include "logic/inner_session.h"
 
 namespace wanderer
 {
 class LogicModule : public Module
 {
-
 private:
     /* data */
+    InnerSession *inner_session_;
 
 public:
     LogicModule(/* args */);

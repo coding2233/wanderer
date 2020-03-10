@@ -7,6 +7,7 @@
 #include <iostream>
 #include <functional>
 #include <arpa/inet.h>
+#include <string.h>
 
 namespace wanderer
 {
@@ -26,6 +27,8 @@ private:
 public:
     SocketInnerLinux(/* args */);
     ~SocketInnerLinux();
+
+    int GetSocket();
 
     void Setup(const char *server_ip, int server_port, std::function<void(int, const char *data, int size)> receiveCallback);
 

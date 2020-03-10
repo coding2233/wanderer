@@ -12,6 +12,7 @@ class InnerSession
 private:
     /* data */
     SocketInnerLinux *socket_inner_;
+    Session *session_;
     //接收数据
     void OnReceiveData(int fd, const char *data, int size);
     //消息打包
@@ -28,6 +29,10 @@ private:
 public:
     InnerSession(const char *server_ip, int server_port, const char *name);
     ~InnerSession();
+
+    void Loop();
+
+    Session *GetSession();
 };
 } // namespace wanderer
 #endif
