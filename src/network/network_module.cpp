@@ -15,7 +15,12 @@ NetworkModule::~NetworkModule()
 void NetworkModule::OnInit()
 {
     message_packer_ = new ProtobufMessagePacker;
+
+#if WIN32
+    throw std::runtime_error("IOCP not implemented yet!!");
+#elif unix
     socket_ = new SocketEpoll;
+#endif
 
     auto receiveCallback = std::bind(&NetworkModule::OnReceiveData, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     auto connectCallback = std::bind(&NetworkModule::OnConnected, this, std::placeholders::_1);

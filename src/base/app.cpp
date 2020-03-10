@@ -33,6 +33,7 @@ void App::InitModule()
 {
     //添加network模块
     modules_.insert(std::pair<std::string, Module *>("network", new NetworkModule()));
+    modules_.insert(std::pair<std::string, Module *>("logic", new LogicModule()));
 }
 
 void App::Init()

@@ -3,7 +3,6 @@
 
 namespace wanderer
 {
-class App;
 
 class Module
 {
@@ -16,11 +15,11 @@ public:
     ~Module();
 
     //初始化
-    virtual void OnInit();
+    virtual void OnInit() = 0;
     //循环
-    virtual void OnUpdate();
+    virtual void OnUpdate() = 0;
     //关闭
-    virtual void OnClose();
+    virtual void OnClose() = 0;
 };
 } // namespace wanderer
 #endif

@@ -3,6 +3,7 @@
 
 #include "base/module.h"
 #include "network/network_module.h"
+#include "logic/logic_module.h"
 
 #include <iostream>
 #include <map>
