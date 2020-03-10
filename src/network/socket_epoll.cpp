@@ -47,41 +47,12 @@ void SocketEpoll::SetLogo()
     std::cout << "server runing ..." << std::endl;
 }
 
-void SocketEpoll::Setup(int port, std::function<void(int)> connectedCallback, std::function<void(int, const char *data, int size)> receiveCallback)
+void SocketEpoll::Setup(std::function<void(int)> connectedCallback, std::function<void(int, const char *data, int size)> receiveCallback)
 {
-    // connectedCallback_ = connectedCallback;
-    // receiveCallback_ = receiveCallback;
-
-    SocketBase::Setup(port, connectedCallback, receiveCallback);
-
-    //设置tcp 非阻塞模式 ，0: 为根据传输类型，选择对应的协议
-    listen_socket_ = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-    bzero(&server_addr_, sizeof(server_addr_));
-    server_addr_.sin_family = AF_INET;
-    server_addr_.sin_addr.s_addr = htonl(INADDR_ANY);
-    server_addr_.sin_port = htons(port);
-
-    //绑定
-    if (bind(listen_socket_, (struct sockaddr *)&server_addr_, sizeof(server_addr_)) < 0)
-    {
-        throw std::runtime_error("lisenSocket bind error");
-    }
-    //监听
-    if (listen(listen_socket_, 20) < 0)
-    {
-        throw std::runtime_error("lisenSocket listen error");
-    }
+    SocketBase::Setup(connectedCallback, receiveCallback);
 
     //创建epoll
     epoll_fd_ = epoll_create(MAX_EVENTS);
-    ev_.events = EPOLLIN | EPOLLET;
-    ev_.data.fd = listen_socket_;
-
-    //添加 服务器的监听socket 到epoll中
-    if (epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, listen_socket_, &ev_) < 0)
-    {
-        throw std::runtime_error("epoll ctrl error");
-    }
 
     //设置logo
     SetLogo();
@@ -126,6 +97,70 @@ void SocketEpoll::Loop()
             // }
         }
     }
+}
+
+int SocketEpoll::CreateListenSocket(int server_port)
+{
+    //设置tcp 非阻塞模式 ，0: 为根据传输类型，选择对应的协议
+    listen_socket_ = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+    bzero(&server_addr_, sizeof(server_addr_));
+    server_addr_.sin_family = AF_INET;
+    server_addr_.sin_addr.s_addr = htonl(INADDR_ANY);
+    server_addr_.sin_port = htons(server_port);
+
+    //绑定
+    if (bind(listen_socket_, (struct sockaddr *)&server_addr_, sizeof(server_addr_)) < 0)
+    {
+        throw std::runtime_error("lisenSocket bind error");
+    }
+    //监听
+    if (listen(listen_socket_, 20) < 0)
+    {
+        throw std::runtime_error("lisenSocket listen error");
+    }
+
+    ev_.events = EPOLLIN | EPOLLET;
+    ev_.data.fd = listen_socket_;
+
+    //添加 服务器的监听socket 到epoll中
+    if (epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, listen_socket_, &ev_) < 0)
+    {
+        throw std::runtime_error("epoll ctrl error");
+    }
+    return listen_socket_;
+}
+
+int SocketEpoll::CreateConnectSocket(const char *server_ip, int server_port)
+{
+    int sock_client = socket(AF_INET, SOCK_STREAM, 0);
+    sockaddr_in addr;
+    bzero(&addr, sizeof(addr));
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_port = htons(0);
+    if (bind(sock_client, (const sockaddr *)&addr, sizeof(addr)) < 0)
+    {
+        throw std::runtime_error("inner socket bind error!");
+    }
+    bzero(&addr, sizeof(addr));
+    addr.sin_addr.s_addr = inet_addr(server_ip);
+    addr.sin_port = htons(0);
+    int result = connect(sock_client, (const sockaddr *)&addr, sizeof(addr));
+    if (result == 0)
+    {
+        //设置非阻塞模式
+        int flag = fcntl(sock_client, F_GETFL, 0);
+        fcntl(sock_client, F_SETFL, flag | O_NONBLOCK);
+        //添加epoll中
+        ev_.events = EPOLLIN | EPOLLOUT;
+        ev_.data.fd = sock_client;
+        epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, sock_client, &ev_);
+        connectedCallback_(sock_client);
+    }
+    else if (result < 0)
+    {
+        throw std::runtime_error("innner socket connect server fail !");
+    }
+    return sock_client;
 }
 
 void SocketEpoll::Close()

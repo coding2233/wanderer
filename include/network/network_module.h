@@ -23,6 +23,9 @@ private:
     //session map
     std::map<int, Session *> sessions_;
     std::map<int, Session *>::iterator sessions_iter_;
+    //inner session map
+    std::map<std::string, Session *> inner_session_;
+    std::map<std::string, Session *>::iterator inner_session_iter_;
     //消息打包
     ProtobufMessagePacker *message_packer_;
     //消息发送绑定
@@ -48,6 +51,10 @@ public:
     void OnUpdate() override;
     //关闭
     void OnClose() override;
+    //创建服务器
+    void CreateServer(int server_port);
+    //创建内部的交流通信
+    void CreateInnerSession(const char *name, const char *server_ip, int server_port);
 };
 
 // #ifdef __cplusplus

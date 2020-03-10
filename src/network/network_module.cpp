@@ -24,7 +24,10 @@ void NetworkModule::OnInit()
 
     auto receiveCallback = std::bind(&NetworkModule::OnReceiveData, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     auto connectCallback = std::bind(&NetworkModule::OnConnected, this, std::placeholders::_1);
-    socket_->Setup(SERVER_PORT, connectCallback, receiveCallback);
+    socket_->Setup(connectCallback, receiveCallback);
+
+    CreateServer(SERVER_PORT);
+    CreateInnerSession("ALL", "127.0.0.1", 2233);
 }
 
 void NetworkModule::OnUpdate()
@@ -73,6 +76,21 @@ void NetworkModule::OnMessageReceive(const Session *session, int type, const cha
 {
     message_packer_->Dispatcher(session, type, data, size);
     // dispatcher_->Dispatcher(session, type, data, size);
+}
+
+void NetworkModule::CreateServer(int server_port)
+{
+    socket_->CreateListenSocket(server_port);
+}
+
+void NetworkModule::CreateInnerSession(const char *name, const char *server_ip, int server_port)
+{
+    int fd = socket_->CreateConnectSocket(server_ip, server_port);
+    sessions_iter_ = sessions_.find(fd);
+    if (sessions_iter_ != sessions_.end())
+    {
+        inner_session_.insert(std::make_pair(name, sessions_iter_->second));
+    }
 }
 
 // void *CreateNetworkModule()

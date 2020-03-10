@@ -9,6 +9,7 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <string.h>
+#include <arpa/inet.h>
 
 namespace wanderer
 {
@@ -41,13 +42,17 @@ public:
     SocketEpoll(/* args */);
     ~SocketEpoll();
     //设置
-    virtual void Setup(int port, std::function<void(int)> connectedCallback, std::function<void(int, const char *data, int size)> receiveCallback) override;
+    virtual void Setup(std::function<void(int)> connectedCallback, std::function<void(int, const char *data, int size)> receiveCallback) override;
     //循环
     void Loop() override;
     //关闭
     void Close() override;
     //发送数据
     int SendData(int fd, const char *data, size_t size) override;
+    //创建服务端监听socket
+    int CreateListenSocket(int server_port) override;
+    //创建客户端的socket
+    int CreateConnectSocket(const char *server_ip, int server_port) override;
 
 protected:
     //设置logo
