@@ -4,9 +4,12 @@
 #include "base/module.h"
 #include "network/network_module.h"
 #include "logic/logic_module.h"
+#include "base/app_config.h"
 
 #include <iostream>
 #include <map>
+#include <string>
+
 namespace wanderer
 {
 class App
@@ -17,7 +20,7 @@ private:
 
 private:
     //初始化模块
-    void InitModule();
+    void InitModule(AppConfig *app_config);
     //初始化
     void Init();
     //循环

@@ -12,7 +12,7 @@
 namespace wanderer
 {
 
-#define SERVER_PORT 2233
+//#define SERVER_PORT 2233
 
 class NetworkModule : public Module
 {

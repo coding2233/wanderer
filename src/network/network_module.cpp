@@ -4,16 +4,6 @@ namespace wanderer
 
 NetworkModule::NetworkModule()
 {
-    message_send_ = std::bind(&NetworkModule::OnMessageSend, this, std::placeholders::_1, std::placeholders::_2);
-    message_receive_ = std::bind(&NetworkModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
-}
-
-NetworkModule::~NetworkModule()
-{
-}
-
-void NetworkModule::OnInit()
-{
     message_packer_ = new ProtobufMessagePacker;
 #if WIN32
     throw std::runtime_error("IOCP not implemented yet!!");
@@ -21,12 +11,23 @@ void NetworkModule::OnInit()
     socket_ = new SocketEpoll;
 #endif
 
+    message_send_ = std::bind(&NetworkModule::OnMessageSend, this, std::placeholders::_1, std::placeholders::_2);
+    message_receive_ = std::bind(&NetworkModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+
     auto receiveCallback = std::bind(&NetworkModule::OnReceiveData, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     auto connectCallback = std::bind(&NetworkModule::OnConnected, this, std::placeholders::_1);
     socket_->Setup(connectCallback, receiveCallback);
+}
 
-    CreateServer("127.0.0.1", SERVER_PORT);
-    CreateInnerSession("ALL", "127.0.0.1", 2233);
+NetworkModule::~NetworkModule()
+{
+    delete message_packer_;
+}
+
+void NetworkModule::OnInit()
+{
+    // CreateServer("127.0.0.1", SERVER_PORT);
+    //CreateInnerSession("ALL", "127.0.0.1", 2233);
 }
 
 void NetworkModule::OnUpdate()
@@ -55,7 +56,6 @@ void NetworkModule::OnReceiveData(int fd, const char *data, int size)
 
 void NetworkModule::OnConnected(int fd)
 {
-    std::cout << "OnConnected: " << fd << std::endl;
     sessions_iter_ = sessions_.find(fd);
     if (sessions_iter_ == sessions_.end())
     {
@@ -74,12 +74,12 @@ void NetworkModule::OnMessageSend(int fd, const google::protobuf::Message &messa
 void NetworkModule::OnMessageReceive(const Session *session, int type, const char *data, int size)
 {
     message_packer_->Dispatcher(session, type, data, size);
-    // dispatcher_->Dispatcher(session, type, data, size);
 }
 
 void NetworkModule::CreateServer(const char *server_ip, int server_port)
 {
     socket_->CreateListenSocket(server_ip, server_port);
+    std::cout << "server runing: " << server_ip << ":" << server_port << std::endl;
 }
 
 void NetworkModule::CreateInnerSession(const char *name, const char *server_ip, int server_port)
@@ -90,6 +90,8 @@ void NetworkModule::CreateInnerSession(const char *name, const char *server_ip, 
     {
         inner_session_.insert(std::make_pair(name, sessions_iter_->second));
     }
+    std::cout << "inner session runing: "
+              << "[" << name << "] " << server_ip << ":" << server_port << std::endl;
 }
 
 // void *CreateNetworkModule()

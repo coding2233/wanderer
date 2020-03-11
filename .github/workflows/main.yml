@@ -18,7 +18,7 @@ jobs:
         pip3 install protobuf
         mkdir build && cd build
         cmake --no-warn-unused-cli -DCMAKE_TOOLCHAIN_FILE=../cmake/linux_clang.cmake ../ && make
-        ./wanderer &
+        ./wanderer --type all --server 127.0.0.1:2233 --gate_server 127.0.0.1:2233 &
         pip3 list | grep protobuf
         python3 ../client-test/client.py &
     

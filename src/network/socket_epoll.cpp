@@ -43,8 +43,6 @@ void SocketEpoll::SetLogo()
     std::cout << "**"
               << "*******************************"
               << "**" << std::endl;
-
-    std::cout << "server runing ..." << std::endl;
 }
 
 void SocketEpoll::Setup(std::function<void(int)> connectedCallback, std::function<void(int, const char *data, int size)> receiveCallback)

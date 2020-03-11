@@ -21,4 +21,6 @@
     |类变量|小写单词，下划线连接，下划线结尾|test_var_|
     |结构体变量|同普通变量|test_var|
     |类名|大驼峰命名|TestClass|
-    |函数名|大驼峰命令|TestFunction|
+    |函数名|大驼峰命名|TestFunction|
+    |常量命名|k开头+大驼峰命名|kTestValue|
+    |枚举命名|名称大驼峰命名,变量同常量|AppType,kAll|
