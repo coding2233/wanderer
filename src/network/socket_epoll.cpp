@@ -45,9 +45,9 @@ void SocketEpoll::SetLogo()
               << "**" << std::endl;
 }
 
-void SocketEpoll::Setup(std::function<void(int)> connectedCallback, std::function<void(int, const char *data, int size)> receiveCallback)
+void SocketEpoll::Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char *name, int fd)> inner_connected_callback)
 {
-    SocketBase::Setup(connectedCallback, receiveCallback);
+    SocketBase::Setup(connected_callback, receive_callback, inner_connected_callback);
 
     //创建epoll
     epoll_fd_ = epoll_create(MAX_EVENTS);
@@ -71,11 +71,11 @@ void SocketEpoll::Loop()
         {
             conn_sock_ = accept(listen_socket_, (sockaddr *)&client_addr_, &client_len_);
             // fcntl(conn_sock,)
-            //epoll_event ev;
-            ev_.events = EPOLLIN | EPOLLOUT;
-            ev_.data.fd = conn_sock_;
-            epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, conn_sock_, &ev_);
-            connectedCallback_(conn_sock_);
+            epoll_event ev;
+            ev.events = EPOLLIN | EPOLLOUT;
+            ev.data.fd = conn_sock_;
+            epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, conn_sock_, &ev);
+            connected_callback_(conn_sock_);
         }
         else
         {
@@ -85,7 +85,7 @@ void SocketEpoll::Loop()
                 auto size = recv(events_[i].data.fd, buffer_, BUFFER_MAX_SIZE, 0);
                 if (size > 0)
                 {
-                    receiveCallback_(events_[i].data.fd, buffer_, size);
+                    receive_callback_(events_[i].data.fd, buffer_, size);
                 }
             }
             // //发送
@@ -128,37 +128,50 @@ int SocketEpoll::CreateListenSocket(const char *server_ip, int server_port)
     return listen_socket_;
 }
 
-int SocketEpoll::CreateConnectSocket(const char *server_ip, int server_port)
+void SocketEpoll::CreateConnectSocket(const char *name, const char *server_ip, int server_port)
 {
+    int sleep_time(++sleep_time_);
+    std::thread socket_thread(&SocketEpoll::CreateClientSocket, this, name, server_ip, server_port, sleep_time);
+    socket_thread.detach();
+}
+
+void SocketEpoll::CreateClientSocket(const char *name, const char *server_ip, int server_port, int sleep_time)
+{
+    std::this_thread::sleep_for(std::chrono::seconds(sleep_time));
+
     int sock_client = socket(AF_INET, SOCK_STREAM, 0);
-    sockaddr_in addr;
+    sockaddr_in addr, server_addr;
     bzero(&addr, sizeof(addr));
+    addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port = htons(0);
     if (bind(sock_client, (const sockaddr *)&addr, sizeof(addr)) < 0)
     {
         throw std::runtime_error("inner socket bind error!");
     }
-    bzero(&addr, sizeof(addr));
-    addr.sin_addr.s_addr = inet_addr(server_ip);
-    addr.sin_port = htons(0);
-    int result = connect(sock_client, (const sockaddr *)&addr, sizeof(addr));
+    //添加epoll中
+
+    bzero(&server_addr, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = inet_addr(server_ip);
+    server_addr.sin_port = htons(server_port);
+    int result = connect(sock_client, (const sockaddr *)&server_addr, sizeof(server_addr));
     if (result == 0)
     {
         //设置非阻塞模式
         int flag = fcntl(sock_client, F_GETFL, 0);
         fcntl(sock_client, F_SETFL, flag | O_NONBLOCK);
-        //添加epoll中
+        //添加到epoll
         ev_.events = EPOLLIN | EPOLLOUT;
         ev_.data.fd = sock_client;
         epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, sock_client, &ev_);
-        connectedCallback_(sock_client);
+        //回调
+        inner_connected_callback_(name, sock_client);
     }
     else if (result < 0)
     {
         throw std::runtime_error("innner socket connect server fail !");
     }
-    return sock_client;
 }
 
 void SocketEpoll::Close()

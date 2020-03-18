@@ -11,16 +11,17 @@ SocketBase::~SocketBase()
 {
 }
 
-void SocketBase::Setup(std::function<void(int)> connectedCallback, std::function<void(int, const char *data, int size)> receiveCallback)
+void SocketBase::Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char *name, int fd)> inner_connected_callback)
 {
-    connectedCallback_ = connectedCallback;
-    receiveCallback_ = receiveCallback;
+    connected_callback_ = connected_callback;
+    receive_callback_ = receive_callback;
+    inner_connected_callback_ = inner_connected_callback;
 }
 
 int SocketBase::CreateListenSocket(const char *server_ip, int server_port)
 {
 }
-int SocketBase::CreateConnectSocket(const char *server_ip, int server_port)
+void SocketBase::CreateConnectSocket(const char *name, const char *server_ip, int server_port)
 {
 }
 

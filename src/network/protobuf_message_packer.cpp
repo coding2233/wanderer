@@ -9,6 +9,9 @@ ProtobufMessagePacker::ProtobufMessagePacker(/* args */)
 
     BindMessageCode(1, new wanderer::TestMessage);
     BindMessageHandler(1, new wanderer::TestMessageHandler);
+
+    BindMessageCode(2, new wanderer::S2G_RegisterInnerSession);
+    BindMessageHandler(2, new wanderer::S2G_RegisterInnerSessionHandler);
 }
 
 ProtobufMessagePacker::~ProtobufMessagePacker()

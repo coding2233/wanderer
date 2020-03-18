@@ -6,6 +6,8 @@
 #include "test.pb.h"
 #include "network/message_hander_base.h"
 #include "message_handler/test_message_handler.h"
+#include "wanderer.pb.h"
+#include "message_handler/s2g_register_inner_session_handler.h"
 
 #include <google/protobuf/message.h>
 

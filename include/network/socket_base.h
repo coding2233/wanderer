@@ -17,7 +17,7 @@ public:
     ~SocketBase();
 
     //设置
-    virtual void Setup(std::function<void(int)> connectedCallback, std::function<void(int, const char *data, int size)> receiveCallback);
+    virtual void Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char *name, int fd)> inner_connected_callback);
     //循环
     virtual void Loop() = 0;
     //关闭
@@ -27,15 +27,17 @@ public:
     //创建监听socket
     virtual int CreateListenSocket(const char *server_ip, int server_port);
     //创建客户端的socket
-    virtual int CreateConnectSocket(const char *server_ip, int server_port);
+    virtual void CreateConnectSocket(const char *name, const char *server_ip, int server_port);
 
 protected:
     //缓存数据
     char buffer_[BUFFER_MAX_SIZE];
     //连接回调
-    std::function<void(int)> connectedCallback_;
+    std::function<void(int)> connected_callback_;
     //数据接收回调
-    std::function<void(int, const char *data, int size)> receiveCallback_;
+    std::function<void(int, const char *data, int size)> receive_callback_;
+    //内部通信创建回调
+    std::function<void(const char *name, int fd)> inner_connected_callback_;
     //显示logo
     virtual void SetLogo() = 0;
 };

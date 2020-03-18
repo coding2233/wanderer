@@ -40,6 +40,8 @@ private:
     void OnMessageSend(int fd, const google::protobuf::Message &message);
     //处理消息
     void OnMessageReceive(const Session *session, int type, const char *data, int size);
+    //内部通信的回调
+    void OnInnerConnected(const char *name, int fd);
 
 public:
     NetworkModule();
