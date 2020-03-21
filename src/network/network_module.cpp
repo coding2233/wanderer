@@ -2,7 +2,7 @@
 namespace wanderer
 {
 
-NetworkModule::NetworkModule()
+NetworkModule::NetworkModule(System *system) : Module(system)
 {
     message_packer_ = new ProtobufMessagePacker;
 #if WIN32

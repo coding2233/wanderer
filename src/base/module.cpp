@@ -1,8 +1,10 @@
 #include "base/module.h"
 namespace wanderer
 {
-Module::Module()
+
+Module::Module(System *system)
 {
+    system_ = system;
 }
 
 Module::~Module()
@@ -20,4 +22,10 @@ void Module::OnUpdate()
 void Module::OnClose()
 {
 }
+
+System *Module::GetSystem()
+{
+    return system_;
 }
+
+} // namespace wanderer

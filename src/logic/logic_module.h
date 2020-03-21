@@ -12,7 +12,7 @@ private:
     // InnerSession *inner_session_;
 
 public:
-    LogicModule(/* args */);
+    LogicModule(System *system);
     ~LogicModule();
 
     //初始化函数

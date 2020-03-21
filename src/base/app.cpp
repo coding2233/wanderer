@@ -5,6 +5,7 @@ namespace wanderer
 
 App::App()
 {
+    system_ = new System(&modules_);
 }
 
 App::~App()
@@ -13,7 +14,7 @@ App::~App()
 
 void App::Run(int argc, char *args[])
 {
-    AppConfig *app_config=new AppConfig(argc,args);
+    AppConfig *app_config = new AppConfig(argc, args);
 
     InitModule(app_config);
     Init();
@@ -23,42 +24,41 @@ void App::Run(int argc, char *args[])
 
 void App::InitModule(AppConfig *app_config)
 {
-    NetworkModule *network_module = new NetworkModule;
+    NetworkModule *network_module = new NetworkModule(system_);
 
     switch (app_config->app_type_)
     {
-        case kAll:
-            network_module->CreateServer(app_config->server_ip_.c_str(),app_config->server_port_);
-            network_module->CreateInnerSession("login",app_config->gate_ip_.c_str(),app_config->gate_port_);
-            network_module->CreateInnerSession("database",app_config->gate_ip_.c_str(),app_config->gate_port_);
-            network_module->CreateInnerSession("center",app_config->gate_ip_.c_str(),app_config->gate_port_);
-            network_module->CreateInnerSession("battle",app_config->gate_ip_.c_str(),app_config->gate_port_);
-            break;
-        case kLogin:
-            network_module->CreateServer(app_config->server_ip_.c_str(),app_config->server_port_);
-            network_module->CreateInnerSession("login",app_config->gate_ip_.c_str(),app_config->gate_port_);
-            break;
-        case kGate:
-            network_module->CreateServer(app_config->server_ip_.c_str(),app_config->server_port_);
-            break;
-        case kDataBase:
-            network_module->CreateServer(app_config->server_ip_.c_str(),app_config->server_port_);
-            network_module->CreateInnerSession("database",app_config->gate_ip_.c_str(),app_config->gate_port_);
-            break;
-        case kCenter:
-            network_module->CreateServer(app_config->server_ip_.c_str(),app_config->server_port_);
-            network_module->CreateInnerSession("center",app_config->gate_ip_.c_str(),app_config->gate_port_);
-            break;
-        case kBattle:
-            network_module->CreateServer(app_config->server_ip_.c_str(),app_config->server_port_);
-            network_module->CreateInnerSession("center",app_config->gate_ip_.c_str(),app_config->gate_port_);
-            break;
-        default:
-            break;
+    case kAll:
+        network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
+        network_module->CreateInnerSession("login", app_config->gate_ip_.c_str(), app_config->gate_port_);
+        network_module->CreateInnerSession("database", app_config->gate_ip_.c_str(), app_config->gate_port_);
+        network_module->CreateInnerSession("center", app_config->gate_ip_.c_str(), app_config->gate_port_);
+        network_module->CreateInnerSession("battle", app_config->gate_ip_.c_str(), app_config->gate_port_);
+        break;
+    case kLogin:
+        network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
+        network_module->CreateInnerSession("login", app_config->gate_ip_.c_str(), app_config->gate_port_);
+        break;
+    case kGate:
+        network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
+        break;
+    case kDataBase:
+        network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
+        network_module->CreateInnerSession("database", app_config->gate_ip_.c_str(), app_config->gate_port_);
+        break;
+    case kCenter:
+        network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
+        network_module->CreateInnerSession("center", app_config->gate_ip_.c_str(), app_config->gate_port_);
+        break;
+    case kBattle:
+        network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
+        network_module->CreateInnerSession("center", app_config->gate_ip_.c_str(), app_config->gate_port_);
+        break;
+    default:
+        break;
     }
 
-    modules_.insert(std::pair<std::string, Module *>("network", network_module));
-
+    modules_.insert(std::pair<std::string, Module *>(typeid(*network_module).name(), network_module));
 }
 
 void App::Init()

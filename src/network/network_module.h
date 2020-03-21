@@ -44,7 +44,7 @@ private:
     void OnInnerConnected(const char *name, int fd);
 
 public:
-    NetworkModule();
+    NetworkModule(System *system);
     ~NetworkModule();
 
     //初始化函数

@@ -2,7 +2,7 @@
 
 namespace wanderer
 {
-LogicModule::LogicModule(/* args */)
+LogicModule::LogicModule(System *system) : Module(system)
 {
 }
 

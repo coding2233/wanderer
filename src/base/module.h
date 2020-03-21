@@ -1,17 +1,23 @@
 #ifndef __MODULE_H__
 #define __MODULE_H__
 
+#include "base/system.h"
+
 namespace wanderer
 {
 
 class Module
 {
-protected:
+
+private:
     /* data */
+    System *system_;
 
 protected:
+    System *GetSystem();
+
 public:
-    Module();
+    Module(System *system);
     ~Module();
 
     //初始化
