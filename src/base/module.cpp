@@ -23,7 +23,7 @@ void Module::OnClose()
 {
 }
 
-System *Module::GetSystem()
+System *Module::GetSystem() const
 {
     return system_;
 }

@@ -14,7 +14,7 @@ private:
     System *system_;
 
 protected:
-    System *GetSystem();
+    System *GetSystem() const;
 
 public:
     Module(System *system);

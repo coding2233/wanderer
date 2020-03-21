@@ -37,7 +37,7 @@ private:
     //发送数据
     void OnConnected(int fd);
     //消息发送
-    void OnMessageSend(int fd, const google::protobuf::Message &message);
+    void OnMessageSend(int fd, const google::protobuf::Message *message);
     //处理消息
     void OnMessageReceive(const Session *session, int type, const char *data, int size);
     //内部通信的回调

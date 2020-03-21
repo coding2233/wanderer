@@ -18,7 +18,7 @@ public:
     ~System();
 
     template <class T>
-    T *GetModule()
+    T *GetModule() const
     {
         auto iter = modules_->find(typeid(T).name());
         if (iter != modules_->end())

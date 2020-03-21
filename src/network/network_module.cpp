@@ -71,7 +71,7 @@ void NetworkModule::OnConnected(int fd)
     }
 }
 
-void NetworkModule::OnMessageSend(int fd, const google::protobuf::Message &message)
+void NetworkModule::OnMessageSend(int fd, const google::protobuf::Message *message)
 {
     size_t size = message_packer_->ToBytes(message);
     socket_->SendData(fd, message_packer_->Read(), size);
@@ -108,7 +108,7 @@ void NetworkModule::OnInnerConnected(const char *name, int fd)
         S2G_RegisterInnerSession ss;
         ss.set_name(name);
         ss.set_secret("7c70519a56c6c16ab2c6be0c05c6455b");
-        session->Send(ss);
+        session->Send(&ss);
         std::cout << "inner session connected:"
                   << " [" << name << "] "
                   << "[" << fd << "]" << std::endl;

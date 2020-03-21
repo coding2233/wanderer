@@ -31,7 +31,7 @@ public:
     ProtobufMessagePacker(/* args */);
     ~ProtobufMessagePacker();
 
-    size_t ToBytes(const google::protobuf::Message &message) override;
+    size_t ToBytes(const google::protobuf::Message *message) override;
 
     void Dispatcher(const Session *session, int type, const char *data, int size);
 

@@ -20,7 +20,7 @@ void Session::Setup(int fd, MESSAGE_SEND message_send, MESSAGE_RECEIVE message_r
     message_receive_ = message_receive;
 }
 
-void Session::Send(const google::protobuf::Message &message)
+void Session::Send(const google::protobuf::Message *message)
 {
     message_send_(fd_, message);
 }
@@ -38,7 +38,7 @@ void Session::Receive(const char *data, int size)
         // memset(temp, 0, 4);
         // memcpy(temp, read + 4, 4);
         int message_type = CharPointer2Int(read + 4); // atoi(temp);
-        //消息回调
+        //消息回调`
         message_receive_(this, message_type, read + 8, data_size - 8);
         //清理数据
         circle_buffer_->Flush(data_size);

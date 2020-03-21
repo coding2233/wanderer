@@ -8,7 +8,7 @@
 namespace wanderer
 {
 
-#define MESSAGE_SEND std::function<void(int, const google::protobuf::Message &)>
+#define MESSAGE_SEND std::function<void(int, const google::protobuf::Message *)>
 #define MESSAGE_RECEIVE std::function<void(const Session *, int, const char *, int)>
 
 class Session
@@ -34,7 +34,7 @@ public:
 
     void Setup(int fd, MESSAGE_SEND message_send, MESSAGE_RECEIVE message_receive);
     //发送信息
-    void Send(const google::protobuf::Message &message);
+    void Send(const google::protobuf::Message *message);
     //接收的数据
     void Receive(const char *data, int size);
 };

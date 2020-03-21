@@ -22,7 +22,7 @@ public:
     }
 
     //转数据
-    virtual size_t ToBytes(const T &message) = 0;
+    virtual size_t ToBytes(const T *message) = 0;
 
     // //转消息结构
     // Message *ToMessage(const char *buffer, int size) = 0;
