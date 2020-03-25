@@ -29,10 +29,9 @@ void Session::Receive(const char *data, int size)
 {
     circle_buffer_->Write(data, size);
     const char *read = circle_buffer_->Read();
-
     // char temp[4];
     // memcpy(temp, read, 4);
-    int data_size = CharPointer2Int(read);
+    int data_size = CharPointer2Int(circle_buffer_->Read());
     if (data_size > 0 && data_size <= circle_buffer_->Length())
     {
         // memset(temp, 0, 4);

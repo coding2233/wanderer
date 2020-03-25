@@ -50,8 +50,8 @@ size_t ProtobufMessagePacker::ToBytes(const google::protobuf::Message *message)
         int type_code = iter->second;
         const size_t data_size = message->ByteSizeLong();
         size_t size = 4 + 4 + data_size;
-        sprintf(data_, "%d", size);
-        sprintf(data_ + 4, "%d", type_code);
+        Int2CharPointer(data_,size);
+        Int2CharPointer(data_+4,type_code);
         message->SerializeToArray(data_ + 8, size);
         return size;
     }

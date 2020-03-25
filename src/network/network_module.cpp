@@ -45,7 +45,6 @@ void NetworkModule::OnClose()
 
 void NetworkModule::OnReceiveData(int fd, const char *data, int size)
 {
-    std::cout << "read receive data : " << fd << std::endl;
     sessions_iter_ = sessions_.find(fd);
     if (sessions_iter_ != sessions_.end())
     {
