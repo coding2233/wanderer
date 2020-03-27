@@ -5,6 +5,7 @@
 #include "network/socket_epoll.h"
 #include "network/session.h"
 #include "network/protobuf_message_packer.h"
+#include "inner_session/inner_session_module.h"
 
 #include <functional>
 #include <map>
@@ -24,8 +25,8 @@ private:
     std::map<int, Session *> sessions_;
     std::map<int, Session *>::iterator sessions_iter_;
     //inner session map
-    std::map<std::string, Session *> inner_session_;
-    std::map<std::string, Session *>::iterator inner_session_iter_;
+    //std::map<std::string, Session *> inner_session_;
+    //std::map<std::string, Session *>::iterator inner_session_iter_;
     //消息打包
     ProtobufMessagePacker *message_packer_;
     //消息发送绑定

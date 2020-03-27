@@ -13,6 +13,7 @@ S2G_RegisterInnerSessionHandler::~S2G_RegisterInnerSessionHandler()
 
 void S2G_RegisterInnerSessionHandler::Handle(const Session *session, S2G_RegisterInnerSession *message)
 {
+    System::GetModule<InnerSessionModule>()->AddInnerGateSession(message->name(),session);
     std::cout << "s2g register inner session: " <<"["<< message->name()<<"] " << message->secret() << std::endl;
 }
 

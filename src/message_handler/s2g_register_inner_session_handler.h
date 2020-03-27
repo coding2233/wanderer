@@ -4,6 +4,8 @@
 #include "network/message_hander.h"
 #include "wanderer.pb.h"
 #include "network/session.h"
+#include "base/system.h"
+#include "inner_session/inner_session_module.h"
 
 #include <iostream>
 

@@ -103,7 +103,8 @@ void NetworkModule::OnInnerConnected(const char *name, int fd)
         session->Setup(fd, message_send_, message_receive_);
         sessions_.insert(std::make_pair(fd, session));
         //内部的session
-        inner_session_.insert(std::make_pair(name, session));
+        //inner_session_.insert(std::make_pair(name, session));
+        GetSystem()->GetModule<InnerSessionModule>()->AddInnerSession(name,session);
         S2G_RegisterInnerSession ss;
         ss.set_name(name);
         ss.set_secret("7c70519a56c6c16ab2c6be0c05c6455b");

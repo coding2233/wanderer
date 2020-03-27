@@ -25,6 +25,7 @@ void App::Run(int argc, char *args[])
 void App::InitModule(AppConfig *app_config)
 {
     NetworkModule *network_module = new NetworkModule(system_);
+    InnerSessionModule *inner_session_module = new InnerSessionModule(system_);
 
     switch (app_config->app_type_)
     {
@@ -40,7 +41,7 @@ void App::InitModule(AppConfig *app_config)
         network_module->CreateInnerSession("login", app_config->gate_ip_.c_str(), app_config->gate_port_);
         break;
     case kGate:
-        network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
+        network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_); 
         break;
     case kDataBase:
         network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
@@ -58,7 +59,9 @@ void App::InitModule(AppConfig *app_config)
         break;
     }
 
-    modules_.insert(std::pair<std::string, Module *>(typeid(*network_module).name(), network_module));
+    modules_.insert(std::pair<std::string, Module *>(typeid(*network_module).name(), network_module));    
+    modules_.insert(std::pair<std::string, Module *>(typeid(*inner_session_module).name(), inner_session_module));
+
 }
 
 void App::Init()

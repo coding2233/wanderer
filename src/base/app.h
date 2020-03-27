@@ -6,6 +6,7 @@
 #include "network/network_module.h"
 #include "logic/logic_module.h"
 #include "base/app_config.h"
+#include "inner_session/inner_session_module.h"
 
 #include <iostream>
 #include <map>
