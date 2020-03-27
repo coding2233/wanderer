@@ -53,7 +53,7 @@ void App::InitModule(AppConfig *app_config)
         break;
     case kBattle:
         network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-        network_module->CreateInnerSession("center", app_config->gate_ip_.c_str(), app_config->gate_port_);
+        network_module->CreateInnerSession("battle", app_config->gate_ip_.c_str(), app_config->gate_port_);
         break;
     default:
         break;

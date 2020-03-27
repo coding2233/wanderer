@@ -24,3 +24,6 @@
     |函数名|大驼峰命名|TestFunction|
     |常量命名|k开头+大驼峰命名|kTestValue|
     |枚举命名|名称大驼峰命名,变量同常量|AppType,kAll|
+
+### 测试
+* `secret`可以使用`openssl rand -hex 16`生成
