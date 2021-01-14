@@ -5,6 +5,7 @@
 #include <iostream>
 #include <WinSock2.h>
 #include <ws2tcpip.h>
+#include <windows.h>
 
 #include "network/socket_base.h"
 
@@ -13,6 +14,8 @@ namespace wanderer
 {
     class SocketIOCP : public SocketBase
     {
+    private:
+        HANDLE completion_port_;
     public:
         SocketIOCP();
         ~SocketIOCP();

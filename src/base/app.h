@@ -7,6 +7,7 @@
 #include "logic/logic_module.h"
 #include "base/app_config.h"
 #include "inner_session/inner_session_module.h"
+#include "custom_module/custom_module.h"
 
 #include <iostream>
 #include <map>
@@ -24,8 +25,7 @@ namespace wanderer
 
     private:
         //初始化模块
-        void
-        InitModule(AppConfig *app_config);
+        void InitModule(AppConfig *app_config);
         //初始化
         void Init();
         //循环
