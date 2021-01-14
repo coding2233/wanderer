@@ -4,9 +4,10 @@ namespace wanderer
 
 NetworkModule::NetworkModule(System *system) : Module(system)
 {
-    message_packer_ = new ProtobufMessagePacker;
+    //message_packer_ = new ProtobufMessagePacker;
 #if WIN32
-    throw std::runtime_error("IOCP not implemented yet!!");
+    //throw std::runtime_error("IOCP not implemented yet!!");
+    socket_ = new SocketIOCP;
 #elif unix
     socket_ = new SocketEpoll;
 #endif
@@ -23,7 +24,7 @@ NetworkModule::NetworkModule(System *system) : Module(system)
 
 NetworkModule::~NetworkModule()
 {
-    delete message_packer_;
+    //delete message_packer_;
 }
 
 void NetworkModule::OnInit()
@@ -70,15 +71,16 @@ void NetworkModule::OnConnected(int fd)
     }
 }
 
-void NetworkModule::OnMessageSend(int fd, const google::protobuf::Message *message)
+void NetworkModule::OnMessageSend(int fd, const char *message)
 {
-    size_t size = message_packer_->ToBytes(message);
-    socket_->SendData(fd, message_packer_->Read(), size);
+    //size_t size = message_packer_->ToBytes(message);
+    int size = sizeof(message);
+    socket_->SendData(fd, message, size);
 }
 
 void NetworkModule::OnMessageReceive(const Session *session, int type, const char *data, int size)
 {
-    message_packer_->Dispatcher(session, type, data, size);
+    //message_packer_->Dispatcher(session, type, data, size);
 }
 
 void NetworkModule::CreateServer(const char *server_ip, int server_port)
@@ -105,10 +107,10 @@ void NetworkModule::OnInnerConnected(const char *name, int fd)
         //内部的session
         //inner_session_.insert(std::make_pair(name, session));
         GetSystem()->GetModule<InnerSessionModule>()->AddInnerSession(name,session);
-        S2G_RegisterInnerSession ss;
-        ss.set_name(name);
-        ss.set_secret("7c70519a56c6c16ab2c6be0c05c6455b");
-        session->Send(&ss);
+        //S2G_RegisterInnerSession ss;
+   /*     ss.set_name(name);
+        ss.set_secret("7c70519a56c6c16ab2c6be0c05c6455b");*/
+        //session->Send(&ss);
         std::cout << "inner session connected:"
                   << " [" << name << "] "
                   << "[" << fd << "]" << std::endl;

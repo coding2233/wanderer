@@ -1,3 +1,5 @@
+#if unix
+
 #include "network/socket_epoll.h"
 namespace wanderer
 {
@@ -179,3 +181,5 @@ void SocketEpoll::Close()
     shutdown(listen_socket_, SHUT_RD);
 }
 } // namespace wanderer
+
+#endif

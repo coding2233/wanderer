@@ -4,11 +4,9 @@ project(wanderer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories("src" "protocol")
+include_directories("src")
 
-add_subdirectory(library)
-
-add_subdirectory(protocol)
+# add_subdirectory(protocol)
 
 add_subdirectory(src)
 

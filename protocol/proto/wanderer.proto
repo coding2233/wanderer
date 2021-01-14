@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package wanderer;
-
-message S2G_RegisterInnerSession {
-  string name = 1;
-  string secret = 2;
-}

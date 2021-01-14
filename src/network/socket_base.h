@@ -2,6 +2,7 @@
 #define __SOCKET_BASE_H__
 
 #include <functional>
+#include <queue>
 
 namespace wanderer
 {
@@ -12,6 +13,8 @@ class SocketBase
 {
 private:
     /* data */
+
+
 public:
     SocketBase(/* args */);
     ~SocketBase();

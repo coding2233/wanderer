@@ -1,3 +1,5 @@
+#if unix
+
 #ifndef __SOCKET_EPOLL_H__
 #define __SOCKET_EPOLL_H__
 
@@ -65,4 +67,7 @@ protected:
 };
 
 } // namespace wanderer
+#endif
+
+
 #endif

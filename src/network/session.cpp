@@ -20,7 +20,7 @@ void Session::Setup(int fd, MESSAGE_SEND message_send, MESSAGE_RECEIVE message_r
     message_receive_ = message_receive;
 }
 
-void Session::Send(const google::protobuf::Message *message)
+void Session::Send(const char *message)
 {
     message_send_(fd_, message);
 }

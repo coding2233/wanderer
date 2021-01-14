@@ -19,7 +19,7 @@ public:
     {
     }
     //处理消息
-    void HandleMessage(const Session *session, google::protobuf::Message *message) override
+    void HandleMessage(const Session *session,char *message) override
     {
         T *t = dynamic_cast<T *>(message);
         Handle(session, t);
