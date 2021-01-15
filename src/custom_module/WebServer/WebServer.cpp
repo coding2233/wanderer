@@ -16,7 +16,7 @@ namespace wanderer
 	void WebServer::OnInit()
 	{
 		const char *port = "19321";
-		const char *document_root = "./files";
+		const char *document_root = ".";
 
 		struct mg_mgr mgr;
 		struct mg_connection *nc;
@@ -39,7 +39,7 @@ namespace wanderer
 
 	void WebServer::OnUpdate()
 	{
-		mg_mgr_poll(mgr_, 1000);
+		mg_mgr_poll(mgr_, 10);
 	}
 
 	void WebServer::OnClose()

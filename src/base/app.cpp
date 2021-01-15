@@ -77,7 +77,7 @@ namespace wanderer
 
     void App::MainLoop()
     {
-        while (1)
+        while (true)
         {
             for (module_iter_ = modules_.begin(); module_iter_ != modules_.end(); module_iter_++)
             {
