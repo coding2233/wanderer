@@ -63,7 +63,7 @@ namespace wanderer
         modules_.insert(std::pair<std::string, Module *>(typeid(*inner_session_module).name(), inner_session_module));
 
         //load custom module
-        CustomModule custom_module(modules_, system_);
+        CustomModule custom_module(&modules_, system_);
     }
 
     void App::Init()
