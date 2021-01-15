@@ -3,6 +3,9 @@
 //This file is generated automatically by the program and is not allowed to be modified manually!
 
 #include "custom_module/custom_module.h"
+#if TEST
+#include "custom_module/test.h"
+#endif
 
 CustomModule::CustomModule(std::map<std::string, Module *> *modules, System *system)
 {
