@@ -77,7 +77,10 @@
         "unordered_set": "cpp",
         "iomanip": "cpp",
         "*.inc": "cpp",
-        "xlocale": "cpp"
+        "xlocale": "cpp",
+        "xhash": "cpp",
+        "xstring": "cpp",
+        "xtree": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"

@@ -10,13 +10,15 @@
 #include "base/system.h"
 #include "base/module.h"
 
-class CustomModule
+namespace wanderer
 {
-private:
-    /* data */
-public:
-    CustomModule(std::map<std::string, Module *> *modules, System *system);
-    ~CustomModule();
-};
-
+    class CustomModule
+    {
+    private:
+        /* data */
+    public:
+        CustomModule(std::map<std::string, Module *> *modules, System *system);
+        ~CustomModule();
+    };
+} // namespace wanderer
 #endif
