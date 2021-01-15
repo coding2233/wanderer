@@ -20,6 +20,7 @@ namespace wanderer
 
 		struct mg_mgr mgr;
 		struct mg_connection *nc;
+		mgr_ = &mgr;
 
 		mg_mgr_init(&mgr, NULL);
 		std::cout << "Starting web server on port: " << port << std::endl;
@@ -33,13 +34,14 @@ namespace wanderer
 		mg_set_protocol_http_websocket(nc);
 		http_server_opts.document_root = document_root;
 		http_server_opts.enable_directory_listing = "yes";
-
-		mgr_ = &mgr;
 	}
 
 	void WebServer::OnUpdate()
 	{
-		mg_mgr_poll(mgr_, 10);
+		if (mgr_ != nullptr)
+		{
+			int poll_result = mg_mgr_poll(mgr_,0);
+		}
 	}
 
 	void WebServer::OnClose()
