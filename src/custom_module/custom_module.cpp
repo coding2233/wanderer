@@ -6,7 +6,10 @@
 
 CustomModule::CustomModule(std::map<std::string, Module *> *modules, System *system)
 {
-#if SFSDF
+
+#if TEST
+	test *test__ = new test(system);
+	modules.insert(std::pair<std::string, Module *>(typeid(*test__).name(), test__));
 #endif
 }
 
