@@ -4,7 +4,7 @@ namespace wanderer
 	std::map<const char *, const char *> WebServer::map_upload_files = {
 		{"a", "a"}};
 
-	WebServer::WebServer(System *system):Module(system)
+	WebServer::WebServer(System *system) : Module(system)
 	{
 		map_upload_files.clear();
 	}
@@ -18,15 +18,13 @@ namespace wanderer
 		const char *port = "19321";
 		const char *document_root = ".";
 
-		struct mg_mgr mgr;
 		struct mg_connection *nc;
-		mgr_ = &mgr;
 
-		mg_mgr_init(&mgr, NULL);
+		mg_mgr_init(&mgr_, NULL);
 		std::cout << "Starting web server on port: " << port << std::endl;
 		std::cout << "Document root path: " << document_root << std::endl;
 
-		nc = mg_bind(&mgr, port, OnHttpEvent);
+		nc = mg_bind(&mgr_, port, OnHttpEvent);
 		if (nc == nullptr)
 		{
 			throw std::runtime_error("Failed to create listener");
@@ -38,15 +36,12 @@ namespace wanderer
 
 	void WebServer::OnUpdate()
 	{
-		if (mgr_ != nullptr)
-		{
-			int poll_result = mg_mgr_poll(mgr_,0);
-		}
+		int poll_result = mg_mgr_poll(&mgr_, 1000);
 	}
 
 	void WebServer::OnClose()
 	{
-		mg_mgr_free(mgr_);
+		mg_mgr_free(&mgr_);
 	}
 
 	mg_str WebServer::OnFileUploadEvent(mg_connection *connection, mg_str mg_file_name)

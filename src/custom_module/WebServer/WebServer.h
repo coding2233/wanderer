@@ -28,8 +28,9 @@ namespace wanderer
 
     class WebServer : public Module
     {
+
     private:
-        struct mg_mgr *mgr_ = nullptr;
+        struct mg_mgr mgr_;
 
         static std::map<const char *, const char *> map_upload_files;
         //	static std::map<const char*, const char*>::iterator iter_upload_files;
