@@ -16,13 +16,12 @@ namespace wanderer
 	void WebServer::OnInit()
 	{
 		const char *port = "19321";
-		const char *document_root = ".";
+		const char *document_root = "./files";
 
 		struct mg_connection *nc;
 
 		mg_mgr_init(&mgr_, NULL);
-		std::cout << "Starting web server on port: " << port << std::endl;
-		std::cout << "Document root path: " << document_root << std::endl;
+		std::cout << "Starting web server on port: " << port << ", Document root path:" << document_root << std::endl;
 
 		nc = mg_bind(&mgr_, port, OnHttpEvent);
 		if (nc == nullptr)

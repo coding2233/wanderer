@@ -12,9 +12,8 @@ jobs:
     - name: Run build-test script
       run: |
         mkdir build && cd build
-        cmake --no-warn-unused-cli -DCMAKE_TOOLCHAIN_FILE=../cmake/linux_clang.cmake ../ && make
+        cmake --no-warn-unused-cli -DWEBSERVER=1 -DCMAKE_TOOLCHAIN_FILE=../cmake/linux_clang.cmake ../ && make
         ./wanderer --type all --server 127.0.0.1:2233 --gate_server 127.0.0.1:2233 &
         python3 ../client-test/client.py &
-    
 
   
