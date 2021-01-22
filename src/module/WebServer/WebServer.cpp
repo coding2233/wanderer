@@ -1,4 +1,4 @@
-#include "custom_module/WebServer/WebServer.h"
+#include "WebServer/WebServer.h"
 namespace wanderer
 {
 	std::map<const char *, const char *> WebServer::map_upload_files = {
@@ -83,7 +83,6 @@ namespace wanderer
 				auto iter = map_upload_files.find(mp->file_name);
 				if (iter != map_upload_files.end())
 				{
-					//�����ļ�
 					if (fs::exists(file_name))
 					{
 						std::string dir_name = std::string(iter->second);
@@ -91,13 +90,11 @@ namespace wanderer
 						dir_name = dir_name.substr(0, index);
 						std::string root_path = std::string(http_server_opts.document_root);
 						dir_name = root_path + "/" + dir_name;
-						//����ļ��в����ڣ��򴴽��ļ���
 						if (!fs::exists(dir_name))
 						{
 							fs::create_directories(dir_name);
 						}
 						dir_name = dir_name + "/" + file_name;
-						//����ļ����ڣ�ɾ�����¸����µ�
 						if (fs::exists(dir_name))
 						{
 							fs::remove(dir_name);

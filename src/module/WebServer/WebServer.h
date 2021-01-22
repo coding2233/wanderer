@@ -11,7 +11,7 @@
 #include <thread>
 
 #include "base/module.h"
-#include "custom_module/WebServer/mongoose/mongoose.h"
+#include "WebServer/mongoose/mongoose.h"
 
 namespace fs = std::filesystem;
 
