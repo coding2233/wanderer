@@ -61,7 +61,6 @@ function(SetDefinitions dir)
       message("@@ Disable custom module: ${module}")
     endif()
   endforeach()
-  
 endfunction()
 
 function(AddLibraries dir)

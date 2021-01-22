@@ -3,8 +3,8 @@
 //This file is generated automatically by the program and is not allowed to be modified manually!
 
 #include "custom_module.h"
-#if WEBSERVER
-#include "WebServer/WebServer.h"
+#if LUASCRIPT
+#include "LuaScript/LuaScript.h"
 #endif
 
 namespace wanderer
@@ -12,9 +12,9 @@ namespace wanderer
 CustomModule::CustomModule(std::map<std::string, Module *> *modules, System *system)
 {
 
-#if WEBSERVER
-	WebServer *webserver__ = new WebServer(system);
-	modules->insert(std::pair<std::string, Module *>(typeid(*webserver__).name(),webserver__));
+#if LUASCRIPT
+	LuaScript *luascript__ = new LuaScript(system);
+	modules->insert(std::pair<std::string, Module *>(typeid(*luascript__).name(),luascript__));
 #endif
 
 }
