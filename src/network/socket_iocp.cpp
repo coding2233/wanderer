@@ -29,14 +29,14 @@ namespace wanderer
         SocketBase::Setup(connected_callback, receive_callback, inner_connected_callback);
         ////create iocp
         //completion_port_ = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-        ////create worker thread
+        ////create worker thread. Twice the number of cores.
         //SYSTEM_INFO si;
         //GetSystemInfo(&si);
         //int worker_thread_num = si.dwNumberOfProcessors * 2;
         //HANDLE* worker_threads = new HANDLE[worker_thread_num];
         //for (int i = 0; i < worker_thread_num; i++)
         //{
-        //    worker_threads[i] = CreateThread(0, 0, WorkerThreadProc, (void*)this, 0, 0);
+        //    //worker_threads[i] = CreateThread(0, 0, WorkerThreadProc, (void*)this, 0, 0);
         //}
         //logo
         SetLogo();

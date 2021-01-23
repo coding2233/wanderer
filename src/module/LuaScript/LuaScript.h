@@ -1,15 +1,33 @@
+//https://blog.csdn.net/x356982611/article/details/26688287
+//https://blog.csdn.net/shun_fzll/article/details/39120965
+
 #ifndef __LUA_SCRIPT_MODULE_H__
 #define __LUA_SCRIPT_MODULE_H__
 
-#include "LuaScript/lua-5.4.2/src/lapi.h"
+#include <iostream>
+
+extern "C"
+{
+#include "lua/lua.h"
+#include "lua/lauxlib.h"
+#include "lua/lualib.h"
+}
+
 #include "base/module.h"
+
 
 namespace wanderer
 {
     class LuaScript : public Module
     {
     private:
-        /* data */
+        /* lua_State */
+        lua_State* global_state_ = nullptr;
+        //Registering C functions
+        void RegisterCFunction();
+        //Set the search Lua file folder
+        void SetLuaSearchPath();
+
     public:
         LuaScript(System *system);
         ~LuaScript();

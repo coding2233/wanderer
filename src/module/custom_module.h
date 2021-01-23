@@ -6,6 +6,7 @@
 #define __CUSTOM_MODULE_H__
 
 #include <map>
+#include <typeinfo>
 
 #include "base/system.h"
 #include "base/module.h"
