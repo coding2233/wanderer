@@ -47,7 +47,7 @@ void SocketEpoll::SetLogo()
               << "**" << std::endl;
 }
 
-void SocketEpoll::Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char *name, int fd)> inner_connected_callback)
+void SocketEpoll::Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char name, int fd)> inner_connected_callback)
 {
     SocketBase::Setup(connected_callback, receive_callback, inner_connected_callback);
 
@@ -137,7 +137,7 @@ void SocketEpoll::CreateConnectSocket(const char *name, const char *server_ip, i
     socket_thread.detach();
 }
 
-void SocketEpoll::CreateClientSocket(const char *name, const char *server_ip, int server_port, int sleep_time)
+void SocketEpoll::CreateClientSocket(const char name, const char *server_ip, int server_port, int sleep_time)
 {
     std::this_thread::sleep_for(std::chrono::seconds(sleep_time));
 

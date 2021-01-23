@@ -80,10 +80,9 @@ void NetworkModule::OnMessageSend(int fd, const char *message)
 
 void NetworkModule::OnMessageReceive(const Session *session, IMessage* message)
 {
-    //message_packer_->Dispatcher(session, type, data, size);
-    for (auto iter = message_receiver_listeners_.begin(); iter != message_receiver_listeners_.end(); iter++)
+    for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
     {
-        //iter(session, message);
+        message_receiver_listeners_[i](session, message);
     }
 }
 
@@ -120,6 +119,11 @@ void NetworkModule::OnInnerConnected(const char name, int fd)
                   << " [" << name << "] "
                   << "[" << fd << "]" << std::endl;
     }
+}
+
+void NetworkModule::AddReciveListener(MESSAGE_RECEIVE message_receive)
+{
+    message_receiver_listeners_.push_back(message_receive);
 }
 
 } // namespace wanderer

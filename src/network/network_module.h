@@ -66,10 +66,7 @@ namespace wanderer
         //创建内部的交流通信
         void CreateInnerSession(AppType_ app_type, const char *server_ip, int server_port);
 
-        void AddReciveListener(MESSAGE_RECEIVE message_receive)
-        {
-            message_receiver_listeners_.push_back(message_receive);
-        }
+        void AddReciveListener(MESSAGE_RECEIVE message_receive);
         //void RemoveReciveListener(MESSAGE_RECEIVE message_receive);
     };
 
