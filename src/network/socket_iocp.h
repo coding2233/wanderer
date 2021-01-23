@@ -19,12 +19,12 @@ namespace wanderer
     public:
         SocketIOCP();
         ~SocketIOCP();
-        virtual void Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char *name, int fd)> inner_connected_callback) override;
+        virtual void Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char name, int fd)> inner_connected_callback) override;
         void Loop() override;
         void Close() override;
         int SendData(int fd, const char *data, size_t size) override;
         int CreateListenSocket(const char *server_ip, int server_port) override;
-        void CreateConnectSocket(const char *name, const char *server_ip, int server_port) override;
+        void CreateConnectSocket(const char name, const char *server_ip, int server_port) override;
 
     protected:
         void SetLogo() override;

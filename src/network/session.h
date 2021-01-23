@@ -4,14 +4,14 @@
 #include <functional>
 
 #include "network/circle_buffer.h"
-// #include "google/protobuf/message.h"
 #include "utility/utility.h"
+#include "network/message.h"
 
 namespace wanderer
 {
 
 #define MESSAGE_SEND std::function<void(int, const char *)>
-#define MESSAGE_RECEIVE std::function<void(const Session *, int, const char *, int)>
+#define MESSAGE_RECEIVE std::function<void(const Session *, IMessage*)>
 
     class Session
     {
@@ -36,7 +36,7 @@ namespace wanderer
 
         void Setup(int fd, MESSAGE_SEND message_send, MESSAGE_RECEIVE message_receive);
         //发送信息
-        void Send(const char *message);
+        void Send(IMessage *message);
         //接收的数据
         void Receive(const char *data, int size);
     };

@@ -13,7 +13,7 @@ NetworkModule::NetworkModule(System *system) : Module(system)
 #endif
 
     message_send_ = std::bind(&NetworkModule::OnMessageSend, this, std::placeholders::_1, std::placeholders::_2);
-    message_receive_ = std::bind(&NetworkModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
+    message_receive_ = std::bind(&NetworkModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2);
 
     auto receive_callback = std::bind(&NetworkModule::OnReceiveData, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     auto connect_callback = std::bind(&NetworkModule::OnConnected, this, std::placeholders::_1);
@@ -78,9 +78,13 @@ void NetworkModule::OnMessageSend(int fd, const char *message)
     socket_->SendData(fd, message, size);
 }
 
-void NetworkModule::OnMessageReceive(const Session *session, int type, const char *data, int size)
+void NetworkModule::OnMessageReceive(const Session *session, IMessage* message)
 {
     //message_packer_->Dispatcher(session, type, data, size);
+    for (auto iter = message_receiver_listeners_.begin(); iter != message_receiver_listeners_.end(); iter++)
+    {
+        //iter(session, message);
+    }
 }
 
 void NetworkModule::CreateServer(const char *server_ip, int server_port)
@@ -89,14 +93,14 @@ void NetworkModule::CreateServer(const char *server_ip, int server_port)
     std::cout << "server runing: " << server_ip << ":" << server_port << std::endl;
 }
 
-void NetworkModule::CreateInnerSession(const char *name, const char *server_ip, int server_port)
+void NetworkModule::CreateInnerSession(AppType_ app_type, const char *server_ip, int server_port)
 {
-    socket_->CreateConnectSocket(name, server_ip, server_port);
+    socket_->CreateConnectSocket(app_type, server_ip, server_port);
     std::cout << "inner session connecting: "
-              << "[" << name << "] " << server_ip << ":" << server_port << std::endl;
+              << "[" << app_type << "] " << server_ip << ":" << server_port << std::endl;
 }
 
-void NetworkModule::OnInnerConnected(const char *name, int fd)
+void NetworkModule::OnInnerConnected(const char name, int fd)
 {
     sessions_iter_ = sessions_.find(fd);
     if (sessions_iter_ == sessions_.end())
@@ -107,6 +111,7 @@ void NetworkModule::OnInnerConnected(const char *name, int fd)
         //内部的session
         //inner_session_.insert(std::make_pair(name, session));
         GetSystem()->GetModule<InnerSessionModule>()->AddInnerSession(name,session);
+        //session->Send(Message::Setup(MessageType_Inner,));
         //S2G_RegisterInnerSession ss;
    /*     ss.set_name(name);
         ss.set_secret("7c70519a56c6c16ab2c6be0c05c6455b");*/

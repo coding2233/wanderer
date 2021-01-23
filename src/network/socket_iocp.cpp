@@ -24,7 +24,7 @@ namespace wanderer
         std::cout << "***********************************" << std::endl;
     }
 
-    void SocketIOCP::Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char *name, int fd)> inner_connected_callback)
+    void SocketIOCP::Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char name, int fd)> inner_connected_callback)
     {
         SocketBase::Setup(connected_callback, receive_callback, inner_connected_callback);
         ////create iocp
@@ -61,7 +61,7 @@ namespace wanderer
     }
 
     //创建客户端的socket
-    void SocketIOCP::CreateConnectSocket(const char *name, const char *server_ip, int server_port)
+    void SocketIOCP::CreateConnectSocket(const char name, const char *server_ip, int server_port)
     {
     }
 } // namespace wanderer

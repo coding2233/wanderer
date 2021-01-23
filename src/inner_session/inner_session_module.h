@@ -3,6 +3,7 @@
 
 #include "base/module.h"
 #include "network/session.h"
+#include "base/app_config.h"
 
 #include <map>
 
@@ -14,18 +15,20 @@ namespace wanderer
         InnerSessionModule(System *system);
         ~InnerSessionModule();
     private:
-        std::map<std::string,const Session*> inner_sessions_;
-        std::map<std::string,const Session*> inner_gate_sessions_;
+        //normal inner session
+        std::map<char,Session*> inner_sessions_;
+        //gate server inner session
+        std::map<char,Session*> inner_gate_sessions_;
     public:
         
         void OnInit() override;
         void OnUpdate() override;
         void OnClose() override;
     
-        void AddInnerGateSession(std::string name,const Session* session);
-        void AddInnerSession(std::string name,const Session* session);
+        void AddInnerGateSession(char name,Session* session);
+        void AddInnerSession(char name,Session* session);
 
-       
+        void Send(std::string name, std::string target_name);
     };
 }
 

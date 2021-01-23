@@ -17,7 +17,7 @@ namespace wanderer
     void InnerSessionModule::OnClose()
     {}
 
-    void InnerSessionModule::AddInnerGateSession(std::string name,const Session* session)
+    void InnerSessionModule::AddInnerGateSession(char name,Session* session)
     {
         auto iter=inner_gate_sessions_.find(name);
         if(iter==inner_gate_sessions_.end())
@@ -26,7 +26,7 @@ namespace wanderer
         }
     }
 
-    void InnerSessionModule::AddInnerSession(std::string name,const Session* session)
+    void InnerSessionModule::AddInnerSession(char name,Session* session)
     {
         auto iter= inner_sessions_.find(name);
         if(iter==inner_sessions_.end())
@@ -34,4 +34,19 @@ namespace wanderer
             inner_sessions_.insert(std::make_pair(name,session));
         }
     }
+
+    //void InnerSessionModule::Send(std::string name,std::string target_name)
+    //{
+    //    auto iter = inner_sessions_.find(name);
+    //    if (iter != inner_sessions_.end())
+    //    {
+    //        auto session = iter->second;
+    //        //session->Send(Message::Global.Setup(MessageType_Inner,""))
+    //        //session->Send(Message::Global.Setup(0,));
+    //       /* Message* msg = new Message();
+    //        session->Send(msg->Setup(0, 1, 2, "sdsdfsdf"));*/
+    //        //iter->second->Send
+    //    }
+    //}
+
 }

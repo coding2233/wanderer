@@ -8,20 +8,20 @@
 namespace wanderer
 {
 
-enum AppType
+enum AppType_:char
 {
     //登录服务器
-    kLogin = 1 << 0,
+    AppType_Login = 1 << 0,
     //网关服务器
-    kGate = 1 << 1,
+    AppType_Gate = 1 << 1,
     //数据库服务器
-    kDataBase = 1 << 2,
+    AppType_DataBase = 1 << 2,
     //中心服务器
-    kCenter = 1 << 3,
+    AppType_Center = 1 << 3,
     //战场服务器
-    kBattle = 1 << 4,
+    AppType_Battle = 1 << 4,
     //集所有服务器为一体
-    kAll = kLogin | kGate | kDataBase | kCenter | kBattle
+    AppType_All = AppType_Login | AppType_Gate | AppType_DataBase | AppType_Center | AppType_Battle
 };
 
 class AppConfig
@@ -43,7 +43,7 @@ public:
     AppConfig(int argc, char *args[]);
     ~AppConfig();
     //类型
-    AppType app_type_;
+    AppType_ app_type_;
     //密钥
     std::string secret_key_;
     //服务器ip

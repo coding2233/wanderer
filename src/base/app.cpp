@@ -26,34 +26,41 @@ namespace wanderer
     {
         NetworkModule *network_module = new NetworkModule(system_);
         InnerSessionModule *inner_session_module = new InnerSessionModule(system_);
+        //GateModule* gate_module=nullptr;
 
         switch (app_config->app_type_)
         {
-        case kAll:
+        case AppType_All:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            network_module->CreateInnerSession("login", app_config->gate_ip_.c_str(), app_config->gate_port_);
-            network_module->CreateInnerSession("database", app_config->gate_ip_.c_str(), app_config->gate_port_);
-            network_module->CreateInnerSession("center", app_config->gate_ip_.c_str(), app_config->gate_port_);
-            network_module->CreateInnerSession("battle", app_config->gate_ip_.c_str(), app_config->gate_port_);
+            network_module->CreateInnerSession(AppType_Login, app_config->gate_ip_.c_str(), app_config->gate_port_);
+            network_module->CreateInnerSession(AppType_DataBase, app_config->gate_ip_.c_str(), app_config->gate_port_);
+            network_module->CreateInnerSession(AppType_Center, app_config->gate_ip_.c_str(), app_config->gate_port_);
+            network_module->CreateInnerSession(AppType_Battle, app_config->gate_ip_.c_str(), app_config->gate_port_);
+
+            //gate_module = new GateModule(system_);
+            //modules_.insert(std::pair<std::string, Module*>(typeid(*gate_module).name(), gate_module));
+
             break;
-        case kLogin:
+        case AppType_Login:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            network_module->CreateInnerSession("login", app_config->gate_ip_.c_str(), app_config->gate_port_);
+            network_module->CreateInnerSession(AppType_Login, app_config->gate_ip_.c_str(), app_config->gate_port_);
             break;
-        case kGate:
+        case AppType_Gate:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
+            //gate_module = new GateModule(system_);
+            //modules_.insert(std::pair<std::string, Module*>(typeid(*gate_module).name(), gate_module));
             break;
-        case kDataBase:
+        case AppType_DataBase:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            network_module->CreateInnerSession("database", app_config->gate_ip_.c_str(), app_config->gate_port_);
+            network_module->CreateInnerSession(AppType_DataBase, app_config->gate_ip_.c_str(), app_config->gate_port_);
             break;
-        case kCenter:
+        case AppType_Center:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            network_module->CreateInnerSession("center", app_config->gate_ip_.c_str(), app_config->gate_port_);
+            network_module->CreateInnerSession(AppType_Center, app_config->gate_ip_.c_str(), app_config->gate_port_);
             break;
-        case kBattle:
+        case AppType_Battle:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            network_module->CreateInnerSession("battle", app_config->gate_ip_.c_str(), app_config->gate_port_);
+            network_module->CreateInnerSession(AppType_Battle, app_config->gate_ip_.c_str(), app_config->gate_port_);
             break;
         default:
             break;

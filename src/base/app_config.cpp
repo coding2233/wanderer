@@ -44,27 +44,27 @@ void AppConfig::SetAppType(char *arg)
 {
     if (std::strcmp(arg, "all") == 0)
     {
-        app_type_ = kAll;
+        app_type_ = AppType_All;
     }
     else if (std::strcmp(arg, "login") == 0)
     {
-        app_type_ = kLogin;
+        app_type_ = AppType_Login;
     }
     else if (std::strcmp(arg, "gate") == 0)
     {
-        app_type_ = kGate;
+        app_type_ = AppType_Gate;
     }
     else if (std::strcmp(arg, "database") == 0)
     {
-        app_type_ = kDataBase;
+        app_type_ = AppType_DataBase;
     }
     else if (std::strcmp(arg, "center") == 0)
     {
-        app_type_ = kCenter;
+        app_type_ = AppType_Center;
     }
     else if (std::strcmp(arg, "battle") == 0)
     {
-        app_type_ = kBattle;
+        app_type_ = AppType_Battle;
     }
     else
     {
