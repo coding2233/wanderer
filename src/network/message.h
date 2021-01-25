@@ -1,3 +1,5 @@
+//https://blog.51cto.com/9291927/2332264#h0
+
 #ifndef __MESSAGE_H__
 #define __MESSAGE_H__
 
@@ -49,9 +51,9 @@ namespace wanderer
         //The global object of the message.
         static Message Global;
 
-        Message* Setup(MessageType_ message_type, const char* message);
+        Message* Setup(MessageType_ message_type, MessageCode_ message_code, const char* message);
 
-        Message* Setup(MessageType_ message_type, AppType_ inner_sender, AppType_ inner_receiver, const char* message);
+        Message* Setup(MessageType_ message_type, MessageCode_ message_code, AppType_ inner_sender, AppType_ inner_receiver, const char* message);
 
         const char *ToBytes() override;
 

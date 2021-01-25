@@ -46,7 +46,6 @@ namespace wanderer
         return nullptr;
     }
 
-
     Session* InnerSessionModule::GetNormalSession(AppType_ app_type)
     {
         auto iter = inner_sessions_.find(app_type);
