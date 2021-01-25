@@ -15,6 +15,8 @@ namespace wanderer
         InnerSessionModule(System *system);
         ~InnerSessionModule();
     private:
+        //For the time being, only one server of all types is supported!!!
+
         //normal inner session
         std::map<char,Session*> inner_sessions_;
         //gate server inner session
@@ -28,7 +30,8 @@ namespace wanderer
         void AddInnerGateSession(char name,Session* session);
         void AddInnerSession(char name,Session* session);
 
-        void Send(std::string name, std::string target_name);
+        Session* GetGateSession(AppType_ app_type);
+        Session* GetNormalSession(AppType_ app_type);
     };
 }
 

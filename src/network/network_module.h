@@ -67,7 +67,7 @@ namespace wanderer
         void CreateInnerSession(AppType_ app_type, const char *server_ip, int server_port);
 
         void AddReciveListener(MESSAGE_RECEIVE message_receive);
-        //void RemoveReciveListener(MESSAGE_RECEIVE message_receive);
+        //void RemoveReciveListener(MESSAGE_RECEIVE& message_receive);
     };
 
     // #ifdef __cplusplus

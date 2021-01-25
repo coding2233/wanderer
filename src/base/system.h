@@ -4,6 +4,8 @@
 #include <map>
 #include <string>
 
+#include "base/app_config.h"
+
 namespace wanderer
 {
 
@@ -13,7 +15,7 @@ namespace wanderer
     {
     private:
         static std::map<std::string, Module *> *modules_;
-
+        
     public:
         System(std::map<std::string, Module *> *modules);
         ~System();
@@ -28,6 +30,8 @@ namespace wanderer
             }
             return nullptr;
         }
+
+        static AppConfig* app_config_;
     };
 } // namespace wanderer
 

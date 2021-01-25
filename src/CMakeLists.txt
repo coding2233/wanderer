@@ -6,9 +6,10 @@ add_subdirectory(module)
 
 file(GLOB_RECURSE src "base/*.*"
     "inner_session/*.*"
-    "logic/*.*" 
     "network/*.*"
-    "utility/*.*")
+    "utility/*.*"
+    "login/*.*" 
+    "gate/*.*")
 
 add_library(core ${src})
 

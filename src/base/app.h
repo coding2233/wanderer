@@ -4,7 +4,7 @@
 #include "base/system.h"
 #include "base/module.h"
 #include "network/network_module.h"
-#include "logic/logic_module.h"
+#include "login/login_module.h"
 #include "base/app_config.h"
 #include "inner_session/inner_session_module.h"
 #include "gate/gate_module.h"
@@ -33,6 +33,9 @@ namespace wanderer
         void MainLoop();
         //清理
         void CleanUp();
+
+
+        void AddModule(Module* module);
 
     public:
         App(/* args */);

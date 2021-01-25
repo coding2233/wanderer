@@ -19,20 +19,32 @@ namespace wanderer
         MessageType_Outer = 1 << 1
     };
 
+    enum MessageCode_:unsigned char
+    {
+        MessageCode_Login_C2S=0,
+        MessageCode_Login_S2C=1,
+        MessageCode_UserInfo_L2D=2,
+        MessageCode_UserInfo_D2L = 3,
+    };
+
     struct Message : public IMessage
     {
     private:
+       
+    public:
+        Message(/* args */);
+        ~Message();
+
         //MessageType_
         char message_type_;
+        //MessageCode_
+        unsigned char message_code_;
         //AppType_ 
         char inner_sender_;
         //AppType_
         char inner_receiver_;
         // Message content
         const char* message_;
-    public:
-        Message(/* args */);
-        ~Message();
 
         //The global object of the message.
         static Message Global;

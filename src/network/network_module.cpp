@@ -84,6 +84,8 @@ void NetworkModule::OnMessageReceive(const Session *session, IMessage* message)
     {
         message_receiver_listeners_[i](session, message);
     }
+
+    delete message;
 }
 
 void NetworkModule::CreateServer(const char *server_ip, int server_port)

@@ -39,8 +39,10 @@ namespace wanderer
             //int message_type = CharPointer2Int(read + 4); // atoi(temp);
             //消息回调`
             //message_receive_(this, message_type, read + 8, data_size - 8);
-            IMessage* message = new Message();
-            message->ToMessage(read,data_size);
+
+            IMessage *message = new Message();
+            message->ToMessage(read, data_size);
+            // IMessage *message = (IMessage *)(Message::Global.ToMessage(read, data_size));
             message_receive_(this, message);
             //清理数据
             circle_buffer_->Flush(data_size);

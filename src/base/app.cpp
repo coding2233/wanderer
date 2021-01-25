@@ -16,6 +16,8 @@ namespace wanderer
     {
         AppConfig *app_config = new AppConfig(argc, args);
 
+        System::app_config_ = app_config;
+
         InitModule(app_config);
         Init();
         MainLoop();
@@ -26,7 +28,9 @@ namespace wanderer
     {
         NetworkModule *network_module = new NetworkModule(system_);
         InnerSessionModule *inner_session_module = new InnerSessionModule(system_);
-        //GateModule* gate_module=nullptr;
+
+        LoginModule* login_module = nullptr;
+        GateModule* gate_module=nullptr;
 
         switch (app_config->app_type_)
         {
@@ -37,18 +41,20 @@ namespace wanderer
             network_module->CreateInnerSession(AppType_Center, app_config->gate_ip_.c_str(), app_config->gate_port_);
             network_module->CreateInnerSession(AppType_Battle, app_config->gate_ip_.c_str(), app_config->gate_port_);
 
-            //gate_module = new GateModule(system_);
-            //modules_.insert(std::pair<std::string, Module*>(typeid(*gate_module).name(), gate_module));
+            gate_module = new GateModule(system_);
+            login_module = new LoginModule(system_);
 
             break;
         case AppType_Login:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
             network_module->CreateInnerSession(AppType_Login, app_config->gate_ip_.c_str(), app_config->gate_port_);
+            
+            login_module = new LoginModule(system_);
             break;
         case AppType_Gate:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            //gate_module = new GateModule(system_);
-            //modules_.insert(std::pair<std::string, Module*>(typeid(*gate_module).name(), gate_module));
+            
+            gate_module = new GateModule(system_);
             break;
         case AppType_DataBase:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
@@ -66,8 +72,10 @@ namespace wanderer
             break;
         }
 
-        modules_.insert(std::pair<std::string, Module *>(typeid(*network_module).name(), network_module));
-        modules_.insert(std::pair<std::string, Module *>(typeid(*inner_session_module).name(), inner_session_module));
+        //Add modules to map
+        AddModule(network_module);
+        AddModule(inner_session_module);
+        AddModule(gate_module);
 
         //load custom module
         CustomModule custom_module(&modules_, system_);
@@ -103,4 +111,13 @@ namespace wanderer
         }
         modules_.clear();
     }
+
+    void App::AddModule(Module* module)
+    {
+        if (module==nullptr)
+        {
+            modules_.insert(std::pair<std::string, Module*>(typeid(*module).name(), module));
+        }
+    }
+
 } // namespace wanderer

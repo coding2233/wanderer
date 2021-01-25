@@ -35,18 +35,27 @@ namespace wanderer
         }
     }
 
-    //void InnerSessionModule::Send(std::string name,std::string target_name)
-    //{
-    //    auto iter = inner_sessions_.find(name);
-    //    if (iter != inner_sessions_.end())
-    //    {
-    //        auto session = iter->second;
-    //        //session->Send(Message::Global.Setup(MessageType_Inner,""))
-    //        //session->Send(Message::Global.Setup(0,));
-    //       /* Message* msg = new Message();
-    //        session->Send(msg->Setup(0, 1, 2, "sdsdfsdf"));*/
-    //        //iter->second->Send
-    //    }
-    //}
+    Session* InnerSessionModule::GetGateSession(AppType_ app_type)
+    {
+        auto iter = inner_gate_sessions_.find(app_type);
+        if (iter!= inner_gate_sessions_.end())
+        {
+            return iter->second;
+        }
+
+        return nullptr;
+    }
+
+
+    Session* InnerSessionModule::GetNormalSession(AppType_ app_type)
+    {
+        auto iter = inner_sessions_.find(app_type);
+        if (iter != inner_sessions_.end())
+        {
+            return iter->second;
+        }
+
+        return nullptr;
+    }
 
 }
