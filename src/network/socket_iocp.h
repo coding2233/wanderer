@@ -1,5 +1,7 @@
 #if WIN32
-
+//https://blog.csdn.net/piggyxp/article/details/6922277
+//https://www.cnblogs.com/tanguoying/p/8439701.html
+//https://github.com/TTGuoying/IOCPServer
 #pragma once
 
 #include <iostream>

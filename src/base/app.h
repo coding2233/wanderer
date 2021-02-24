@@ -13,9 +13,17 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <csignal>
 
 namespace wanderer
 {
+    int signal_flag_=0;
+    //循环
+    void SignalHandler(int signal)
+    {
+        signal_flag_ = signal;
+    }
+
     class App
     {
     private:
@@ -33,8 +41,7 @@ namespace wanderer
         void MainLoop();
         //清理
         void CleanUp();
-
-
+        //添加模块
         void AddModule(Module* module);
 
     public:

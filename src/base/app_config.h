@@ -10,18 +10,20 @@ namespace wanderer
 
 enum AppType_:char
 {
+    //没有服务器类型
+    AppType_None = -1,
     //登录服务器
     AppType_Login = 1 << 0,
     //网关服务器
     AppType_Gate = 1 << 1,
     //数据库服务器
-    AppType_DataBase = 1 << 2,
+    AppType_DataBase =1 << 2,
     //中心服务器
-    AppType_Center = 1 << 3,
+    AppType_Center =1 << 3,
     //战场服务器
     AppType_Battle = 1 << 4,
     //集所有服务器为一体
-    AppType_All = AppType_Login | AppType_Gate | AppType_DataBase | AppType_Center | AppType_Battle
+    AppType_All =AppType_Login | AppType_Gate | AppType_DataBase | AppType_Center | AppType_Battle,
 };
 
 class AppConfig
@@ -54,6 +56,10 @@ public:
     std::string gate_ip_;
     //网关服务器的端口
     int gate_port_;
+    //外部参数的个数
+    int argc_;
+    //所有的外部参数
+    char **args_;
 };
 } // namespace wanderer
 

@@ -4,6 +4,14 @@ namespace wanderer
 
 AppConfig::AppConfig(int argc, char *args[])
 {
+    argc_ = argc;
+    args_ = args;
+
+    app_type_ = AppType_All;
+    server_ip_= gate_ip_ = "127.0.0.1";
+    server_port_ = gate_port_ = 2233;
+    secret_key_ = "c6596580cc9c193d6b8a15becff9a31d";
+
     int index = 1;
     while (index < argc)
     {

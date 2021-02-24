@@ -14,10 +14,12 @@ namespace wanderer
 
     void App::Run(int argc, char *args[])
     {
+        //绑定信号
+        std::signal(SIGINT, SignalHandler);
+
         AppConfig *app_config = new AppConfig(argc, args);
-
         System::app_config_ = app_config;
-
+   
         InitModule(app_config);
         Init();
         MainLoop();
@@ -92,7 +94,7 @@ namespace wanderer
 
     void App::MainLoop()
     {
-        while (true)
+        while (signal_flag_==0)
         {
             for (module_iter_ = modules_.begin(); module_iter_ != modules_.end(); module_iter_++)
             {

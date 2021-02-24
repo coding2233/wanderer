@@ -68,7 +68,7 @@ namespace wanderer
         }
 
         // 将socket绑定到完成端口中
-        if (NULL == CreateIoCompletionPort((HANDLE)listen_socket_, completion_port_, (DWORD)listenSockContext, 0))
+        if (NULL == CreateIoCompletionPort((HANDLE)listen_socket_, completion_port_, (DWORD)listen_socket_, 0))
         {
             RELEASE_SOCKET(listen_socket_);
             return false;
@@ -105,6 +105,14 @@ namespace wanderer
 
     DWORD SocketIOCP::WorkerThreadProc(LPVOID lpParam)
     {
+        SocketIOCP *iocp= (SocketIOCP*)lpParam;
+        DWORD dw_bytes = 0;
+        SOCKET *socket;
+        OVERLAPPED* ol = NULL;
+        while (true)
+        {
+            bool result = GetQueuedCompletionStatus(iocp->completion_port_, &dw_bytes, (PULONG_PTR)&socket, &ol, NULL);
+        }
         return 0;
     }
 
