@@ -14,12 +14,19 @@ namespace wanderer
 
     void App::Run(int argc, char *args[])
     {
-        //绑定信号
+        // 基于当前系统的当前日期/时间
+        time_t now = time(0);
+        // 把 now 转换为字符串形式
+        const char* dt = ctime(&now);
+        //std::cout to log file
+        static std::ofstream log_file(std::string(dt,"_out.log").c_str());
+        std::cout.rdbuf(log_file.rdbuf());
+        //绑定操作信号
         std::signal(SIGINT, SignalHandler);
-
+        //外部参数
         AppConfig *app_config = new AppConfig(argc, args);
         System::app_config_ = app_config;
-   
+        //各种模块
         InitModule(app_config);
         Init();
         MainLoop();

@@ -14,6 +14,7 @@
 #include <map>
 #include <string>
 #include <csignal>
+#include <fstream>
 
 namespace wanderer
 {
