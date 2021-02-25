@@ -129,7 +129,7 @@ namespace wanderer
 
     void App::AddModule(Module* module)
     {
-        if (module==nullptr)
+        if (module!=nullptr)
         {
             modules_.insert(std::pair<std::string, Module*>(typeid(*module).name(), module));
         }
