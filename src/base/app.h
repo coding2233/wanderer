@@ -19,13 +19,6 @@
 
 namespace wanderer
 {
-    int signal_flag_=0;
-    //
-    void SignalHandler(int signal)
-    {
-        signal_flag_ = signal;
-    }
-
     class App
     {
     private:
@@ -33,7 +26,7 @@ namespace wanderer
         std::map<std::string, Module *>::iterator module_iter_;
 
         System *system_;
-
+        static int signal_flag_;
     private:
         //初始化模块
         void InitModule(AppConfig *app_config);
@@ -45,6 +38,12 @@ namespace wanderer
         void CleanUp();
         //添加模块
         void AddModule(Module* module);
+
+        //信号处理
+        static void SignalHandler(int signal)
+        {
+            signal_flag_ = signal;
+        }
 
     public:
         App(/* args */);

@@ -3,6 +3,8 @@
 namespace wanderer
 {
 
+    int App::signal_flag_ = 0;
+
     App::App()
     {
         system_ = new System(&modules_);
@@ -28,7 +30,7 @@ namespace wanderer
         std::ofstream log_file(log_path);
         std::cout.rdbuf(log_file.rdbuf());
         //绑定操作信号
-        std::signal(SIGINT, SignalHandler);
+        std::signal(SIGINT, App::SignalHandler);
         //外部参数
         AppConfig *app_config = new AppConfig(argc, args);
         System::app_config_ = app_config;
