@@ -1,0 +1,11 @@
+version: '3'
+services:
+  wanderer:
+    build: ./
+    network_mode: host
+    restart: always 
+    container_name: wanderer-db
+    volumes:
+      - ./mongodb:/var/lib/mongodb
+      - ./log/mongodb.log:/var/log/mongodb/mongodb.log
+      - ./log:/log
