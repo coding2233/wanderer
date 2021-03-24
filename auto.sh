@@ -9,7 +9,9 @@ docker-compose up --build
 
 cd ../../
 
-cp -r ./docker/run ./build/
-cp ./build/wanderer ./build/run/
+
+mkdir out
+cp -r ./docker/run ./out/
+cp ./build/wanderer ./out/run/
 
 # ./wanderer -t all --server 0.0.0.0:2233 --gate_server 0.0.0.0:2233

@@ -11,6 +11,6 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 
-RUN mkdir -p /src/build && chmod 777 /src/build
+RUN mkdir -p /src
 
 # ENTRYPOINT ["/entrypoint.sh"]
