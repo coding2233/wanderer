@@ -9,8 +9,13 @@ docker-compose up --build
 
 cd ../../
 
+# 判断文件夹是否存在
+outdir=out
+if [ ! -d $outdir ]
+then
+    mkdir $outdir
+fi
 
-mkdir out
 cp -r ./docker/run ./out/
 cp ./build/wanderer ./out/run/
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(wanderer)
+project(wanderer LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
