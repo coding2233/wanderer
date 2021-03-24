@@ -9,11 +9,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Run build-test script
+    - name: build
       run: |
-        mkdir build && cd build
-        cmake --no-warn-unused-cli -DWEBSERVER=1 -DCMAKE_TOOLCHAIN_FILE=../cmake/linux_clang.cmake ../ && make
-        ./wanderer --type all --server 127.0.0.1:2233 --gate_server 127.0.0.1:2233 &
-        python3 ../client-test/client.py &
+        chmod +x auto.sh
+        ./auto
 
   
