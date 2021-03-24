@@ -2,12 +2,10 @@ FROM alpine
 
 LABEL maintain="wanderer"
 
-RUN apk add cmake && apk add clang && apk add git && apk add make \
-    && git clone https://github.com/coding2233/wanderer.git /data  \
-    && mkdir -p /data/build
-
+RUN mkdir -p /data/files && chmod 777 /data/files
 WORKDIR /data
+COPY build/wanderer /data
+COPY docker-entrypoint.sh /data
+RUN chmod + /data/docker-entrypoint.sh
 
-RUN cmake --no-warn-unused-cli -DWEBSERVER=1 -DCMAKE_TOOLCHAIN_FILE=/data/cmake/linux_clang.cmake -S /data -B /data/build && cmake --build /data/build
-
-ENTRYPOINT ["/data/docker/docker-entrypoint.sh"]
+ENTRYPOINT ["/data/docker-entrypoint.sh"]

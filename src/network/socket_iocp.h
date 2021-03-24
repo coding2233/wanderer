@@ -15,17 +15,13 @@
 
 namespace wanderer
 {
-    // 释放指针的宏
     #define RELEASE(x)			{if(x != nullptr) {delete x; x = nullptr;}}
-    // 释放句柄的宏
     #define RELEASE_HANDLE(x)	{if(x != NULL && x != INVALID_HANDLE_VALUE) { CloseHandle(x); x = INVALID_HANDLE_VALUE; }}
-    // 释放Socket的宏
     #define RELEASE_SOCKET(x)	{if(x != INVALID_SOCKET) { closesocket(x); x = INVALID_SOCKET; }}
 
     class SocketIOCP : public SocketBase
     {
     private:
-        //服务端监听的socket
         SOCKET listen_socket_;
         HANDLE completion_port_= INVALID_HANDLE_VALUE;
         HANDLE* worker_threads_=nullptr;

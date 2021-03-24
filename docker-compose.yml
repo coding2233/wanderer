@@ -1,8 +1,0 @@
-version: '3'
-services:
-  wanderer:
-    build: ./
-    network_mode: host
-    restart: always 
-    volumes:
-      - ./build/:/data/files
