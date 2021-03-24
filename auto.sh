@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-cd ./docker/build
+cd ./docker/docker-build
 docker-compose up --build
 
 # cd ../run
