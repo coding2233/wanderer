@@ -1,13 +1,10 @@
 #include "base/app_config.h"
 namespace wanderer
 {
-
     AppConfig::AppConfig(int argc, char *args[])
     {
-        argc_ = argc;
-        args_ = args;
 
-        app_type_ = AppType_All;
+        app_type_ = AppType_None;
         server_ip_ = gateway_ip_ = "127.0.0.1";
         server_port_ = gateway_port_ = 2233;
         secret_key_ = "c6596580cc9c193d6b8a15becff9a31d";
@@ -23,26 +20,26 @@ namespace wanderer
                 SetConfig(args[index]);
                 break;
             }
-            else if (std::strcmp(args[index], "--type") == 0 || std::strcmp(args[index], "-t") == 0)
-            {
-                index++;
-                SetAppType(args[index]);
-            }
-            else if (std::strcmp(args[index], "--server") == 0 || std::strcmp(args[index], "-s") == 0)
-            {
-                index++;
-                SetSeverInfo(args[index]);
-            }
-            else if (std::strcmp(args[index], "--gateway") == 0 || std::strcmp(args[index], "-g") == 0)
-            {
-                index++;
-                SetGateInfo(args[index]);
-            }
-            else if (std::strcmp(args[index], "--secret") == 0 || std::strcmp(args[index], "-S") == 0)
-            {
-                index++;
-                SetSecretKey(args[index]);
-            }
+            // else if (std::strcmp(args[index], "--type") == 0 || std::strcmp(args[index], "-t") == 0)
+            // {
+            //     index++;
+            //     SetAppType(args[index]);
+            // }
+            // else if (std::strcmp(args[index], "--server") == 0 || std::strcmp(args[index], "-s") == 0)
+            // {
+            //     index++;
+            //     SetSeverInfo(args[index]);
+            // }
+            // else if (std::strcmp(args[index], "--gateway") == 0 || std::strcmp(args[index], "-g") == 0)
+            // {
+            //     index++;
+            //     SetGateInfo(args[index]);
+            // }
+            // else if (std::strcmp(args[index], "--secret") == 0 || std::strcmp(args[index], "-S") == 0)
+            // {
+            //     index++;
+            //     SetSecretKey(args[index]);
+            // }
             else if (std::strcmp(args[index], "--help") == 0 || std::strcmp(args[index], "-h") == 0)
             {
                 ShowHelp();
@@ -60,6 +57,8 @@ namespace wanderer
     {
         YAML::Node config = YAML::LoadFile(arg)["service"];
 
+        service_config_ = config;
+
         if (config["log-path"].IsDefined())
         {
             log_path_ = config["log-path"].as<std::string>();
@@ -76,9 +75,25 @@ namespace wanderer
             server_ip_ = config["server"].as<std::string>();
         }
 
-        if (config["server"].IsDefined())
+        if (config["port"].IsDefined())
         {
-            server_port_ = config["server"].as<std::string>();
+            server_port_ = config["port"].as<int>();
+        }
+
+        if (config["secret"].IsDefined())
+        {
+            secret_key_ = config["secret"].as<std::string>();
+        }
+
+        if (config["secret"].IsDefined())
+        {
+            secret_key_ = config["secret"].as<std::string>();
+        }
+
+        if (config["gateway"].IsDefined())
+        {
+            gateway_ip_ = config["gateway"]["server"].as<std::string>();
+            gateway_port_ = config["gateway"]["port"].as<int>();
         }
 
         // for (YAML::const_iterator it = config.begin(); it != config.end(); it++)
@@ -88,7 +103,7 @@ namespace wanderer
         // }
     }
 
-    void AppConfig::SetAppType(char *arg)
+    void AppConfig::SetAppType(const char *arg)
     {
         if (std::strcmp(arg, "all") == 0)
         {
@@ -118,43 +133,6 @@ namespace wanderer
         {
             Exit();
         }
-    }
-
-    void AppConfig::SetSeverInfo(char *arg)
-    {
-        char *v = std::strtok(arg, ":");
-        if (v == nullptr)
-        {
-            Exit();
-        }
-        server_ip_ = v;
-        v = std::strtok(nullptr, ":");
-        if (v == nullptr)
-        {
-            Exit();
-        }
-        server_port_ = atoi(v);
-    }
-
-    void AppConfig::SetGateInfo(char *arg)
-    {
-        char *v = std::strtok(arg, ":");
-        if (v == nullptr)
-        {
-            Exit();
-        }
-        gateway_ip_ = v;
-        v = std::strtok(nullptr, ":");
-        if (v == nullptr)
-        {
-            Exit();
-        }
-        gateway_port_ = atoi(v);
-    }
-
-    void AppConfig::SetSecretKey(char *arg)
-    {
-        secret_key_ = arg;
     }
 
     void AppConfig::ShowHelp()

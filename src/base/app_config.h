@@ -35,13 +35,7 @@ namespace wanderer
         //设置配置文件
         void SetConfig(char *arg);
         //设置app类型
-        void SetAppType(char *arg);
-        //设置服务器的信息
-        void SetSeverInfo(char *arg);
-        //设置网关服务器的信息
-        void SetGateInfo(char *arg);
-        //设置密钥
-        void SetSecretKey(char *arg);
+        void SetAppType(const char *arg);
         //退出程序
         void Exit();
 
@@ -62,10 +56,8 @@ namespace wanderer
         int gateway_port_;
         //日志文件
         std::string log_path_;
-        //外部参数的个数
-        int argc_;
-        //所有的外部参数
-        char **args_;
+        //服务的配置文件
+        YAML::Node service_config_;
     };
 } // namespace wanderer
 

@@ -74,7 +74,7 @@ namespace wanderer
             gate_module = new GateModule(system_);
             break;
         case AppType_DataBase:
-            network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
+            // network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
             network_module->CreateInnerSession(AppType_DataBase, app_config->gateway_ip_.c_str(), app_config->gateway_port_);
             break;
         case AppType_Center:
