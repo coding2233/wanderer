@@ -9,6 +9,7 @@ RUN mkdir /log
 
 COPY entrypoint.sh /
 COPY wanderer /
+COPY conf/database.yml /
 
 RUN chmod +x /entrypoint.sh chmod +x /wanderer
 

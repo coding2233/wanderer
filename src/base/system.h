@@ -8,14 +8,15 @@
 
 namespace wanderer
 {
-
     class Module;
+
+#define VERSION "0.1.0"
 
     class System
     {
     private:
         static std::map<std::string, Module *> *modules_;
-        
+
     public:
         System(std::map<std::string, Module *> *modules);
         ~System();
@@ -31,7 +32,7 @@ namespace wanderer
             return nullptr;
         }
 
-        static AppConfig* app_config_;
+        static AppConfig *app_config_;
     };
 } // namespace wanderer
 

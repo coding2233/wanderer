@@ -1,9 +1,8 @@
 #!/bin/sh
 
-export SRC=/src
-
+SRC=/src
 cd ${SRC}
 
-ls ${SRC}
+BUILD=build/docker-build
 
-cmake --no-warn-unused-cli -DWEBSERVER=ON -DLUASCRIPT=ON -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/build && cmake --build ${SRC}/build
+cmake --no-warn-unused-cli -DWEBSERVER=ON -DLUASCRIPT=ON -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10

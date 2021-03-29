@@ -27,21 +27,19 @@ namespace wanderer
     }
 
     //处理消息
-    void GateModule::OnMessageReceive(const Session* session, IMessage* message)
+    void GateModule::OnMessageReceive(const Session *session, IMessage *message)
     {
-        auto msg = dynamic_cast<Message*>(message);
+        auto msg = dynamic_cast<Message *>(message);
         if (msg->message_type_ == MessageType_Inner)
         {
             auto app_config = GetSystem()->app_config_;
             //网关负责转发消息
-            if (app_config->app_type_ == AppType_Gate)
+            if (app_config->app_type_ == AppType_Gateway)
             {
-                auto session =GetSystem()->GetModule<InnerSessionModule>()->GetGateSession((AppType_)msg->inner_receiver_);
+                auto session = GetSystem()->GetModule<InnerSessionModule>()->GetGateSession((AppType_)msg->inner_receiver_);
                 session->Send(message);
             }
-
         }
-
     }
 
 } // namespace wanderer

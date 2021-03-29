@@ -1,0 +1,14 @@
+
+-h,--help
+	help info
+-t,--type
+	all,login,gate,database,center,battle
+-S,--secret
+	secret key,openssl rand -hex 16
+-s,--server
+	server address & port, e.g. 127.0.0.1:2233
+-g,--gateway
+	gateway server,e.g. 127.0.0.1:223
+-c,--config
+	A YAML file that supports the above parameters.
+

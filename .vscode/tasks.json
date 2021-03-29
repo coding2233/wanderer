@@ -4,16 +4,12 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "cmake",
+            "label": "auto-build",
             "type": "shell",
-            "command": "cmake",
+            "command": "bash",
             "args": [
-                "--build",
-                "${workspaceFolder}/build",
-                "--config",
-                "Debug",
-                "-j",
-                "10"
+                "-c",
+                "${workspaceFolder}/auto.sh"
             ]
         }
     ]
