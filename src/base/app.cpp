@@ -52,7 +52,7 @@ namespace wanderer
         InnerSessionModule *inner_session_module = new InnerSessionModule(system_);
 
         LoginModule *login_module = nullptr;
-        GateModule *gate_module = nullptr;
+        GatewayModule *gateway_module = nullptr;
 
         switch (app_config->app_type_)
         {
@@ -63,7 +63,7 @@ namespace wanderer
             network_module->CreateInnerSession(AppType_Center, app_config->gateway_ip_.c_str(), app_config->gateway_port_);
             network_module->CreateInnerSession(AppType_Battle, app_config->gateway_ip_.c_str(), app_config->gateway_port_);
 
-            gate_module = new GateModule(system_);
+            gateway_module = new GatewayModule(system_);
             login_module = new LoginModule(system_);
 
             break;
@@ -76,7 +76,7 @@ namespace wanderer
         case AppType_Gateway:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
 
-            gate_module = new GateModule(system_);
+            gateway_module = new GatewayModule(system_);
             break;
         case AppType_DataBase:
             // network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
@@ -97,7 +97,7 @@ namespace wanderer
         //Add modules to map
         AddModule(network_module);
         AddModule(inner_session_module);
-        AddModule(gate_module);
+        AddModule(gateway_module);
 
         //load custom module
         CustomModule custom_module(&modules_, system_);

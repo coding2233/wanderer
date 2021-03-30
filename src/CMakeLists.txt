@@ -14,7 +14,7 @@ file(GLOB_RECURSE src "base/*.*"
     "network/*.*"
     "utility/*.*"
     "login/*.*" 
-    "gate/*.*")
+    "gateway/*.*")
 
 add_library(core ${src})
 

@@ -12,7 +12,7 @@
 #include "base/easylogging++.h"
 #include "base/module.h"
 #include "base/system.h"
-#include "gate/gate_module.h"
+#include "gateway/gateway_module.h"
 #include "inner_session/inner_session_module.h"
 #include "login/login_module.h"
 #include "module/custom_module.h"
