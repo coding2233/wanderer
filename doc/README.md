@@ -27,3 +27,26 @@
 
 ### 测试
 * `secret`可以使用`openssl rand -hex 16`生成
+
+
+### 日志  
+```c++
+LOG(Global)<< "Generic level that represents all levels. Useful when setting global configuration for all levels.";
+
+LOG(Trace)<< "Information that can be useful to back-trace certain events - mostly useful than debug logs.";
+
+LOG(Debug)<< "Informational events most useful for developers to debug application. Only applicable if NDEBUG is not defined (for non-VC++) or _DEBUG is defined (for VC++).";
+
+LOG(Fatal)<< "Very severe error event that will presumably lead the application to abort.";
+
+LOG(Error)<< "Error information but will continue application to keep running.";
+
+LOG(Warning)<< "Information representing errors in application but application will keep running.";
+
+LOG(Info)<< "Mainly useful to represent current progress of application.";
+
+LOG(Verbose)<< "Information that can be highly useful and vary with verbose logging level. Verbose logging is not applicable to hierarchical logging.";
+
+LOG(Unknown)<< "Only applicable to hierarchical logging and is used to turn off logging completely.";
+```
+

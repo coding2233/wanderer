@@ -42,6 +42,8 @@ namespace wanderer
     public:
         AppConfig(int argc, char *args[]);
         ~AppConfig();
+        //类型名称
+        std::string app_type_name_;
         //类型
         AppType_ app_type_;
         //密钥

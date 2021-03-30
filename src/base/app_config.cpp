@@ -105,6 +105,8 @@ namespace wanderer
 
     void AppConfig::SetAppType(const char *arg)
     {
+        app_type_name_ = arg;
+
         if (std::strcmp(arg, "all") == 0)
         {
             app_type_ = AppType_All;

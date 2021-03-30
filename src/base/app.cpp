@@ -1,5 +1,7 @@
 #include "base/app.h"
 
+INITIALIZE_EASYLOGGINGPP
+
 namespace wanderer
 {
 
@@ -16,24 +18,27 @@ namespace wanderer
 
     void App::Run(int argc, char *args[])
     {
-        // // 基于当前系统的当前日期/时间
-        // time_t now = time(0);
-        // tm* ltm = localtime(&now);
-        // std::string dir_name = "log";
-        // if (!std::filesystem::is_directory(dir_name))
-        // {
-        //     std::filesystem::create_directory(dir_name);
-        // }
-        // std::string log_path = dir_name+"/"+std::to_string(1900 + ltm->tm_year) + "_" + std::to_string(ltm->tm_mon+1) + "_" + std::to_string(ltm->tm_mday) + "_log.txt";
-        // //auto file_path = std::filesystem::absolute(log_path);
-        // //std::cout to log file
-        // std::ofstream log_file(log_path);
         // std::cout.rdbuf(log_file.rdbuf());
         // //绑定操作信号
         // std::signal(SIGINT, App::SignalHandler);
         //外部参数
         AppConfig *app_config = new AppConfig(argc, args);
         System::app_config_ = app_config;
+
+        //设置日志
+        if (!app_config->log_path_.empty())
+        {
+            el::Configurations defaultConf;
+            defaultConf.setToDefault();
+            // 基于当前系统的当前日期/时间
+            time_t now = time(0);
+            tm *ltm = localtime(&now);
+            std::string log_path = app_config->log_path_ + "/" + app_config->app_type_name_ + "_" + std::to_string(1900 + ltm->tm_year) + "_" + std::to_string(ltm->tm_mon + 1) + "_" + std::to_string(ltm->tm_mday) + ".log";
+            defaultConf.setGlobally(el::ConfigurationType::Filename, log_path);
+            el::Loggers::reconfigureLogger("default", defaultConf);
+            el::Loggers::reconfigureAllLoggers(defaultConf);
+        }
+
         //各种模块
         InitModule(app_config);
         Init();
