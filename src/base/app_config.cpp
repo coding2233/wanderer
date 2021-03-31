@@ -5,8 +5,8 @@ namespace wanderer
     {
 
         app_type_ = AppType_None;
-        server_ip_ = gateway_ip_ = "127.0.0.1";
-        server_port_ = gateway_port_ = 2233;
+        server_ip_ = center_ip_ = "127.0.0.1";
+        server_port_ = center_port_ = 12233;
         secret_key_ = "c6596580cc9c193d6b8a15becff9a31d";
 
         bool has_config = false;
@@ -90,10 +90,10 @@ namespace wanderer
             secret_key_ = config["secret"].as<std::string>();
         }
 
-        if (config["gateway"].IsDefined())
+        if (config["center"].IsDefined())
         {
-            gateway_ip_ = config["gateway"]["server"].as<std::string>();
-            gateway_port_ = config["gateway"]["port"].as<int>();
+            center_ip_ = config["center"]["server"].as<std::string>();
+            center_port_ = config["center"]["port"].as<int>();
         }
 
         // for (YAML::const_iterator it = config.begin(); it != config.end(); it++)

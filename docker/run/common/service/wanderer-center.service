@@ -1,0 +1,13 @@
+[Unit]
+Description=Wanderer center server. 
+After=network.target
+
+
+[Service]
+ExecStart=/opt/wanderer/wanderer -c /opt/wanderer/conf/center.yml
+WorkingDirectory=/opt/wanderer
+Restart=always
+User=wanderer
+
+[Install]
+WantedBy=multi-user.target 

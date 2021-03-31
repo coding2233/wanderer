@@ -52,10 +52,10 @@ namespace wanderer
         std::string server_ip_;
         //服务器的端口
         int server_port_;
-        //网关服务器ip
-        std::string gateway_ip_;
-        //网关服务器的端口
-        int gateway_port_;
+        //中间服务器ip
+        std::string center_ip_;
+        //中间服务器的端口
+        int center_port_;
         //日志文件
         std::string log_path_;
         //服务的配置文件

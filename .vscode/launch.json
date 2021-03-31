@@ -7,11 +7,11 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug-Center",
+            "name": "Debug-All",
             "program": "${workspaceFolder}/out/run/wanderer",
             "args": [
                 "-c",
-                "${workspaceFolder}/out/run/common/conf/center.yml"
+                "${workspaceFolder}/out/run/common/conf/all.yml"
             ],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "auto-build"

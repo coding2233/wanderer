@@ -13,6 +13,7 @@ file(GLOB_RECURSE src "base/*.*"
     "inner_session/*.*"
     "network/*.*"
     "utility/*.*"
+    "center/*.*"
     "login/*.*" 
     "gateway/*.*")
 

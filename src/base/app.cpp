@@ -51,6 +51,7 @@ namespace wanderer
         NetworkModule *network_module = new NetworkModule(system_);
         InnerSessionModule *inner_session_module = new InnerSessionModule(system_);
 
+        CenterModule *center_module = nullptr;
         LoginModule *login_module = nullptr;
         GatewayModule *gateway_module = nullptr;
 
@@ -58,18 +59,20 @@ namespace wanderer
         {
         case AppType_All:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            network_module->CreateInnerSession(AppType_Login, app_config->gateway_ip_.c_str(), app_config->gateway_port_);
-            network_module->CreateInnerSession(AppType_DataBase, app_config->gateway_ip_.c_str(), app_config->gateway_port_);
-            network_module->CreateInnerSession(AppType_Center, app_config->gateway_ip_.c_str(), app_config->gateway_port_);
-            network_module->CreateInnerSession(AppType_Battle, app_config->gateway_ip_.c_str(), app_config->gateway_port_);
+            // network_module->CreateInnerSession(AppType_Login, app_config->center_ip_.c_str(), app_config->center_port_);
+            // network_module->CreateInnerSession(AppType_DataBase, app_config->center_ip_.c_str(), app_config->center_port_);
+            // network_module->CreateInnerSession(AppType_Center, app_config->center_ip_.c_str(), app_config->center_port_);
+            // network_module->CreateInnerSession(AppType_Battle, app_config->center_ip_.c_str(), app_config->center_port_);
 
-            gateway_module = new GatewayModule(system_);
+            center_module = new CenterModule(system_);
+            // center_module = new CenterModule(system_);
+            // gateway_module = new GatewayModule(system_);
             login_module = new LoginModule(system_);
 
             break;
         case AppType_Login:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            network_module->CreateInnerSession(AppType_Login, app_config->gateway_ip_.c_str(), app_config->gateway_port_);
+            // network_module->CreateInnerSession(AppType_Login, app_config->center_ip_.c_str(), app_config->center_port_);
 
             login_module = new LoginModule(system_);
             break;
@@ -80,15 +83,16 @@ namespace wanderer
             break;
         case AppType_DataBase:
             // network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            network_module->CreateInnerSession(AppType_DataBase, app_config->gateway_ip_.c_str(), app_config->gateway_port_);
+            // network_module->CreateInnerSession(AppType_DataBase, app_config->center_ip_.c_str(), app_config->center_port_);
             break;
         case AppType_Center:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            network_module->CreateInnerSession(AppType_Center, app_config->gateway_ip_.c_str(), app_config->gateway_port_);
+            // network_module->CreateInnerSession(AppType_Center, app_config->center_ip_.c_str(), app_config->center_port_);
+            center_module = new CenterModule(system_);
             break;
         case AppType_Battle:
             network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            network_module->CreateInnerSession(AppType_Battle, app_config->gateway_ip_.c_str(), app_config->gateway_port_);
+            // network_module->CreateInnerSession(AppType_Battle, app_config->center_ip_.c_str(), app_config->center_port_);
             break;
         default:
             break;
@@ -97,6 +101,8 @@ namespace wanderer
         //Add modules to map
         AddModule(network_module);
         AddModule(inner_session_module);
+        AddModule(center_module);
+        AddModule(login_module);
         AddModule(gateway_module);
 
         //load custom module

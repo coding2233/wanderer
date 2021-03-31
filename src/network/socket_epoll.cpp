@@ -132,13 +132,15 @@ namespace wanderer
 
     void SocketEpoll::CreateConnectSocket(const char name, const char *server_ip, int server_port)
     {
-        int sleep_time(++sleep_time_);
-        std::thread socket_thread(&SocketEpoll::CreateClientSocket, this, name, server_ip, server_port, sleep_time);
+        // int sleep_time(++sleep_time_);
+        std::thread socket_thread(&SocketEpoll::CreateClientSocket, this, name, server_ip, server_port, sleep_time_);
         socket_thread.detach();
+        // CreateClientSocket(name, server_ip, server_port, 0);
     }
 
     void SocketEpoll::CreateClientSocket(const char name, const char *server_ip, int server_port, int sleep_time)
     {
+        sleep_time = 1.0;
         std::this_thread::sleep_for(std::chrono::seconds(sleep_time));
 
         int sock_client = socket(AF_INET, SOCK_STREAM, 0);
@@ -149,10 +151,9 @@ namespace wanderer
         addr.sin_port = htons(0);
         if (bind(sock_client, (const sockaddr *)&addr, sizeof(addr)) < 0)
         {
-            throw std::runtime_error("inner socket bind error!");
+            throw std::runtime_error("Inner socket bind error!");
         }
         //添加epoll中
-
         bzero(&server_addr, sizeof(server_addr));
         server_addr.sin_family = AF_INET;
         server_addr.sin_addr.s_addr = inet_addr(server_ip);
@@ -172,7 +173,7 @@ namespace wanderer
         }
         else if (result < 0)
         {
-            throw std::runtime_error("innner socket connect server fail !");
+            throw std::runtime_error("Innner socket connect server fail !");
         }
     }
 
