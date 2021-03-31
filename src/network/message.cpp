@@ -13,6 +13,8 @@ namespace wanderer
     Message *Message::Setup(MessageType_ message_type)
     {
         message_type_ = message_type;
+        buffer_.Flush();
+
         return this;
     }
 

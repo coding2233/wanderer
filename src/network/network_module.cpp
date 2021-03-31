@@ -69,13 +69,16 @@ namespace wanderer
             Session *session = new Session;
             session->Setup(fd, message_send_, message_receive_);
             sessions_.insert(std::make_pair(fd, session));
+
+            session->Send(MessageType_Connected);
+            // session->Send(Message::Global.Setup(MessageType_Connected));
         }
     }
 
-    void NetworkModule::OnMessageSend(int fd, const char *message)
+    void NetworkModule::OnMessageSend(int fd, const char *message, size_t size)
     {
         //size_t size = message_packer_->ToBytes(message);
-        int size = sizeof(message);
+        // int size = sizeof(message);
         socket_->SendData(fd, message, size);
     }
 

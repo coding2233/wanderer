@@ -4,6 +4,7 @@ service:
   server: 127.0.0.1
   port: 12233
   secret: f9dbc4d222bee1a264c25f6c07410755
+  web-port: 19321
   center: 
     server: 127.0.0.1
     port: 12233

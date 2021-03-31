@@ -22,7 +22,14 @@ namespace wanderer
 
     void Session::Send(IMessage *message)
     {
-        message_send_(fd_, message->ToBytes());
+        // message_send_(fd_, message->ToBytes());
+    }
+
+    //发送信息
+    void Session::Send(MessageType_ message_type)
+    {
+        // auto msg = Message::Global;
+        // msg.Setup(message_type);
     }
 
     void Session::Receive(const char *data, int size)

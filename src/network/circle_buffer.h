@@ -29,6 +29,9 @@ namespace wanderer
         //写进来的数据
         void Write(const char *data, int size);
 
+        //写入数据的大小
+        void WriteSize();
+
         //读取数据
         char *Read() const;
 
