@@ -2,6 +2,9 @@
 
 namespace wanderer
 {
+    CircleBuffer Message::buffer_;
+    Message Message::Global;
+
     Message::Message(/* args */)
     {
     }
@@ -12,9 +15,16 @@ namespace wanderer
 
     Message *Message::Setup(MessageType_ message_type)
     {
-        message_type_ = message_type;
         buffer_.Flush();
+        message_type_ = message_type;
+        return this;
+    }
 
+    Message *Message::Setup(MessageType_ message_type, const char *data, size_t size)
+    {
+        buffer_.Flush();
+        message_type_ = message_type;
+        buffer_.Write(data, size);
         return this;
     }
 
@@ -30,20 +40,21 @@ namespace wanderer
 
     const char *Message::ToBytes()
     {
-        //inner
-        // if (message_type_ == MessageType_Inner)
-        // {
-        // }
-        // //outer
-        // else if (message_type_ == MessageType_Outer)
-        // {
-        // }
-        return "";
+        // buffer_.Write(message_type_);
+        //加密 - 压缩
+        buffer_.WriteHeader(message_type_);
+        return buffer_.Read();
+    }
+
+    int Message::Size()
+    {
+        return buffer_.Length();
     }
 
     IMessage *Message::ToMessage(const char *message, int size)
     {
-        // message_type_ = message[0];
+        //解压 - 解密
+        message_type_ = message[0];
         // message_code_ = message[1];
         // int index = 2;
         // if (message_type_ == MessageType_Inner)

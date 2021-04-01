@@ -12,14 +12,15 @@ namespace wanderer
     {
     public:
         virtual const char *ToBytes() = 0;
-
+        virtual int Size() = 0;
         virtual IMessage *ToMessage(const char *message, int size) = 0;
     };
 
     enum MessageType_ : char
     {
         MessageType_Connected = 0,
-        MessageType_Heartbeat = 1,
+        MessageType_SecretKey = 1,
+        MessageType_Heartbeat = 2,
         MessageType_Normal = 99,
     };
 
@@ -41,13 +42,17 @@ namespace wanderer
 
     数据类型:
     0: 连接服务器成功
-    1: 心跳包
+    1: AES加密密钥
+    2: 心跳包
     99: 正常数据
+
+    加密:
+    服务器接收客户端连接成功->客户端生成AES密钥->客户端通过RSA加密传输给服务端->服务器接收AES密钥并作为网络数据的传输加密.
     */
     struct Message : public IMessage
     {
     private:
-        CircleBuffer buffer_;
+        static CircleBuffer buffer_;
 
     public:
         Message(/* args */);
@@ -72,6 +77,8 @@ namespace wanderer
         // Message *Setup(MessageType_ message_type, MessageCode_ message_code, AppType_ inner_sender, AppType_ inner_receiver, const char *message);
 
         const char *ToBytes() override;
+
+        int Size() override;
 
         IMessage *ToMessage(const char *message, int size) override;
     };

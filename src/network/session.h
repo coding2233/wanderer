@@ -18,6 +18,9 @@ namespace wanderer
     private:
         /* data */
         int fd_;
+        //AES密钥
+        std::string secret_key_;
+
         //   SocketBase *socket_;
         //   ProtobufMessagePacker *message_packer_;
         //  MESSAGE_CALLBACK message_callback_;
@@ -41,6 +44,8 @@ namespace wanderer
         void Send(MessageType_ message_type);
         //接收的数据
         void Receive(const char *data, int size);
+        //创建密钥
+        std::string CreateSecretKey();
     };
 
 } // namespace wanderer

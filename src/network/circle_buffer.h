@@ -4,6 +4,8 @@
 #include <cstring>
 #include <stdexcept>
 
+#include "utility/utility.h"
+
 namespace wanderer
 {
 
@@ -29,14 +31,20 @@ namespace wanderer
         //写进来的数据
         void Write(const char *data, int size);
 
+        //写入数据
+        void Write(const char data);
+
         //写入数据的大小
-        void WriteSize();
+        void WriteHeader(const char type);
 
         //读取数据
         char *Read() const;
 
         //清理数据
         void Flush(int size);
+
+        //清理数据
+        void Flush();
 
         //数据长度
         int Length();

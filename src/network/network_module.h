@@ -45,7 +45,7 @@ namespace wanderer
         //发送数据
         void OnConnected(int fd);
         //消息发送
-        void OnMessageSend(int fd, const char*message);
+        void OnMessageSend(int fd, const char*message,size_t size);
         //处理消息
         void OnMessageReceive(const Session *session, IMessage* message);
         //内部通信的回调

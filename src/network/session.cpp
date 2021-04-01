@@ -22,14 +22,13 @@ namespace wanderer
 
     void Session::Send(IMessage *message)
     {
-        // message_send_(fd_, message->ToBytes());
+        message_send_(fd_, message->ToBytes(), message->Size());
     }
 
     //发送信息
     void Session::Send(MessageType_ message_type)
     {
-        // auto msg = Message::Global;
-        // msg.Setup(message_type);
+        this->Send(Message::Global.Setup(message_type));
     }
 
     void Session::Receive(const char *data, int size)
@@ -44,7 +43,7 @@ namespace wanderer
             // memset(temp, 0, 4);
             // memcpy(temp, read + 4, 4);
             //int message_type = CharPointer2Int(read + 4); // atoi(temp);
-            //消息回调`
+            //消息回调
             //message_receive_(this, message_type, read + 8, data_size - 8);
 
             IMessage *message = new Message();
@@ -54,6 +53,12 @@ namespace wanderer
             //清理数据
             circle_buffer_->Flush(data_size);
         }
+    }
+
+    std::string Session::CreateSecretKey()
+    {
+        secret_key_ = "";
+        return secret_key_;
     }
 
     // int Session::CharPointer2Int(const char *data)
