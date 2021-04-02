@@ -54,7 +54,7 @@ namespace wanderer
         }
         else
         {
-            throw std::runtime_error("can't find session: " + std::to_string(fd));
+            throw std::runtime_error("Can't find session: " + std::to_string(fd));
         }
     }
 
@@ -84,18 +84,30 @@ namespace wanderer
 
     void NetworkModule::OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size)
     {
-        // switch (message_type)
-        // {
-        // case MessageType_Connected:
-        //     std::string secretKey = session->CreateSecretKey();
-        //     break;
-        // // case MessageType_SecretKey:
-        // //     // session->UpdateSecretKey(std::string(data));
-        // //     break;
-        // default:
-        //     break;
-        // }
-
+        if (message_type == MessageType_SecretKey)
+        {
+            session->Send(MessageType_Exchange);
+            return;
+        }
+        else if (message_type == MessageType_Exchange)
+        {
+            auto app_type = GetSystem()->app_config_->app_type_;
+            LOG(INFO) << "MessageType_Exchange " << std::to_string(app_type);
+            GetSystem()->GetModule<InnerSessionModule>()->InnerAuth(app_type);
+            return;
+        }
+        else if (message_type == MessageType_InnerAuth)
+        {
+            auto app_type = (AppType_)data[0];
+            std::string secret_key(data + 1);
+            LOG(INFO) << "Internal session authentication key: [" << std::to_string((char)data[0]) << "] " << secret_key;
+            if (secret_key == GetSystem()->app_config_->secret_key_)
+            {
+                LOG(INFO) << "successful authentication!";
+                GetSystem()->GetModule<InnerSessionModule>()->AddInnerCenterSession(app_type, session);
+            }
+            return;
+        }
         for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
         {
             message_receiver_listeners_[i](session, message_type, data, size);
@@ -121,19 +133,11 @@ namespace wanderer
         sessions_iter_ = sessions_.find(fd);
         if (sessions_iter_ == sessions_.end())
         {
-            // LOG(INFO) << "Socket created successfully, waiting for inner session to connect to server, "
-            //           << " [" << std::to_string(name) << "] "
-            //           << "[" << fd << "]";
             Session *session = new Session;
             session->Setup(fd, message_send_, message_receive_);
             sessions_.insert(std::make_pair(fd, session));
             //内部的session
             GetSystem()->GetModule<InnerSessionModule>()->AddInnerSession(name, session);
-            //session->Send(Message::Setup(MessageType_Inner,));
-            //S2G_RegisterInnerSession ss;
-            /*     ss.set_name(name);
-        ss.set_secret("7c70519a56c6c16ab2c6be0c05c6455b");*/
-            //session->Send(&ss);
         }
     }
 

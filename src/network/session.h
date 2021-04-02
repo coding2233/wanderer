@@ -3,6 +3,7 @@
 
 #include <functional>
 
+#include "base/system.h"
 #include "network/circle_buffer.h"
 #include "network/message.h"
 #include "utility/utility.h"
@@ -45,6 +46,8 @@ namespace wanderer
         void Send(IMessage *message);
         //发送信息
         void Send(MessageType_ message_type);
+        //内部认证
+        void InnerAuth(AppType_ app_type);
         //接收的数据
         void Receive(const char *data, int size);
     };

@@ -19,9 +19,17 @@ namespace wanderer
 
     enum MessageType_ : char
     {
+        //服务器接收到客户端的连接 S->C
         MessageType_Connected = 0,
+        //客户端的密钥 C->S
         MessageType_SecretKey = 1,
-        MessageType_Heartbeat = 2,
+        //可通信交流 S->C
+        MessageType_Exchange = 2,
+        //内部通信认证 C->S
+        MessageType_InnerAuth = 3,
+        //心跳包 S->C
+        MessageType_Heartbeat = 9,
+        //普通信息 S<->C
         MessageType_Normal = 99,
     };
 

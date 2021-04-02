@@ -3,10 +3,10 @@
 
 #include <map>
 
-#include "base/module.h"
-#include "network/network_module.h"
-#include "network/message.h"
 #include "base/app_config.h"
+#include "base/module.h"
+#include "network/message.h"
+#include "network/network_module.h"
 
 namespace wanderer
 {
@@ -15,11 +15,11 @@ namespace wanderer
     private:
         /* data */
         // InnerSession *inner_session_;
-        
-        std::map<std::string, const Session*> login_sessions_;
+
+        std::map<std::string, const Session *> login_sessions_;
 
         //处理消息
-        void OnMessageReceive(const Session* session, IMessage* message);
+        void OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size);
 
     public:
         LoginModule(System *system);
