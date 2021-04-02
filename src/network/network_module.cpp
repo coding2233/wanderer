@@ -13,7 +13,7 @@ namespace wanderer
 #endif
 
         message_send_ = std::bind(&NetworkModule::OnMessageSend, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-        message_receive_ = std::bind(&NetworkModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2);
+        message_receive_ = std::bind(&NetworkModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
 
         auto receive_callback = std::bind(&NetworkModule::OnReceiveData, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
         auto connect_callback = std::bind(&NetworkModule::OnConnected, this, std::placeholders::_1);
@@ -82,14 +82,25 @@ namespace wanderer
         socket_->SendData(fd, message, size);
     }
 
-    void NetworkModule::OnMessageReceive(const Session *session, IMessage *message)
+    void NetworkModule::OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size)
     {
+        // switch (message_type)
+        // {
+        // case MessageType_Connected:
+        //     std::string secretKey = session->CreateSecretKey();
+        //     break;
+        // // case MessageType_SecretKey:
+        // //     // session->UpdateSecretKey(std::string(data));
+        // //     break;
+        // default:
+        //     break;
+        // }
+
         for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
         {
-            message_receiver_listeners_[i](session, message);
+            message_receiver_listeners_[i](session, message_type, data, size);
         }
-
-        delete message;
+        // delete message;
     }
 
     void NetworkModule::CreateServer(const char *server_ip, int server_port)
@@ -113,11 +124,11 @@ namespace wanderer
             // LOG(INFO) << "Socket created successfully, waiting for inner session to connect to server, "
             //           << " [" << std::to_string(name) << "] "
             //           << "[" << fd << "]";
-            // Session *session = new Session;
-            // session->Setup(fd, message_send_, message_receive_);
-            // sessions_.insert(std::make_pair(fd, session));
-            // //内部的session
-            // GetSystem()->GetModule<InnerSessionModule>()->AddInnerSession(name, session);
+            Session *session = new Session;
+            session->Setup(fd, message_send_, message_receive_);
+            sessions_.insert(std::make_pair(fd, session));
+            //内部的session
+            GetSystem()->GetModule<InnerSessionModule>()->AddInnerSession(name, session);
             //session->Send(Message::Setup(MessageType_Inner,));
             //S2G_RegisterInnerSession ss;
             /*     ss.set_name(name);

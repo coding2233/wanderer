@@ -13,7 +13,7 @@ namespace wanderer
     //初始化函数
     void GatewayModule::OnInit()
     {
-        GetSystem()->GetModule<NetworkModule>()->AddReciveListener(std::bind(&GatewayModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2));
+        // GetSystem()->GetModule<NetworkModule>()->AddReciveListener(std::bind(&GatewayModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2));
     }
 
     //循环

@@ -11,7 +11,7 @@ namespace wanderer
 {
 
 #define MESSAGE_SEND std::function<void(int, const char *, size_t)>
-#define MESSAGE_RECEIVE std::function<void(const Session *, IMessage *)>
+#define MESSAGE_RECEIVE std::function<void(Session *, MessageType_, const char *, size_t)>
 
     class Session
     {
@@ -33,6 +33,9 @@ namespace wanderer
         MESSAGE_SEND message_send_;
         MESSAGE_RECEIVE message_receive_;
 
+        //创建密钥
+        void CreateSecretKey();
+
     public:
         Session(/* args */);
         ~Session();
@@ -44,8 +47,6 @@ namespace wanderer
         void Send(MessageType_ message_type);
         //接收的数据
         void Receive(const char *data, int size);
-        //创建密钥
-        std::string CreateSecretKey();
     };
 
 } // namespace wanderer

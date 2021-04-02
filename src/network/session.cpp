@@ -22,43 +22,59 @@ namespace wanderer
 
     void Session::Send(IMessage *message)
     {
-        message_send_(fd_, message->ToBytes(), message->Size());
+        message_send_(fd_, message->Pack(), message->Size());
     }
 
     //发送信息
     void Session::Send(MessageType_ message_type)
     {
-        this->Send(Message::Global.Setup(message_type));
+        Send(Message::Global.Setup(message_type));
     }
 
     void Session::Receive(const char *data, int size)
     {
         circle_buffer_->Write(data, size);
+        if (circle_buffer_->Length() <= 4)
+        {
+            return;
+        }
+
         const char *read = circle_buffer_->Read();
         // char temp[4];
         // memcpy(temp, read, 4);
         int data_size = CharPointer2Int(circle_buffer_->Read());
         if (data_size > 0 && data_size <= circle_buffer_->Length())
         {
-            // memset(temp, 0, 4);
-            // memcpy(temp, read + 4, 4);
-            //int message_type = CharPointer2Int(read + 4); // atoi(temp);
-            //消息回调
-            //message_receive_(this, message_type, read + 8, data_size - 8);
-
-            IMessage *message = new Message();
-            message->ToMessage(read, data_size);
-            // IMessage *message = (IMessage *)(Message::Global.ToMessage(read, data_size));
-            message_receive_(this, message);
+            auto message = Message::Global;
+            // IMessage *message = new Message();
+            const char *data_message = message.Unpack(read, data_size);
+            LOG(INFO) << "The message received: " << std::to_string(message.message_type_);
+            switch (message.message_type_)
+            {
+            case MessageType_Connected:
+                CreateSecretKey();
+                /* code */
+                break;
+            case MessageType_SecretKey:
+                secret_key_ = std::string(data_message);
+                LOG(INFO) << "secret_key_: " << secret_key_;
+                break;
+            default:
+                message_receive_(this, (MessageType_)message.message_type_, data_message, message.Size());
+                break;
+            }
             //清理数据
             circle_buffer_->Flush(data_size);
         }
     }
 
-    std::string Session::CreateSecretKey()
+    void Session::CreateSecretKey()
     {
-        secret_key_ = "";
-        return secret_key_;
+        //随机生成SecretKey
+        secret_key_ = "c6596580cc9c193d6b8a15becff9a31d";
+        auto message = Message::Global;
+        message.Setup(MessageType_SecretKey, secret_key_.c_str(), secret_key_.size());
+        Send(&message);
     }
 
     // int Session::CharPointer2Int(const char *data)

@@ -4,6 +4,7 @@
 #define __MESSAGE_H__
 
 #include "base/app_config.h"
+#include "base/easylogging++.h"
 #include "network/circle_buffer.h"
 
 namespace wanderer
@@ -11,9 +12,9 @@ namespace wanderer
     struct IMessage
     {
     public:
-        virtual const char *ToBytes() = 0;
-        virtual int Size() = 0;
-        virtual IMessage *ToMessage(const char *message, int size) = 0;
+        virtual const char *Pack() = 0;
+        virtual const char *Unpack(const char *message, int size) = 0;
+        virtual size_t Size() = 0;
     };
 
     enum MessageType_ : char
@@ -74,13 +75,13 @@ namespace wanderer
 
         Message *Setup(MessageType_ message_type);
 
+        Message *Setup(MessageType_ message_type, const char *data, size_t size);
         // Message *Setup(MessageType_ message_type, MessageCode_ message_code, AppType_ inner_sender, AppType_ inner_receiver, const char *message);
 
-        const char *ToBytes() override;
+        const char *Pack() override;
+        const char *Unpack(const char *message, int size) override;
 
-        int Size() override;
-
-        IMessage *ToMessage(const char *message, int size) override;
+        size_t Size() override;
     };
 
 } // namespace wanderer

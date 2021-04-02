@@ -1,0 +1,4 @@
+2021-04-02 07:25:46,696 INFO [default] Server runing: 127.0.0.1:12233
+2021-04-02 07:25:46,696 INFO [default] Waiting for inner session connecting: [1] 127.0.0.1:12233
+2021-04-02 07:25:47,699 INFO [default] The client connects to the server:  [8]
+2021-04-02 07:25:47,700 INFO [default] OnReceiveData: 7

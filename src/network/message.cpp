@@ -28,43 +28,49 @@ namespace wanderer
         return this;
     }
 
-    // Message *Message::Setup(MessageType_ message_type, MessageCode_ message_code, AppType_ inner_sender, AppType_ inner_receiver, const char *message)
-    // {
-    //     message_type_ = message_type;
-    //     // message_code_ = message_code;
-    //     // inner_sender_ = inner_sender;
-    //     // inner_receiver_ = inner_receiver;
-    //     // message_ = message;
-    //     return this;
-    // }
-
-    const char *Message::ToBytes()
+    const char *Message::Pack()
     {
-        // buffer_.Write(message_type_);
         //加密 - 压缩
+        switch (message_type_)
+        {
+        case MessageType_Connected:
+            //无加密
+            break;
+        case MessageType_SecretKey:
+            //RSA加密
+            break;
+        default:
+            //AES加密
+            break;
+        }
         buffer_.WriteHeader(message_type_);
         return buffer_.Read();
     }
 
-    int Message::Size()
-    {
-        return buffer_.Length();
-    }
-
-    IMessage *Message::ToMessage(const char *message, int size)
+    const char *Message::Unpack(const char *message, int size)
     {
         //解压 - 解密
-        message_type_ = message[0];
-        // message_code_ = message[1];
-        // int index = 2;
-        // if (message_type_ == MessageType_Inner)
-        // {
-        //     inner_sender_ = message[2];
-        //     inner_receiver_ = message[3];
-        //     index = 4;
-        // }
+        message_type_ = message[4];
+        switch (message_type_)
+        {
+        case MessageType_Connected:
+            //无加密
+            break;
+        case MessageType_SecretKey:
+            //RSA解密
+            break;
+        default:
+            //AES解密
+            break;
+        }
+        buffer_.Flush();
+        buffer_.Write(message + 5, size - 5);
+        return buffer_.Read();
+    }
 
-        return this;
+    size_t Message::Size()
+    {
+        return buffer_.Length();
     }
 
 } // namespace wanderer

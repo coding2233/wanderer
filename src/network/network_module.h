@@ -4,8 +4,8 @@
 #include <functional>
 #include <map>
 
-#include "base/module.h"
 #include "base/app_config.h"
+#include "base/module.h"
 #if unix
 #include "network/socket_epoll.h"
 #elif WIN32
@@ -45,9 +45,9 @@ namespace wanderer
         //发送数据
         void OnConnected(int fd);
         //消息发送
-        void OnMessageSend(int fd, const char*message,size_t size);
+        void OnMessageSend(int fd, const char *message, size_t size);
         //处理消息
-        void OnMessageReceive(const Session *session, IMessage* message);
+        void OnMessageReceive(Session *session, MessageType_, const char *, size_t);
         //内部通信的回调
         void OnInnerConnected(const char name, int fd);
 

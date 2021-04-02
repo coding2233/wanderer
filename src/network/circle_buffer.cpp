@@ -37,7 +37,7 @@ namespace wanderer
     {
         int size = 5;
         char data_size[size];
-        Int2CharPointer(data_size, length_);
+        Int2CharPointer(data_size, length_ + 5);
         data_size[4] = type;
         memmove(buffer_ + size, buffer_, length_);
         write_ += size;
