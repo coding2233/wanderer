@@ -31,6 +31,7 @@ namespace wanderer
     const char *Message::Pack()
     {
         //加密 - 压缩
+        //openssl
         switch (message_type_)
         {
         case MessageType_Connected:

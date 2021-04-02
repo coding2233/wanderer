@@ -37,6 +37,11 @@ namespace wanderer
         {
             sessions = &iter->second;
         }
+        // for (size_t i = 0; i < sessions->size(); i++)
+        // {
+        //     if (sessions[i] == session)
+        //         return;
+        // }
         sessions->push_back(session);
     }
 

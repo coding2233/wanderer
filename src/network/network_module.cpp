@@ -100,7 +100,7 @@ namespace wanderer
         {
             auto app_type = (AppType_)data[0];
             std::string secret_key(data + 1);
-            LOG(INFO) << "Internal session authentication key: [" << std::to_string((char)data[0]) << "] " << secret_key;
+            LOG(INFO) << "Internal session authentication key: " << data;
             if (secret_key == GetSystem()->app_config_->secret_key_)
             {
                 LOG(INFO) << "successful authentication!";
