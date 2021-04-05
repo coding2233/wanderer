@@ -8,3 +8,6 @@ service:
   center: 
     server: 127.0.0.1
     port: 12233
+  rsa:
+    private: ./privatekey.pem
+    public: ./publickey.pem

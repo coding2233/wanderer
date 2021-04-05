@@ -96,6 +96,12 @@ namespace wanderer
             center_port_ = config["center"]["port"].as<int>();
         }
 
+        if (config["rsa"].IsDefined())
+        {
+            rsa_private_key = config["rsa"]["private"].as<std::string>();
+            rsa_public_key = config["rsa"]["public"].as<std::string>();
+        }
+
         // for (YAML::const_iterator it = config.begin(); it != config.end(); it++)
         // {
         //     argc_++;

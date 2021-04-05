@@ -11,7 +11,8 @@ extern "C"
     //char* 转int
     int CharPointer2Int(const char *data);
     //int转char*
-    void Int2CharPointer(char* data,int value);
+    void Int2CharPointer(char *data, int value);
+
 #ifdef __cplusplus
 }
 #endif

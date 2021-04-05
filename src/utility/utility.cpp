@@ -14,15 +14,14 @@ extern "C"
         return result;
     }
 
-
-    void Int2CharPointer(char* data,int value)
+    void Int2CharPointer(char *data, int value)
     {
-        for(int i=0;i<4;i++)
+        for (int i = 0; i < 4; i++)
         {
-            data[i]=(char)((value>>(3-i)*8)&0xFF);
+            data[i] = (char)((value >> (3 - i) * 8) & 0xFF);
         }
     }
-    
+
 
 #ifdef __cplusplus
 }

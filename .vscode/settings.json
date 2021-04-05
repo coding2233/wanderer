@@ -82,7 +82,11 @@
         "xstring": "cpp",
         "xtree": "cpp",
         "codecvt": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "ranges": "cpp",
+        "stop_token": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"

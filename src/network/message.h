@@ -6,6 +6,7 @@
 #include "base/app_config.h"
 #include "base/easylogging++.h"
 #include "network/circle_buffer.h"
+#include "utility/openssl_utility.h"
 
 namespace wanderer
 {
@@ -62,6 +63,8 @@ namespace wanderer
     {
     private:
         static CircleBuffer buffer_;
+
+        OpenSSLUtility *openssl_;
 
     public:
         Message(/* args */);

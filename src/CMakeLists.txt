@@ -1,5 +1,6 @@
 set(CMAKE_CXX_STANDARD 17)
 
+
 set(OPENSSL_USE_STATIC_LIBS TRUE)
 find_package(OpenSSL REQUIRED)
 
@@ -27,4 +28,4 @@ file(GLOB_RECURSE src "base/*.*"
 
 add_library(core ${src})
 
-target_link_libraries(core ${LIBRARYIES} module ${OPNESSL_LIBRARY})
+target_link_libraries(core ${LIBRARYIES} module ${OPENSSL_LIBRARIES})

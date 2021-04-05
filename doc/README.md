@@ -50,3 +50,13 @@ LOG(Verbose)<< "Information that can be highly useful and vary with verbose logg
 LOG(Unknown)<< "Only applicable to hierarchical logging and is used to turn off logging completely.";
 ```
 
+### RSA 非对称加密
+
+* 私钥生成
+```sh
+openssl genrsa -out privatekey.pen 1024
+```
+* 公钥生成
+```sh
+openssl rsa -in privatekey.pem -puout -out publickey.pem 
+```

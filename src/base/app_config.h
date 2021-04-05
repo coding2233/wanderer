@@ -58,6 +58,10 @@ namespace wanderer
         int center_port_;
         //日志文件
         std::string log_path_;
+        //rsa私钥
+        std::string rsa_private_key;
+        //rsa公钥
+        std::string rsa_public_key;
         //服务的配置文件
         YAML::Node service_config_;
     };
