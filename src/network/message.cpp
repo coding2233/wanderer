@@ -33,23 +33,15 @@ namespace wanderer
     const char *Message::Pack()
     {
         //加密 - 压缩
-        //openssl
-        switch (message_type_)
+        if (message_type_ == MessageType_SecretKey)
         {
-        case MessageType_Connected:
-            //无加密
-            break;
-        case MessageType_SecretKey:
             //RSA加密
             const std::string data(buffer_.Read(), buffer_.Length());
             std::string encrypt_data = openssl_->EncryptRSA(data);
             buffer_.Flush();
             buffer_.Write(encrypt_data.c_str(), encrypt_data.length());
-            break;
-            // default:
-            //     //AES加密
-            //     break;
         }
+
         buffer_.WriteHeader(message_type_);
         return buffer_.Read();
     }
@@ -60,21 +52,16 @@ namespace wanderer
         message_type_ = message[4];
         buffer_.Flush();
         buffer_.Write(message + 5, size - 5);
-        switch (message_type_)
+
+        //加密 - 压缩
+        if (message_type_ == MessageType_SecretKey)
         {
-        case MessageType_Connected:
-            //无加密
-            break;
-        case MessageType_SecretKey:
             //RSA解密
             const std::string data(buffer_.Read(), buffer_.Length());
             std::string decode_data = openssl_->DecodeRSA(data);
+            LOG(INFO) << "---" << decode_data;
             buffer_.Flush();
             buffer_.Write(decode_data.c_str(), decode_data.length());
-            break;
-            // default:
-            //     //AES解密
-            //     break;
         }
         return buffer_.Read();
     }
