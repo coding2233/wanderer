@@ -4,6 +4,8 @@
 #include <functional>
 #include <queue>
 
+#include "base/easylogging++.h"
+
 namespace wanderer
 {
 

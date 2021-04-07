@@ -19,7 +19,7 @@ namespace wanderer
     {
         if (length_ + size >= CIRCLE_BUFFER_SIZE)
         {
-            throw std::runtime_error("Data write out of cache.");
+            LOG(FATAL) << "Data write out of cache.";
         }
 
         //暂时不考虑写满的情况
@@ -36,14 +36,18 @@ namespace wanderer
     void CircleBuffer::WriteHeader(const char type)
     {
         int size = 5;
-        char data_size[size];
-        Int2CharPointer(data_size, length_ + 5);
-        data_size[4] = type;
-        memmove(buffer_ + size, buffer_, length_);
-        write_ += size;
-        length_ += size;
-        memcpy(buffer_, data_size, size);
-        // memcpy(read_ + 4, read_, length_);
+        int data_size = length_ + size;
+        char *temp_data = new char[data_size];
+        Int2CharPointer(temp_data, data_size);
+        temp_data[4] = type;
+        if (length_ > 0)
+        {
+            std::memcpy(temp_data + 5, read_, length_);
+            Flush();
+        }
+        Write(temp_data, data_size);
+
+        delete[] temp_data;
     }
 
     char *CircleBuffer::Read() const

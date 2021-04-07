@@ -22,7 +22,10 @@ namespace wanderer
 
     void Session::Send(IMessage *message)
     {
-        message_send_(fd_, message->Pack(), message->Size());
+        const char *data = message->Pack();
+        int size = message->Size();
+        LOG(INFO) << "Session send: " << data << "  " << size;
+        message_send_(fd_, data, size);
     }
 
     //发送信息

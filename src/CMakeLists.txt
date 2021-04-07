@@ -1,15 +1,19 @@
 set(CMAKE_CXX_STANDARD 17)
 
 
-set(OPENSSL_USE_STATIC_LIBS TRUE)
-find_package(OpenSSL REQUIRED)
+# set(OPENSSL_USE_STATIC_LIBS TRUE)
+# set(OPENSSL_ROOT_DIR /usr/bin/openssl)
 
-if(OPENSSL_FOUND)
-    message("Openssl -Found: ${OPENSSL_VERSION} !!!")
-endif(OPENSSL_FOUND)
+# find_package(OpenSSL REQUIRED)
+# if(OPENSSL_FOUND)
+#     message("Openssl -Found: ${OPENSSL_VERSION} ${OPENSSL_INCLUDE_DIR} ${OPENSSL_LIBRARIES}!!!")
+# endif(OPENSSL_FOUND)
 
 
-include_directories(module libraries ${OPENSSL_INCLUDE_DIR})
+# set(OPENSSL_INCLUDE_DIR /usr/include)
+# set(OPENSSL_LIBRARIES /usr/lib/x86_64-linux-gnu/libssl.a;/usr/lib/x86_64-linux-gnu/libcrypto.a;)
+
+include_directories(module libraries)
 include_directories("libraries/yaml-cpp/include")
 
 add_subdirectory(libraries)
@@ -28,4 +32,4 @@ file(GLOB_RECURSE src "base/*.*"
 
 add_library(core ${src})
 
-target_link_libraries(core ${LIBRARYIES} module ${OPENSSL_LIBRARIES})
+target_link_libraries(core ${LIBRARYIES} module)

@@ -38,10 +38,10 @@ namespace wanderer
             //RSA加密
             const std::string data(buffer_.Read(), buffer_.Length());
             std::string encrypt_data = openssl_->EncryptRSA(data);
-            buffer_.Flush();
-            buffer_.Write(encrypt_data.c_str(), encrypt_data.length());
-        }
 
+            buffer_.Flush();
+            buffer_.Write((const char *)encrypt_data.c_str(), encrypt_data.size());
+        }
         buffer_.WriteHeader(message_type_);
         return buffer_.Read();
     }

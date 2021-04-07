@@ -4,6 +4,7 @@
 #include <cstring>
 #include <stdexcept>
 
+#include "base/easylogging++.h"
 #include "utility/utility.h"
 
 namespace wanderer

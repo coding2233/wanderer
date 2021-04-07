@@ -46,7 +46,7 @@ namespace wanderer
 
     void NetworkModule::OnReceiveData(int fd, const char *data, int size)
     {
-        LOG(INFO) << "OnReceiveData: " << fd;
+        LOG(INFO) << "OnReceiveData: " << fd << " data:" << data << " size:" << size;
         sessions_iter_ = sessions_.find(fd);
         if (sessions_iter_ != sessions_.end())
         {
@@ -79,7 +79,10 @@ namespace wanderer
     {
         //size_t size = message_packer_->ToBytes(message);
         // int size = sizeof(message);
-        socket_->SendData(fd, message, size);
+        if (socket_->SendData(fd, message, size) < 0)
+        {
+            LOG(FATAL) << "Data transmission failed. " << fd;
+        }
     }
 
     void NetworkModule::OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size)

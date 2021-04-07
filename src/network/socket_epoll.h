@@ -5,13 +5,16 @@
 
 #include "network/socket_base.h"
 
-#include <iostream>
-#include <sys/socket.h>
-#include <sys/epoll.h>
-#include <netinet/in.h>
-#include <fcntl.h>
-#include <string.h>
 #include <arpa/inet.h>
+#include <cstring>
+#include <fcntl.h>
+#include <iostream>
+#include <map>
+#include <netinet/in.h>
+#include <queue>
+#include <string.h>
+#include <sys/epoll.h>
+#include <sys/socket.h>
 #include <thread>
 
 namespace wanderer
@@ -38,8 +41,8 @@ namespace wanderer
         int conn_sock_;
         //等待时间
         int sleep_time_ = 0;
-
-    private:
+        //消息发送队列
+        std::map<int, std::queue<std::string>> message_sending_queue_;
         //设置非阻塞模式
         int SetNonblocking(int sfd);
         //创建客户端段的socket
