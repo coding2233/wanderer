@@ -47,7 +47,7 @@ namespace wanderer
     void Session::Receive(const char *data, int size)
     {
         circle_buffer_->Write(data, size);
-        if (circle_buffer_->Length() <= 4)
+        if (circle_buffer_->Length() < 5)
         {
             return;
         }
@@ -56,6 +56,9 @@ namespace wanderer
         // char temp[4];
         // memcpy(temp, read, 4);
         int data_size = CharPointer2Int(circle_buffer_->Read());
+
+        LOG(INFO) << "Session::Receive size: " << data_size;
+
         if (data_size > 0 && data_size <= circle_buffer_->Length())
         {
             auto message = Message::Global;
@@ -91,9 +94,11 @@ namespace wanderer
     {
         //随机生成SecretKey
         secret_key_ = "c6596580cc9c193d6b8a15becff9a31d";
-        auto message = Message::Global;
-        message.Setup(MessageType_SecretKey, secret_key_.c_str(), secret_key_.size());
-        Send(&message);
+        Message *message = new Message();
+        // auto message = Message::Global;
+        message->Setup(MessageType_SecretKey, secret_key_.c_str(), secret_key_.size());
+        Send(message);
+        delete message;
     }
 
     // int Session::CharPointer2Int(const char *data)

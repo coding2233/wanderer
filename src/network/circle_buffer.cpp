@@ -42,11 +42,11 @@ namespace wanderer
         temp_data[4] = type;
         if (length_ > 0)
         {
-            std::memcpy(temp_data + 5, read_, length_);
+            std::memcpy(temp_data + size, read_, length_);
             Flush();
         }
         Write(temp_data, data_size);
-
+        LOG(INFO) << "Write header to int: " << CharPointer2Int(temp_data) << "  " << temp_data;
         delete[] temp_data;
     }
 
@@ -59,7 +59,7 @@ namespace wanderer
     {
         if (size > length_)
         {
-            throw std::runtime_error("pop size out of range");
+            LOG(FATAL) << "Pop size out of range!";
         }
 
         length_ -= size;

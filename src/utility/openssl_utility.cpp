@@ -11,7 +11,7 @@ namespace wanderer
         // CRYPTO_cleanup_all_ex_data();
     }
 
-    std::string OpenSSLUtility::EncryptRSA(const std::string &data)
+    std::string OpenSSLUtility::EncryptRSA(const std::string data)
     {
         // const std::string public_pem_file = System::app_config_->rsa_public_key;
         // FILE *pub_key_file_handle = fopen(public_pem_file.c_str(), "rb");
@@ -62,7 +62,7 @@ namespace wanderer
     }
 
     //Decrypt
-    std::string OpenSSLUtility::DecodeRSA(const std::string &data)
+    std::string OpenSSLUtility::DecodeRSA(const std::string data)
     {
         // const std::string private_pem_file = System::app_config_->rsa_private_key;
 

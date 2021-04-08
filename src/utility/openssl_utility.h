@@ -45,9 +45,9 @@ namespace wanderer
         ~OpenSSLUtility();
 
         //RSA公钥加密
-        std::string EncryptRSA(const std::string &data);
+        std::string EncryptRSA(const std::string data);
         //RSA私钥解密 Decrypt
-        std::string DecodeRSA(const std::string &data);
+        std::string DecodeRSA(const std::string data);
     };
 
 }

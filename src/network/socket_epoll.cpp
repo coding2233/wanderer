@@ -19,6 +19,7 @@ namespace wanderer
 
     int SocketEpoll::SendData(int fd, const char *data, size_t size)
     {
+
         auto iter = message_sending_queue_.find(fd);
         if (iter == message_sending_queue_.end())
         {
@@ -30,7 +31,13 @@ namespace wanderer
         std::memcpy(temp_data, data, size);
         iter->second.push(std::string(temp_data, size));
 
-        LOG(INFO) << "Epoll SendData:" << fd << "  " << iter->second.size() << "  " << size;
+        int count = CharPointer2Int(temp_data + 1);
+
+        LOG(INFO) << "Epoll SendData:" << fd << "  " << count << "  " << size;
+        for (size_t i = 0; i < size; i++)
+        {
+            LOG(INFO) << i << "----------" << std::to_string(temp_data[i]);
+        }
 
         return 0;
         // return send(fd, data, size, 0);
@@ -124,8 +131,9 @@ namespace wanderer
                             else
                             {
                             }
+                            LOG(INFO) << "Epoll EPOLLOUT SendData:" << send_message;
                             iter->second.pop();
-                            send(fd, (const char *)send_message.c_str(), send_message.size(), 0);
+                            send(fd, (const unsigned char *)send_message.c_str(), send_message.size(), 0);
                         }
 
                         // if (iter->second.size() > 0)

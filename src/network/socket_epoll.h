@@ -3,8 +3,6 @@
 #ifndef __SOCKET_EPOLL_H__
 #define __SOCKET_EPOLL_H__
 
-#include "network/socket_base.h"
-
 #include <arpa/inet.h>
 #include <cstring>
 #include <fcntl.h>
@@ -16,6 +14,9 @@
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <thread>
+
+#include "network/socket_base.h"
+#include "utility/utility.h"
 
 namespace wanderer
 {
