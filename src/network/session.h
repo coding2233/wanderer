@@ -6,6 +6,7 @@
 #include "base/system.h"
 #include "network/circle_buffer.h"
 #include "network/message.h"
+#include "utility/openssl_utility.h"
 #include "utility/utility.h"
 
 namespace wanderer

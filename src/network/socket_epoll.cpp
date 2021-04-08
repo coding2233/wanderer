@@ -19,7 +19,6 @@ namespace wanderer
 
     int SocketEpoll::SendData(int fd, const char *data, size_t size)
     {
-
         auto iter = message_sending_queue_.find(fd);
         if (iter == message_sending_queue_.end())
         {
@@ -27,11 +26,7 @@ namespace wanderer
             message_sending_queue_.insert(std::make_pair(fd, msg_queue));
             iter = message_sending_queue_.find(fd);
         }
-        char temp_data[size];
-        std::memcpy(temp_data, data, size);
-        iter->second.push(std::string(temp_data, size));
-        int count = CharPointer2Int(temp_data + 1);
-        LOG(INFO) << "Epoll SendData:" << fd << "  " << count << "  " << size;
+        iter->second.push(std::string(data, size));
         return 0;
         // return send(fd, data, size, 0);
     }
@@ -98,7 +93,6 @@ namespace wanderer
                 //读取
                 if (events_[i].events & EPOLLIN)
                 {
-                    LOG(INFO) << "Epoll EPOLLIN: " << events_[i].data.fd;
                     auto size = recv(events_[i].data.fd, buffer_, BUFFER_MAX_SIZE, 0);
                     if (size > 0)
                     {
@@ -109,7 +103,6 @@ namespace wanderer
                 else if (events_[i].events & EPOLLOUT)
                 {
                     /* code */
-                    // LOG(INFO) << "Ready to send: " << events_[i].data.fd;
                     int fd = events_[i].data.fd;
                     auto iter = message_sending_queue_.find(fd);
                     if (iter != message_sending_queue_.end())
@@ -120,14 +113,6 @@ namespace wanderer
                             iter->second.pop();
                             send(fd, send_message.c_str(), send_message.size(), 0);
                         }
-
-                        // if (iter->second.size() > 0)
-                        // {
-                        //     std::string send_message = iter->second.front();
-                        //     LOG(INFO) << "-------------Send: " << send_message.c_str() + 5 << "# " << send_message.size();
-                        //     send(fd, send_message.c_str(), send_message.size(), 0);
-                        //     iter->second.pop();
-                        // }
                     }
                 }
             }

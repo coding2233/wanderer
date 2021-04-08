@@ -1,10 +1,11 @@
-#ifndef OPENSSL_UTILITY_H
-#define OPENSSL_UTILITY_H
+#ifndef __OPENSSL_UTILITY_H__
+#define __OPENSSL_UTILITY_H__
 
 #include <iostream>
 #include <openssl/aes.h>
 #include <openssl/err.h>
 #include <openssl/pem.h>
+#include <openssl/rand.h>
 #include <openssl/rsa.h>
 #include <string>
 
@@ -14,6 +15,9 @@
 
 namespace wanderer
 {
+
+#define byte unsigned char
+
     class OpenSSLUtility
     {
     private:
@@ -48,6 +52,8 @@ namespace wanderer
         std::string EncryptRSA(const std::string data);
         //RSA私钥解密 Decrypt
         std::string DecodeRSA(const std::string data);
+        //AES随机密钥
+        static void RandSecretKey(char *secret_key, int size);
     };
 
 }
