@@ -30,15 +30,8 @@ namespace wanderer
         char temp_data[size];
         std::memcpy(temp_data, data, size);
         iter->second.push(std::string(temp_data, size));
-
         int count = CharPointer2Int(temp_data + 1);
-
         LOG(INFO) << "Epoll SendData:" << fd << "  " << count << "  " << size;
-        for (size_t i = 0; i < size; i++)
-        {
-            LOG(INFO) << i << "----------" << std::to_string(temp_data[i]);
-        }
-
         return 0;
         // return send(fd, data, size, 0);
     }
@@ -124,16 +117,8 @@ namespace wanderer
                         if (iter->second.size() > 0)
                         {
                             std::string send_message = iter->second.front();
-                            if (send_message.size() > 5)
-                            {
-                                LOG(INFO) << "Epoll EPOLLOUT SendData:" << fd << "  " << iter->second.size() << "  " << send_message.c_str() + 5;
-                            }
-                            else
-                            {
-                            }
-                            LOG(INFO) << "Epoll EPOLLOUT SendData:" << send_message;
                             iter->second.pop();
-                            send(fd, (const unsigned char *)send_message.c_str(), send_message.size(), 0);
+                            send(fd, send_message.c_str(), send_message.size(), 0);
                         }
 
                         // if (iter->second.size() > 0)

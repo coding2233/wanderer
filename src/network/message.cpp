@@ -55,12 +55,12 @@ namespace wanderer
         //加密 - 压缩
         if (message_type_ == MessageType_SecretKey)
         {
-            // //RSA解密
-            // const std::string data(buffer_.Read(), buffer_.Length());
-            // std::string decode_data = openssl_->DecodeRSA(data);
-            // LOG(INFO) << "---" << decode_data;
-            // buffer_.Flush();
-            // buffer_.Write(decode_data.c_str(), decode_data.length());
+            //RSA解密
+            const std::string data(buffer_.Read(), buffer_.Length());
+            std::string decode_data = openssl_->DecodeRSA(data);
+            LOG(INFO) << "---" << decode_data;
+            buffer_.Flush();
+            buffer_.Write(decode_data.c_str(), decode_data.length());
         }
         return buffer_.Read();
     }

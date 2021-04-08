@@ -61,11 +61,10 @@ namespace wanderer
 
         if (data_size > 0 && data_size <= circle_buffer_->Length())
         {
-            auto message = Message::Global;
-            // IMessage *message = new Message();
-            const char *data_message = message.Unpack(read, data_size);
-            LOG(INFO) << "The message received: " << std::to_string(message.message_type_);
-            switch (message.message_type_)
+            Message *message = new Message();
+            const char *data_message = message->Unpack(read, data_size);
+            LOG(INFO) << "The message received: " << std::to_string(message->message_type_);
+            switch (message->message_type_)
             {
             case MessageType_Connected:
                 CreateSecretKey();
@@ -80,11 +79,12 @@ namespace wanderer
             }
 
             //回调
-            if (message.message_type_ != MessageType_Connected)
+            if (message->message_type_ != MessageType_Connected)
             {
-                message_receive_(this, (MessageType_)message.message_type_, data_message, message.Size());
+                message_receive_(this, (MessageType_)message->message_type_, data_message, message->Size());
             }
 
+            delete message;
             //清理数据
             circle_buffer_->Flush(data_size);
         }
