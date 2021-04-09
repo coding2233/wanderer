@@ -30,7 +30,7 @@ namespace wanderer
         return this;
     }
 
-    const char *Message::Pack()
+    const char *Message::Pack(const std::string &secret_key)
     {
         //加密 - 压缩
         if (message_type_ == MessageType_SecretKey)
@@ -41,11 +41,18 @@ namespace wanderer
             buffer_.Flush();
             buffer_.Write(encrypt_data.c_str(), encrypt_data.size());
         }
+        else if (message_type_ == MessageType_InnerAuth)
+        {
+            const std::string data(buffer_.Read(), buffer_.Length());
+            std::string encrypt_data = openssl_->EncryptAES(data, secret_key);
+            buffer_.Flush();
+            buffer_.Write(encrypt_data.c_str(), encrypt_data.size());
+        }
         buffer_.WriteHeader(message_type_);
         return buffer_.Read();
     }
 
-    const char *Message::Unpack(const char *message, int size)
+    const char *Message::Unpack(const char *message, int size, const std::string &secret_key)
     {
         //解压 - 解密
         message_type_ = message[4];
@@ -57,7 +64,15 @@ namespace wanderer
         {
             //RSA解密
             const std::string data(buffer_.Read(), buffer_.Length());
-            std::string decode_data = openssl_->DecodeRSA(data);
+            std::string decode_data = openssl_->DecryptRSA(data);
+            buffer_.Flush();
+            buffer_.Write(decode_data.c_str(), decode_data.length());
+        }
+        else if (message_type_ == MessageType_InnerAuth)
+        {
+            //RSA解密
+            const std::string data(buffer_.Read(), buffer_.Length());
+            std::string decode_data = openssl_->DecryptAES(data, secret_key);
             buffer_.Flush();
             buffer_.Write(decode_data.c_str(), decode_data.length());
         }

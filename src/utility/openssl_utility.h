@@ -12,6 +12,7 @@
 #include "base/easylogging++.h"
 #include "base/system.h"
 #include "utility/base64.h"
+#include "utility/utility.h"
 
 namespace wanderer
 {
@@ -51,9 +52,13 @@ namespace wanderer
         //RSA公钥加密
         std::string EncryptRSA(const std::string data);
         //RSA私钥解密 Decrypt
-        std::string DecodeRSA(const std::string data);
+        std::string DecryptRSA(const std::string data);
         //AES随机密钥
         static void RandSecretKey(char *secret_key, int size);
+        //AES加密
+        std::string EncryptAES(const std::string &data, const std::string &key);
+        //AES解密
+        std::string DecryptAES(const std::string &data, const std::string &key);
     };
 
 }

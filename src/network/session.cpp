@@ -22,7 +22,7 @@ namespace wanderer
 
     void Session::Send(IMessage *message)
     {
-        const char *data = message->Pack();
+        const char *data = message->Pack(secret_key_);
         int size = message->Size();
         LOG(INFO) << "Session send: " << data << "  " << size;
         message_send_(fd_, data, size);
@@ -62,7 +62,7 @@ namespace wanderer
         if (data_size > 0 && data_size <= circle_buffer_->Length())
         {
             Message *message = new Message();
-            const char *data_message = message->Unpack(read, data_size);
+            const char *data_message = message->Unpack(read, data_size, secret_key_);
             LOG(INFO) << "The message received: " << std::to_string(message->message_type_);
             switch (message->message_type_)
             {
@@ -96,8 +96,7 @@ namespace wanderer
         int key_size = 16;
         char *secret_key = new char[key_size];
         OpenSSLUtility::RandSecretKey(secret_key, key_size);
-        secret_key_ = std::string(secret_key); //"F5/kqUxo/4mkMCMD:14,079";
-
+        secret_key_ = std::string(secret_key, key_size); //"F5/kqUxo/4mkMCMD:14,079";
         Message *message = new Message();
         message->Setup(MessageType_SecretKey, secret_key_.c_str(), secret_key_.size());
         Send(message);

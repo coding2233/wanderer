@@ -13,8 +13,8 @@ namespace wanderer
     struct IMessage
     {
     public:
-        virtual const char *Pack() = 0;
-        virtual const char *Unpack(const char *message, int size) = 0;
+        virtual const char *Pack(const std::string &secret_key) = 0;
+        virtual const char *Unpack(const char *message, int size, const std::string &secret_key) = 0;
         virtual size_t Size() = 0;
     };
 
@@ -89,8 +89,8 @@ namespace wanderer
         Message *Setup(MessageType_ message_type, const char *data, size_t size);
         // Message *Setup(MessageType_ message_type, MessageCode_ message_code, AppType_ inner_sender, AppType_ inner_receiver, const char *message);
 
-        const char *Pack() override;
-        const char *Unpack(const char *message, int size) override;
+        const char *Pack(const std::string &secret_key) override;
+        const char *Unpack(const char *message, int size, const std::string &secret_key) override;
 
         size_t Size() override;
     };
