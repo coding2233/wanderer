@@ -99,26 +99,22 @@ namespace wanderer
 
     void OpenSSLUtility::RandSecretKey(char *secret_key, int size)
     {
-        byte rand_bytes[size];
+        byte *rand_bytes = new byte[size];
         if (!RAND_bytes(rand_bytes, size))
         {
             LOG(FATAL) << "OpenSSL failed to generate a random key!";
         }
         int ascii_base64_len;
         char *ascii_base64 = base64(rand_bytes, size, &ascii_base64_len);
-        for (size_t i = 0; i < size; i++)
+        std::memcpy(secret_key, ascii_base64, ascii_base64_len);
+        if (ascii_base64_len < size)
         {
-            if (i < ascii_base64_len)
+            for (size_t i = ascii_base64_len; i < size; i++)
             {
-                secret_key[i] = ascii_base64[i];
-            }
-            else
-            {
-                secret_key[i] = 0;
+                secret_key[i] = 23;
             }
         }
-        LOG(INFO) << "RandSecretKey " << secret_key;
-        delete ascii_base64;
         delete[] rand_bytes;
+        delete ascii_base64;
     }
 }

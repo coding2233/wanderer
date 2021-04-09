@@ -93,20 +93,16 @@ namespace wanderer
     void Session::CreateSecretKey()
     {
         //随机生成SecretKey
-        // int key_size = 16;
-        // char *secret_key = new char[key_size];
-        // OpenSSLUtility::RandSecretKey(secret_key, key_size);
-        // LOG(INFO) << "RandSecretKey " << secret_key;
+        int key_size = 16;
+        char *secret_key = new char[key_size];
+        OpenSSLUtility::RandSecretKey(secret_key, key_size);
+        secret_key_ = std::string(secret_key); //"F5/kqUxo/4mkMCMD:14,079";
 
-        // secret_key_ = std::string(secret_key, key_size);
-        // LOG(INFO) << " CreateSecretKey ------" << secret_key_;
-        secret_key_ = "F5/kqUxo/4mkMCMD:14,079";
         Message *message = new Message();
-        // auto message = Message::Global;
         message->Setup(MessageType_SecretKey, secret_key_.c_str(), secret_key_.size());
         Send(message);
-        // delete[] secret_key;
         delete message;
+        delete[] secret_key;
     }
 
     // int Session::CharPointer2Int(const char *data)
