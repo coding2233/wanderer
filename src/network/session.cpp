@@ -72,7 +72,7 @@ namespace wanderer
                 break;
             case MessageType_SecretKey:
                 secret_key_ = std::string(data_message);
-                LOG(INFO) << "secret_key_: " << secret_key_;
+                LOG(INFO) << "Server-session set secret_key_: [" << fd_ << "] " << secret_key_;
                 break;
             default:
                 break;
@@ -97,6 +97,7 @@ namespace wanderer
         char *secret_key = new char[key_size];
         OpenSSLUtility::RandSecretKey(secret_key, key_size);
         secret_key_ = std::string(secret_key, key_size); //"F5/kqUxo/4mkMCMD:14,079";
+        LOG(INFO) << "Client-session create secret_key_: [" << fd_ << "] " << secret_key_;
         Message *message = new Message();
         message->Setup(MessageType_SecretKey, secret_key_.c_str(), secret_key_.size());
         Send(message);

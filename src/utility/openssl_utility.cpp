@@ -90,6 +90,7 @@ namespace wanderer
         {
             result_data = std::string(decode, ret);
         }
+        LOG(INFO) << "DecryptRSA: " << data << " # " << result_data;
         delete binary_base64;
         delete[] decode;
         BIO_free(bio_key);
@@ -116,10 +117,9 @@ namespace wanderer
     {
         AES_KEY aes_key;
         int key_size = key.size();
-        LOG(INFO) << "EncryptAES----" << key_size << "  key:" << key << "  data:" << data;
-        if (!AES_set_encrypt_key((const byte *)key.c_str(), 128, &aes_key))
+        if (AES_set_encrypt_key((const byte *)key.c_str(), key_size * 8, &aes_key) < 0)
         {
-            LOG(FATAL) << "AES key creation failed！ ";
+            LOG(FATAL) << "AES encrypt key creation failed！ ";
         }
         int in_size = data.length() + 4;
         int out_size = in_size + (key_size - (in_size % key_size));
@@ -143,12 +143,13 @@ namespace wanderer
         char *ascii_base64 = base64(out_data, out_size, &ascii_base64_len);
         std::string result_data(ascii_base64, ascii_base64_len);
 
+        LOG(INFO) << "EncryptAES: " << data << " # " << result_data;
+
         delete ascii_base64;
         delete[] buffer;
         delete[] in_data;
         delete[] out_data;
 
-        LOG(INFO) << "EncryptAES: " << data.size() << "  " << data << " # " << result_data << " " << key_size << " " << ascii_base64_len;
         return result_data;
     }
 
@@ -156,16 +157,15 @@ namespace wanderer
     std::string OpenSSLUtility::DecryptAES(const std::string &data, const std::string &key)
     {
         AES_KEY aes_key;
-        int key_size = key.length();
-        if (!AES_set_decrypt_key((const byte *)key.c_str(), key_size * 8, &aes_key))
+        int key_size = key.size();
+        if (AES_set_decrypt_key((const byte *)key.c_str(), key_size * 8, &aes_key) < 0)
         {
-            LOG(FATAL) << "AES key creation failed！ ";
+            LOG(FATAL) << "AES decrypt key creation failed！ ";
         }
 
         //unbase64
         int binary_base64_len;
         byte *binary_base64 = unbase64((const char *)data.c_str(), data.size(), &binary_base64_len);
-        LOG(INFO) << "DecryptAES unbase64: " << data << "  " << binary_base64 << "  " << binary_base64_len << " " << key_size;
         //Decrypt
         byte *out_data = new byte[binary_base64_len];
         int index = 0;
@@ -176,14 +176,14 @@ namespace wanderer
             index += key_size;
         }
         int out_size = CharPointer2Int((const char *)out_data);
-        // const char *out_char_data =
         std::string result_data = std::string((const char *)(out_data + 4), out_size);
+
+        LOG(INFO) << "DecryptAES: " << data << " # " << result_data;
 
         delete binary_base64;
         delete[] buffer;
         delete[] out_data;
 
-        LOG(INFO) << "DecryptAES: " << data << " # " << result_data << " " << key_size << " " << out_size;
         return result_data;
     }
 }
