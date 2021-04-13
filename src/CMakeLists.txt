@@ -1,5 +1,5 @@
 set(CMAKE_CXX_STANDARD 17)
-
+set(CMAKE_SYSTEM_NAME linux)
 
 # set(OPENSSL_USE_STATIC_LIBS TRUE)
 # set(OPENSSL_ROOT_DIR /usr/bin/openssl)
@@ -14,7 +14,8 @@ set(CMAKE_CXX_STANDARD 17)
 # set(OPENSSL_LIBRARIES /usr/lib/x86_64-linux-gnu/libssl.a;/usr/lib/x86_64-linux-gnu/libcrypto.a;)
 
 include_directories(module libraries)
-include_directories("libraries/yaml-cpp/include")
+include_directories(libraries/yaml-cpp/include)
+include_directories(libraries/lzma)
 
 add_subdirectory(libraries)
 add_subdirectory(module)

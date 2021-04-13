@@ -1,4 +1,8 @@
 
+add_compile_definitions(_7ZIP_ST)
+
+# add_definitions(-D _7ZIP_ST)
+
 add_subdirectory(yaml-cpp)
 add_subdirectory(openssl-cmake)
 
@@ -10,6 +14,10 @@ add_subdirectory(openssl-cmake)
 
 # easy logging
 # add_library(easy-logging "easyloggingpp/*.*")
+
+# aux_source_directory("./lzma" LZMA_SRC)
+# set(LZMA_SRC ./lzma/Alloc.c ./lzma/Alloc.h ./lzma/LzFind.c ./lzma/LzFind.h ./lzma/LzFindMt.c ./lzma/LzFindMt.h ./lzma/LzmaDec.c ./lzma/LzmaDec.h)
+# add_library(lzma ${LZMA_SRC})
 
 # 设置第三方的库
 set_property(GLOBAL APPEND PROPERTY libraries yaml-cpp ssl crypto)
