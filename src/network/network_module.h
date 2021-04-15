@@ -30,6 +30,8 @@ namespace wanderer
         std::map<int, Session *> sessions_;
         std::map<int, Session *>::iterator sessions_iter_;
         std::vector<MESSAGE_RECEIVE> message_receiver_listeners_;
+        //
+        std::map<int, int> alltype_inner_session_;
 
         //inner session map
         //std::map<std::string, Session *> inner_session_;
