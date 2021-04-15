@@ -64,19 +64,35 @@ namespace wanderer
             Message *message = new Message();
             const char *data_message = message->Unpack(read, data_size, secret_key_);
             LOG(INFO) << "The message received: " << std::to_string(message->message_type_);
-            switch (message->message_type_)
+            auto msg_type = (MessageType_)message->message_type_;
+            if (msg_type == MessageType_Connected)
             {
-            case MessageType_Connected:
                 CreateSecretKey();
-                /* code */
-                break;
-            case MessageType_SecretKey:
+            }
+            else if (msg_type == MessageType_SecretKey)
+            {
                 secret_key_ = std::string(data_message);
                 LOG(INFO) << "Server-session set secret_key_: [" << fd_ << "] " << secret_key_;
-                break;
-            default:
-                break;
+                this->Send(MessageType_Exchange);
             }
+            // else if (msg_type == MessageType_Exchange)
+            // {
+            //     auto app_type = System::app_config_->app_type_;
+            //     LOG(INFO) << "MessageType_Exchange " << std::to_string(app_type);
+            //     // System::GetModule<InnerSessionModule>()->InnerAuth(app_type);
+            //     this->InnerAuth(app_type);
+            // }
+            // else if (msg_type == MessageType_InnerAuth)
+            // {
+            //     auto app_type = (AppType_)data[0];
+            //     std::string secret_key(data + 1);
+            //     LOG(INFO) << "Internal session authentication key: " << data;
+            //     if (secret_key == System::app_config_->secret_key_)
+            //     {
+            //         LOG(INFO) << "successful authentication!";
+            //         // System::GetModule<InnerSessionModule>()->AddInnerCenterSession(app_type, this);
+            //     }
+            // }
 
             //回调
             if (message->message_type_ != MessageType_Connected)
