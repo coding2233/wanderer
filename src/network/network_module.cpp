@@ -123,6 +123,11 @@ namespace wanderer
 
     void NetworkModule::CreateInnerSession(AppType_ app_type, const char *server_ip, int server_port)
     {
+        // if (GetSystem()->app_config_->app_type_ == AppType_All)
+        // {
+        //     int fd = -99-
+        //     OnInnerConnected(app_type, int fd)
+        // }
         LOG(INFO) << "Waiting for inner session connecting, app_type: "
                   << std::to_string(app_type) << " server: " << server_ip << ":" << server_port;
         socket_->CreateConnectSocket(app_type, server_ip, server_port);

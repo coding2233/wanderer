@@ -48,6 +48,13 @@ namespace wanderer
             buffer_.Flush();
             buffer_.Write(encrypt_data.c_str(), encrypt_data.size());
         }
+
+        // unsigned long max_size = 1024 * 4;
+        // byte *buf = new byte[max_size];
+        // int z_result = compress(buf, &max_size, (const byte *)buffer_.Read(), (unsigned long)buffer_.Length());
+        // std::cout << "z_result: " << z_result << "   " << buffer_.Length() << "   ---  " << max_size << std::endl;
+        // delete[] buf;
+
         buffer_.WriteHeader(message_type_);
         return buffer_.Read();
     }
