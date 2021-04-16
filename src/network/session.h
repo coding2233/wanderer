@@ -38,6 +38,8 @@ namespace wanderer
         //创建密钥
         void CreateSecretKey();
 
+        bool inner_auth_ = false;
+
     public:
         Session(/* args */);
         ~Session();

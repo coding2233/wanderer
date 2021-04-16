@@ -15,6 +15,7 @@ namespace wanderer
 
     void Session::Setup(int fd, MESSAGE_SEND message_send, MESSAGE_RECEIVE message_receive)
     {
+        inner_auth_ = false;
         fd_ = fd;
         message_send_ = message_send;
         message_receive_ = message_receive;
@@ -24,24 +25,34 @@ namespace wanderer
     {
         const char *data = message->Pack(secret_key_);
         int size = message->Size();
-        LOG(INFO) << "Session send: " << data << "  " << size;
+        LOG(INFO) << "Session send: " << std::to_string(data[4]) << "  " << size;
         message_send_(fd_, data, size);
     }
 
     //发送信息
     void Session::Send(MessageType_ message_type)
     {
-        Send(Message::Global.Setup(message_type));
+        Message *message = new Message();
+        message->Setup(message_type);
+        Send(message);
+        delete message;
     }
 
     //内部认证
     void Session::InnerAuth(AppType_ app_type)
     {
+        if (inner_auth_)
+        {
+            return;
+        }
+
         std::string auth_str_data = std::to_string((char)app_type) + System::app_config_->secret_key_;
         const char *auth_data = auth_str_data.c_str();
         LOG(INFO) << "Internal authentication request: " << std::to_string(app_type) << " " << System::app_config_->secret_key_;
         auto auth_message = Message::Global.Setup(MessageType_InnerAuth, auth_data, auth_str_data.size());
         Send(auth_message);
+
+        inner_auth_ = true;
     }
 
     void Session::Receive(const char *data, int size)
@@ -57,13 +68,15 @@ namespace wanderer
         // memcpy(temp, read, 4);
         int data_size = CharPointer2Int(circle_buffer_->Read());
 
-        LOG(INFO) << "Session::Receive size: " << data_size;
+        LOG(INFO) << "[" << fd_ << "] Session::Receive size: " << data_size << " type:" << std::to_string(data[4]);
 
         if (data_size > 0 && data_size <= circle_buffer_->Length())
         {
             Message *message = new Message();
             const char *data_message = message->Unpack(read, data_size, secret_key_);
             LOG(INFO) << "The message received: " << std::to_string(message->message_type_);
+            //清理数据
+            circle_buffer_->Flush(data_size);
             auto msg_type = (MessageType_)message->message_type_;
             if (msg_type == MessageType_Connected)
             {
@@ -71,16 +84,16 @@ namespace wanderer
             }
             else if (msg_type == MessageType_SecretKey)
             {
-                secret_key_ = std::string(data_message);
+                secret_key_ = std::string(data_message, message->Size());
                 LOG(INFO) << "Server-session set secret_key_: [" << fd_ << "] " << secret_key_;
-                this->Send(MessageType_Exchange);
+                Send(MessageType_Exchange);
             }
             // else if (msg_type == MessageType_Exchange)
             // {
             //     auto app_type = System::app_config_->app_type_;
             //     LOG(INFO) << "MessageType_Exchange " << std::to_string(app_type);
             //     // System::GetModule<InnerSessionModule>()->InnerAuth(app_type);
-            //     this->InnerAuth(app_type);
+            //     // this->InnerAuth(app_type);
             // }
             // else if (msg_type == MessageType_InnerAuth)
             // {
@@ -102,7 +115,7 @@ namespace wanderer
 
             delete message;
             //清理数据
-            circle_buffer_->Flush(data_size);
+            // circle_buffer_->Flush(data_size);
         }
     }
 

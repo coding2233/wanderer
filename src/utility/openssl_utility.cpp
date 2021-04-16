@@ -176,7 +176,7 @@ namespace wanderer
             index += key_size;
         }
         int out_size = CharPointer2Int((const char *)out_data);
-        std::string result_data = std::string((const char *)(out_data + 4), out_size);
+        std::string result_data = std::string((const char *)(out_data + 4));
 
         LOG(INFO) << "DecryptAES: " << data << " # " << result_data;
 

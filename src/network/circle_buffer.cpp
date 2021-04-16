@@ -22,10 +22,26 @@ namespace wanderer
             LOG(FATAL) << "Data write out of cache.";
         }
 
+        // if (size == 5)
+        // {
+        //     for (size_t i = 0; i < size; i++)
+        //     {
+        //         LOG(INFO) << "CircleBuffer::Write Before: " << std::to_string(data[i]) << "--" << std::to_string(buffer_[i]);
+        //     }
+        // }
+
         //暂时不考虑写满的情况
-        memcpy(write_, data, size);
+        std::memcpy(write_, data, size);
         write_ += size;
         length_ += size;
+
+        // if (size == 5)
+        // {
+        //     for (size_t i = 0; i < size; i++)
+        //     {
+        //         LOG(INFO) << "CircleBuffer::Write After: " << std::to_string(data[i]) << "--" << std::to_string(buffer_[i]);
+        //     }
+        // }
     }
 
     void CircleBuffer::Write(const char data)
@@ -45,7 +61,7 @@ namespace wanderer
             std::memcpy(temp_data + size, read_, length_);
             Flush();
         }
-        Write(temp_data, data_size);
+        Write((const char *)temp_data, data_size);
         LOG(INFO) << "Write header to int: " << CharPointer2Int(temp_data) << "  " << temp_data;
         delete[] temp_data;
     }

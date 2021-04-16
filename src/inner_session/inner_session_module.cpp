@@ -39,7 +39,7 @@ namespace wanderer
         }
         // for (size_t i = 0; i < sessions->size(); i++)
         // {
-        //     if (sessions[i] == session)
+        //     if (sessions[i].fd_ == session.fd_)
         //         return;
         // }
         sessions->push_back(session);
@@ -77,22 +77,16 @@ namespace wanderer
         return nullptr;
     }
 
-    void InnerSessionModule::InnerAuth(AppType_ app_type)
+    void InnerSessionModule::InnerAuth(Session *session)
     {
-        if (app_type == AppType_All)
+        for (auto iter = inner_sessions_.begin(); iter != inner_sessions_.end(); iter++)
         {
-            for (auto iter = inner_sessions_.begin(); iter != inner_sessions_.end(); iter++)
+            if (iter->second == session)
             {
-                iter->second->InnerAuth((AppType_)iter->first);
+                session->InnerAuth((AppType_)iter->first);
+                break;
             }
-        }
-        else
-        {
-            auto session = this->GetNormalSession(app_type);
-            if (session != nullptr)
-            {
-                session->InnerAuth(app_type);
-            }
+            // iter->second->InnerAuth((AppType_)iter->first);
         }
     }
 

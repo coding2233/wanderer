@@ -46,7 +46,7 @@ namespace wanderer
 
     void NetworkModule::OnReceiveData(int fd, const char *data, int size)
     {
-        LOG(INFO) << "OnReceiveData: " << fd << " data:" << data << " size:" << size;
+        LOG(INFO) << "OnReceiveData: " << fd << " data:" << data << " size:" << size << " type:" << std::to_string(data[4]);
         sessions_iter_ = sessions_.find(fd);
         if (sessions_iter_ != sessions_.end())
         {
@@ -82,6 +82,7 @@ namespace wanderer
         auto ais = alltype_inner_session_.find(fd);
         if (ais != alltype_inner_session_.end())
         {
+            LOG(INFO) << "Inner message session -> session: " << fd << " ---> " << ais->second << " head:" << std::to_string(message[4]) << std::endl;
             OnReceiveData(ais->second, message, size);
         }
         else
@@ -92,13 +93,13 @@ namespace wanderer
 
     void NetworkModule::OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size)
     {
-        if (msg_type == MessageType_Exchange)
+        if (message_type == MessageType_Exchange)
         {
             auto app_type = GetSystem()->app_config_->app_type_;
             LOG(INFO) << "MessageType_Exchange " << std::to_string(app_type);
-            GetSystem()->GetModule<InnerSessionModule>()->InnerAuth(app_type);
+            GetSystem()->GetModule<InnerSessionModule>()->InnerAuth(session);
         }
-        else if (msg_type == MessageType_InnerAuth)
+        else if (message_type == MessageType_InnerAuth)
         {
             auto app_type = (AppType_)data[0];
             std::string secret_key(data + 1);
@@ -110,10 +111,10 @@ namespace wanderer
             }
         }
 
-        for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
-        {
-            message_receiver_listeners_[i](session, message_type, data, size);
-        }
+        // for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
+        // {
+        //     message_receiver_listeners_[i](session, message_type, data, size);
+        // }
         // delete message;
     }
 

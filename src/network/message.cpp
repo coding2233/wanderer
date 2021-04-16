@@ -79,6 +79,7 @@ namespace wanderer
         {
             //RSA解密
             const std::string data(buffer_.Read(), buffer_.Length());
+            LOG(INFO) << "Message::Unpack DecryptAES: " << data << " secret_key: " << secret_key;
             std::string decode_data = openssl_->DecryptAES(data, secret_key);
             buffer_.Flush();
             buffer_.Write(decode_data.c_str(), decode_data.length());

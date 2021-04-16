@@ -34,7 +34,7 @@ namespace wanderer
         Session *GetCenterSession(AppType_ app_type);
         Session *GetNormalSession(AppType_ app_type);
 
-        void InnerAuth(AppType_ app_type);
+        void InnerAuth(Session *session);
     };
 }
 
