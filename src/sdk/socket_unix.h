@@ -15,11 +15,11 @@
 #include <sys/socket.h>
 #include <thread>
 
-#include "socket_base.h"
+#include "socket_client_base.h"
 
 namespace wanderer
 {
-    class SocketUnix : public SocketBase
+    class SocketUnix : public SocketClientBase
     {
     private:
         /* data */

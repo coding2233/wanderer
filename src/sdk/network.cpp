@@ -37,6 +37,19 @@ namespace wanderer
 
     void Network::OnReceive(int fd, const char *data, size_t size)
     {
+        auto iter = receive_buffer_.find(fd);
+        CircleBuffer *buffer = nullptr;
+        if (iter != receive_buffer_.end())
+        {
+            buffer = new CircleBuffer();
+            receive_buffer_.insert(std::make_pair(fd, buffer));
+            iter = receive_buffer_.find(fd);
+        }
+        else
+        {
+            buffer = iter->second;
+        }
+        buffer->Write(data, size);
     }
 
 }

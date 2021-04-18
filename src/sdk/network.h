@@ -2,6 +2,7 @@
 #define __NETWORK_H__
 
 #include <iostream>
+#include <map>
 
 #if WIN32
 #include "socket_windows.h"
@@ -9,15 +10,19 @@
 #include "socket_unix.h"
 #endif
 
+#include "network/circle_buffer.h"
+
 namespace wanderer
 {
     class Network
     {
     private:
         /* data */
-        SocketBase *socket_;
+        SocketClientBase *socket_;
 
         void OnReceive(int fd, const char *data, size_t size);
+
+        std::map<int, CircleBuffer *> receive_buffer_;
 
     public:
         Network(/* args */);

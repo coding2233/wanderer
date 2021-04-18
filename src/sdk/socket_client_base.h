@@ -9,7 +9,7 @@ namespace wanderer
 
 #define SOCKET_RECEIVE std::function<void(int, const char *data, int size)>
 
-    class SocketBase
+    class SocketClientBase
     {
     private:
         /* data */
@@ -17,8 +17,8 @@ namespace wanderer
         SOCKET_RECEIVE receive_callback_;
 
     public:
-        SocketBase(/* args */);
-        ~SocketBase();
+        SocketClientBase(/* args */);
+        ~SocketClientBase();
 
         virtual void Setup(SOCKET_RECEIVE receive_callback);
 
