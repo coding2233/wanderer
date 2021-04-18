@@ -7,7 +7,7 @@
 #include "base/easylogging++.h"
 #include "network/circle_buffer.h"
 #include "utility/openssl_utility.h"
-#include "zlib.h"
+// #include "zlib.h"
 namespace wanderer
 {
     struct IMessage

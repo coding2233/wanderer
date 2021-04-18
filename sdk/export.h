@@ -1,6 +1,7 @@
 #ifndef __EXPORT_H__
 #define __EXPORT_H__
 
+#include "network/network.h"
 #include <iostream>
 #include <string>
 
@@ -9,12 +10,23 @@ extern "C"
 {
 #endif
 
-    static void Connect(std::string server_ip, int server_port, void *receive_callback, void *connect_faile);
+#if WIN32
+#define WANDERER_EXPORT _declspec(dllexport) _cdecl
+#elif unix
+#define WANDERER_EXPORT
+#endif
 
-    static void DisConnect();
+    typedef void (*RECEIVE_FUNC)(int, const char *, int);
 
-    static void Send(const char *data, size_t size);
+    void Test(const char *data);
 
+    wanderer::Network *WANDERER_EXPORT Connect(const char *server_ip, int server_port, RECEIVE_FUNC receive_callback);
+
+    void WANDERER_EXPORT DisConnect(wanderer::Network *network);
+
+    void WANDERER_EXPORT Update(wanderer::Network *network);
+
+    void WANDERER_EXPORT Send(wanderer::Network *network, int fd, const char *data, size_t size);
 #ifdef __cplusplus
 }
 #endif

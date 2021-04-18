@@ -15,7 +15,10 @@ set(CMAKE_SYSTEM_NAME linux)
 
 include_directories(module libraries)
 include_directories(libraries/yaml-cpp/include)
-include_directories(libraries/lzma)
+# include_directories(libraries/lzma)
+include_directories(libraries/zlib)
+include_directories(libraries/zlib/*)
+include_directories(${CMAKE_SOURCE_DIR})
 
 add_subdirectory(libraries)
 add_subdirectory(module)
