@@ -1,5 +1,5 @@
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_SYSTEM_NAME linux)
+# set(CMAKE_SYSTEM_NAME linux)
 
 # set(OPENSSL_USE_STATIC_LIBS TRUE)
 # set(OPENSSL_ROOT_DIR /usr/bin/openssl)
@@ -34,18 +34,16 @@ file(GLOB_RECURSE src "base/*.*"
     "login/*.*" 
     "gateway/*.*")
 
-add_library(core STATIC ${src})
 
-target_link_libraries(core ${LIBRARYIES} module)
-
+if(BUILD_EXEC)
+    add_library(core STATIC ${src})
+    target_link_libraries(core ${LIBRARYIES} module)
+endif(BUILD_EXEC)
 
 option(BUILD_SDK "The SDK is released simultaneously by default." ON)
 if(BUILD_SDK)
-    # option(BUILD_SHARED_LIBS "Dynamic libraries are compiled by default." ON)
-    # set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread" )
     set(SDK_NAME "${PROJECT_NAME}-sdk")
     file(GLOB_RECURSE sdk-src "sdk/*.*")
     add_library(${SDK_NAME} SHARED ${sdk-src} ${src})
-    # target_compile_definitions(${SDK_NAME} PRIVATE "-pthread")
     target_link_libraries(${SDK_NAME} ${LIBRARYIES} module)  
 endif(BUILD_SDK)
