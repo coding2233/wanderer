@@ -15,10 +15,17 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(module libraries)
 include_directories(libraries/yaml-cpp/include)
+include_directories(libraries/openssl-include)
 # include_directories(libraries/lzma)
 include_directories(libraries/zlib)
 include_directories(libraries/zlib/*)
 include_directories(${CMAKE_SOURCE_DIR})
+
+if(WIN32)
+include_directories("/usr/x86_64-w64-mingw32/include")
+# include_directories("/usr/include")
+endif(WIN32)
+
 
 add_subdirectory(libraries)
 add_subdirectory(module)
@@ -45,5 +52,6 @@ if(BUILD_SDK)
     set(SDK_NAME "${PROJECT_NAME}-sdk")
     file(GLOB_RECURSE sdk-src "sdk/*.*")
     add_library(${SDK_NAME} SHARED ${sdk-src} ${src})
+  
     target_link_libraries(${SDK_NAME} ${LIBRARYIES} module)  
 endif(BUILD_SDK)

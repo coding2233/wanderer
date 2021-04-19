@@ -11,7 +11,8 @@ extern "C"
 #endif
 
 #if WIN32
-#define WANDERER_EXPORT _declspec(dllexport) _cdecl
+// #define WANDERER_EXPORT _declspec(dllexport) _cdecl
+#define WANDERER_EXPORT
 #elif unix
 #define WANDERER_EXPORT
 #endif

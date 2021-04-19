@@ -6,7 +6,7 @@ LABEL maintain="wanderer"
 
 RUN apt-get update && apt-get upgrade -y 
 RUN apt-get install -y clang cmake make
-RUN apt-get install -y --fix-missing openssl libssl-dev
+RUN apt-get install -y --fix-missing openssl libssl-dev mingw-w64
 
 COPY entrypoint.sh /entrypoint.sh
 

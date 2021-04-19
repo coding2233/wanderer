@@ -3,16 +3,17 @@
 #ifndef __SOCKET_WINDOWS_H__
 #define __SOCKET_WINDOWS_H__
 
-#include "socket_base.h"
-#include <WinSock2.h>
 #include <windows.h>
+#include <winsock2.h>
 #include <ws2tcpip.h>
 
 #pragma comment(lib, "WS2_32.lib")
 
+#include "socket_client_base.h"
+
 namespace wanderer
 {
-    class SocketWindows : public SocketBase
+    class SocketWindows : public SocketClientBase
     {
     private:
         /* data */
@@ -21,6 +22,10 @@ namespace wanderer
     public:
         SocketWindows(/* args */);
         ~SocketWindows();
+
+        void Connect(const char *server_ip, int server_port) override;
+
+        void Receive(int socket, const char *data, size_t size) override;
     };
 }
 

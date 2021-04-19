@@ -5,11 +5,11 @@ namespace wanderer
     Network::Network(/* args */)
     {
 #if WIN32
-        socket_ =
+        socket_ = new SocketWindows();
 #elif unix
         socket_ = new SocketUnix();
 #endif
-            socket_->Setup(std::bind(&Network::OnReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        socket_->Setup(std::bind(&Network::OnReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
     Network::~Network()

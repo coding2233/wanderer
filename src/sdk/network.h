@@ -20,9 +20,10 @@ namespace wanderer
         /* data */
         SocketClientBase *socket_;
 
-        void OnReceive(int fd, const char *data, size_t size);
-
         std::map<int, CircleBuffer *> receive_buffer_;
+
+    protected:
+        virtual void OnReceive(int fd, const char *data, size_t size);
 
     public:
         Network(/* args */);

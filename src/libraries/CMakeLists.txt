@@ -19,6 +19,13 @@ add_subdirectory(zlib)
 # set(LZMA_SRC ./lzma/Alloc.c ./lzma/Alloc.h ./lzma/LzFind.c ./lzma/LzFind.h ./lzma/LzFindMt.c ./lzma/LzFindMt.h ./lzma/LzmaDec.c ./lzma/LzmaDec.h)
 # add_library(lzma ${LZMA_SRC})
 
+if(WIN32)
+    set(openssl-lib-dir ${CMAKE_CURRENT_SOURCE_DIR}/libs-binary/openssl)
+    set(openssl-libs  ${openssl-lib-dir}/win64/libcrypto.dll.a ${openssl-lib-dir}/win64/libssl.dll.a)
+elseif(unix)
+    set(openssl-libs ssl crypto)
+endif()
+
 # 设置第三方的库
-set_property(GLOBAL APPEND PROPERTY libraries yaml-cpp ssl crypto zlib)
+set_property(GLOBAL APPEND PROPERTY libraries yaml-cpp zlib ${openssl-libs})
 

@@ -5,9 +5,11 @@
 #pragma once
 
 #include <iostream>
-#include <WinSock2.h>
-#include <ws2tcpip.h>
+
+#include <winsock2.h>
+
 #include <windows.h>
+#include <ws2tcpip.h>
 
 #include "network/socket_base.h"
 
@@ -15,18 +17,40 @@
 
 namespace wanderer
 {
-    #define RELEASE(x)			{if(x != nullptr) {delete x; x = nullptr;}}
-    #define RELEASE_HANDLE(x)	{if(x != NULL && x != INVALID_HANDLE_VALUE) { CloseHandle(x); x = INVALID_HANDLE_VALUE; }}
-    #define RELEASE_SOCKET(x)	{if(x != INVALID_SOCKET) { closesocket(x); x = INVALID_SOCKET; }}
+#define RELEASE(x)        \
+    {                     \
+        if (x != nullptr) \
+        {                 \
+            delete x;     \
+            x = nullptr;  \
+        }                 \
+    }
+#define RELEASE_HANDLE(x)                           \
+    {                                               \
+        if (x != NULL && x != INVALID_HANDLE_VALUE) \
+        {                                           \
+            CloseHandle(x);                         \
+            x = INVALID_HANDLE_VALUE;               \
+        }                                           \
+    }
+#define RELEASE_SOCKET(x)        \
+    {                            \
+        if (x != INVALID_SOCKET) \
+        {                        \
+            closesocket(x);      \
+            x = INVALID_SOCKET;  \
+        }                        \
+    }
 
     class SocketIOCP : public SocketBase
     {
     private:
         SOCKET listen_socket_;
-        HANDLE completion_port_= INVALID_HANDLE_VALUE;
-        HANDLE* worker_threads_=nullptr;
+        HANDLE completion_port_ = INVALID_HANDLE_VALUE;
+        HANDLE *worker_threads_ = nullptr;
 
         static DWORD WINAPI WorkerThreadProc(LPVOID lpParam);
+
     public:
         SocketIOCP();
         ~SocketIOCP();
