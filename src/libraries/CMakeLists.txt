@@ -1,5 +1,5 @@
 
-add_compile_definitions(_7ZIP_ST)
+# add_compile_definitions(_7ZIP_ST)
 
 # add_definitions(-D _7ZIP_ST)
 
@@ -19,6 +19,7 @@ add_subdirectory(zlib)
 # set(LZMA_SRC ./lzma/Alloc.c ./lzma/Alloc.h ./lzma/LzFind.c ./lzma/LzFind.h ./lzma/LzFindMt.c ./lzma/LzFindMt.h ./lzma/LzmaDec.c ./lzma/LzmaDec.h)
 # add_library(lzma ${LZMA_SRC})
 
+set(openssl-libs ssl crypto)
 if(WIN32)
     set(openssl-lib-dir ${CMAKE_CURRENT_SOURCE_DIR}/libs-binary/openssl)
     set(openssl-libs  ${openssl-lib-dir}/win64/libcrypto.dll.a ${openssl-lib-dir}/win64/libssl.dll.a)
