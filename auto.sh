@@ -19,4 +19,8 @@ fi
 cp -r ./build-run/run ./out/
 cp ./build/docker-build/wanderer ./out/run/
 
+ls -alh ./build/docker-build/
+ls -alh ./out/
+
+
 # ./wanderer -t all --server 0.0.0.0:2233 --gate_server 0.0.0.0:2233

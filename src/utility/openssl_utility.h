@@ -29,6 +29,7 @@ namespace wanderer
                                      "qeDvGGy6ActlNz+YMdscFrwz0ISMIpcJ0JsgBZ6WTLqDSp5zwXMrebCx6DJq2p7V\n"
                                      "RVaFx8dQJWPClVGg1QIDAQAB\n"
                                      "-----END PUBLIC KEY-----\n";
+#if BUILD_EXEC
         std::string rsa_private_key = "-----BEGIN RSA PRIVATE KEY-----\n"
                                       "MIICXAIBAAKBgQCanf92YkIxqkXaZUhWkCC5tiPno7xP057AjL3uJ3QzNCFkR3Fn\n"
                                       "Vj6VtKgLD6sxR/e2rH7FtnX2WF+aXDcv7zzBi6f6qeDvGGy6ActlNz+YMdscFrwz\n"
@@ -44,6 +45,9 @@ namespace wanderer
                                       "1Q2syLWjFxdvmOCvUDcCQALzUEBfzqcEuFRwGpTliN9u6AwOuJYNx8ajPRuSnmHs\n"
                                       "Ejo/CIMpO1yP594IWyWp6d1n92ilEcMk1GTYMdeQTug=\n"
                                       "-----END RSA PRIVATE KEY-----\n";
+#else
+        std::string rsa_private_key = "";
+#endif
 
     public:
         OpenSSLUtility(/* args */);
