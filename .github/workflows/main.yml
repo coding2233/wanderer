@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  build:
+  build-server-exec:
 
     runs-on: ubuntu-latest
 
@@ -11,8 +11,32 @@ jobs:
     - uses: actions/checkout@v1
     - name: build
       run: |
-        ls
-        chmod +x auto.sh
-        ./auto.sh
+        export SRC=/src && cd ${SRC}
+        export BUILD=build
+        cmake --no-warn-unused-cli -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
+        ls -alh ${BUILD}
+
+  build-sdk-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        export SRC=/src && cd ${SRC}
+        export BUILD=build
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
+        ls -alh ${BUILD}
+
+  build-sdk-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        export SRC=/src && cd ${SRC}
+        export BUILD=build
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/mingw64_windows.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
+        ls -alh ${BUILD}
+        
 
   
