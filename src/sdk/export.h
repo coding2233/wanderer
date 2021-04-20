@@ -18,6 +18,7 @@ extern "C"
 #endif
 
     typedef void (*RECEIVE_FUNC)(int, const char *, int);
+    typedef void (*LOGIN_CALLBACK)(bool, const char *);
 
     void Test(const char *data);
 
@@ -28,6 +29,9 @@ extern "C"
     void WANDERER_EXPORT Update(wanderer::Network *network);
 
     void WANDERER_EXPORT Send(wanderer::Network *network, int fd, const char *data, size_t size);
+
+    void WANDERER_EXPORT Login(wanderer::Network *network, const char *user_name, const char *password, LOGIN_CALLBACK login_callback);
+
 #ifdef __cplusplus
 }
 #endif

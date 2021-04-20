@@ -11,7 +11,7 @@ CFunTypeReceive = CFUNCTYPE(None,c_int,c_char_p,c_int)
 receiveCallback = CFunTypeReceive(receive)
 
 wd =  cdll.LoadLibrary('../build/src/libwanderer-sdk.so')
-network = wd.Connect("127.0.0.1",12233,receiveCallback)
+network = wd.Connect("127.0.0.1".encode('ascii'),12233,receiveCallback)
 while True:
     wd.Update(network)
 wd.DisConnect(network)
