@@ -26,6 +26,8 @@ namespace wanderer
         void Connect(const char *server_ip, int server_port) override;
 
         void Receive(int socket, const char *data, size_t size) override;
+
+        int SendData(int fd, const char *data, size_t size) override;
     };
 }
 

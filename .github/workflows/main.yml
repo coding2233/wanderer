@@ -27,22 +27,22 @@ jobs:
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}
 
-  build-sdk-windows-mingw:
+  build-sdk-windows-x64:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - name: build
       run: |
+        apt install -y mingw-w64
         export SRC=./
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/mingw64_windows.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}
-
-  build-sdk-windows:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: build
-      run: |
-        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_TOOLCHAIN_FILE=./cmake/mingw64_windows.cmake -S ./ -B ./build && cmake --build ./build -j 10  
-        dir
+  # build-sdk-windows:
+  #   runs-on: windows-latest
+  #   steps:
+  #   - uses: actions/checkout@v1
+  #   - name: build
+  #     run: |
+  #       cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_TOOLCHAIN_FILE=./cmake/mingw64_windows.cmake -S ./ -B ./build && cmake --build ./build -j 10  
+  #       dir

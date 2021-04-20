@@ -33,6 +33,8 @@ namespace wanderer
 
         void Receive(int socket, const char *data, size_t size) override;
 
+        int SendData(int fd, const char *data, size_t size) override;
+
         void ReceiveThread();
     };
 }

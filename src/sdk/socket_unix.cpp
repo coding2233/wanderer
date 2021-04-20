@@ -59,9 +59,14 @@ namespace wanderer
         delete[] buffer;
     }
 
+    int SocketUnix::SendData(int fd, const char *data, size_t size)
+    {
+        send(fd, data, size, 0);
+        return 0;
+    }
+
     void SocketUnix::Receive(int fd, const char *data, size_t size)
     {
-        std::cout << "socket receive: " << fd << " data:" << data << " size" << size << std::endl;
         receive_callback_(fd, data, size);
     }
 

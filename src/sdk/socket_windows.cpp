@@ -51,6 +51,11 @@ namespace wanderer
     {
     }
 
+    int SocketWindows::SendData(int fd, const char *data, size_t size)
+    {
+        return 0;
+    }
+
     DWORD SocketWindows::WorkerThreadProc(LPVOID lpParam)
     {
         return 0;
