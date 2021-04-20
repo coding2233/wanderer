@@ -22,7 +22,7 @@ add_subdirectory(zlib)
 if(WIN32)
     set(openssl-lib-dir ${CMAKE_CURRENT_SOURCE_DIR}/libs-binary/openssl)
     set(openssl-libs  ${openssl-lib-dir}/win64/libcrypto.dll.a ${openssl-lib-dir}/win64/libssl.dll.a)
-elseif(unix)
+elseif(UNIX)
     set(openssl-libs ssl crypto)
 endif()
 
