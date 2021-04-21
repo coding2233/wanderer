@@ -15,7 +15,9 @@ namespace wanderer
     {
         auto app_config = GetSystem()->app_config_;
 
-        // GetSystem()->GetModule<NetworkModule>()->AddReciveListener(std::bind(&LoginModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+        GetSystem()->GetModule<NetworkModule>()->AddInnerReceiveListener(std::bind(&LoginModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+        GetSystem()->GetModule<NetworkModule>()->AddReciveListener(std::bind(&LoginModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+
         GetSystem()->GetModule<NetworkModule>()->CreateInnerSession(AppType_Login, app_config->center_ip_.c_str(), app_config->center_port_);
     }
 
@@ -33,6 +35,11 @@ namespace wanderer
 
     void LoginModule::OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size)
     {
+        if (message_type != MessageType_2L)
+        {
+            return;
+        }
+
         // auto msg = dynamic_cast<Message *>(message);
         // if (msg->message_code_ == MessageCode_Login_C2S)
         // {

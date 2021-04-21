@@ -186,4 +186,18 @@ namespace wanderer
 
         return result_data;
     }
+
+    std::string OpenSSLUtility::Md5(const std::string &data)
+    {
+        byte *md5_data = new byte[16];
+        MD5((const byte *)data.c_str(), data.size(), md5_data)
+        int ascii_base64_len;
+        char *ascii_base64 = base64(md5_data, 16, &ascii_base64_len);
+        std::string result_data(ascii_base64, ascii_base64_len);
+        delete ascii_base64;
+        delete[] md5_data;
+        LOG(INFO) << "Md5: " << data << " # " << result_data;
+        return result_data;
+    }
+
 }

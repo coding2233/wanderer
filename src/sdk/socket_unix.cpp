@@ -13,15 +13,15 @@ namespace wanderer
     {
     }
 
-    void SocketUnix::Connect(const char *server_ip, int server_port)
+    int SocketUnix::Connect(const char *server_ip, int server_port)
     {
-        socket_login_ = socket(AF_INET, SOCK_STREAM, 0);
+        int connect_socket = socket(AF_INET, SOCK_STREAM, 0);
         sockaddr_in addr, server_addr;
         bzero(&addr, sizeof(addr));
         addr.sin_family = AF_INET;
         addr.sin_addr.s_addr = htonl(INADDR_ANY);
         addr.sin_port = htons(0);
-        if (bind(socket_login_, (const sockaddr *)&addr, sizeof(addr)) < 0)
+        if (bind(connect_socket, (const sockaddr *)&addr, sizeof(addr)) < 0)
         {
             throw std::runtime_error("Inner socket bind error!");
         }
@@ -29,16 +29,18 @@ namespace wanderer
         server_addr.sin_family = AF_INET;
         server_addr.sin_addr.s_addr = inet_addr(server_ip);
         server_addr.sin_port = htons(server_port);
-        int result = connect(socket_login_, (const sockaddr *)&server_addr, sizeof(server_addr));
+        int result = connect(connect_socket, (const sockaddr *)&server_addr, sizeof(server_addr));
         if (result == 0)
         {
             //设置非阻塞模式
-            int flag = fcntl(socket_login_, F_GETFL, 0);
+            int flag = fcntl(connect_socket, F_GETFL, 0);
         }
         else if (result < 0)
         {
             throw std::runtime_error("Innner socket connect server fail !");
         }
+        sockets_.insert(connect_socket);
+        return connect_socket;
     }
 
     void SocketUnix::ReceiveThread()
@@ -47,13 +49,16 @@ namespace wanderer
         char *buffer = new char[buffer_max];
         while (true)
         {
-            if (socket_login_ > 0)
+            int index = 0;
+            for (auto iter = sockets_.begin(); iter != sockets_.end(); iter++)
             {
-                auto size = recv(socket_login_, buffer, buffer_max, 0);
+                int recv_socket = sockets_[index];
+                auto size = recv(recv_socket, buffer, buffer_max, 0);
                 if (size > 0)
                 {
-                    Receive(socket_login_, (const char *)buffer, size);
+                    Receive(recv_socket, (const char *)buffer, size);
                 }
+                index++;
             }
         }
         delete[] buffer;

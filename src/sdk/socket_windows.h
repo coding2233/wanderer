@@ -23,7 +23,7 @@ namespace wanderer
         SocketWindows(/* args */);
         ~SocketWindows();
 
-        void Connect(const char *server_ip, int server_port) override;
+        int Connect(const char *server_ip, int server_port) override;
 
         void Receive(int socket, const char *data, size_t size) override;
 

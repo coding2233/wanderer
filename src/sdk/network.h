@@ -31,6 +31,8 @@ namespace wanderer
 
         std::map<int, SessionData *> sessions_;
 
+        int login_fd_;
+
     protected:
         void OnReceive(int fd, const char *data, size_t size);
 
@@ -47,6 +49,8 @@ namespace wanderer
         void Send(int fd, const char *dta, size_t size);
 
         void Update();
+
+        void Login(const char *user_name, const char *password);
     };
 }
 

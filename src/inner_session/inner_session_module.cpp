@@ -43,6 +43,8 @@ namespace wanderer
         //         return;
         // }
         sessions->push_back(session);
+        //添加到所有的内部会话中
+        inner_all_sessions_.insert(std::make_pair(session, true));
     }
 
     void InnerSessionModule::AddInnerSession(const char name, Session *session)
@@ -51,6 +53,8 @@ namespace wanderer
         if (iter == inner_sessions_.end())
         {
             inner_sessions_.insert(std::make_pair(name, session));
+            //添加到所有的内部会话中
+            inner_all_sessions_.insert(std::make_pair(session, true));
         }
     }
 
@@ -88,6 +92,12 @@ namespace wanderer
             }
             // iter->second->InnerAuth((AppType_)iter->first);
         }
+    }
+
+    bool InnerSessionModule::IsInner(Session *session)
+    {
+        auto iter = inner_all_sessions_.find(session);
+        return iter != inner_all_sessions_.end();
     }
 
 }

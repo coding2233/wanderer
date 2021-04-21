@@ -4,6 +4,7 @@
 #include <iostream>
 #include <openssl/aes.h>
 #include <openssl/err.h>
+#include <openssl/md5.h>
 #include <openssl/pem.h>
 #include <openssl/rand.h>
 #include <openssl/rsa.h>
@@ -63,6 +64,8 @@ namespace wanderer
         std::string EncryptAES(const std::string &data, const std::string &key);
         //AES解密
         std::string DecryptAES(const std::string &data, const std::string &key);
+        //md5加密
+        static std::string Md5(const std::string &data);
     };
 
 }

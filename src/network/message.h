@@ -31,7 +31,15 @@ namespace wanderer
         //心跳包 S->C
         MessageType_Heartbeat = 9,
         //普通信息 S<->C
-        MessageType_Normal = 99,
+        MessageType_Normal = 100,
+        //->Login
+        MessageType_2L = 101,
+        //->Gateway
+        MessageType_2G = 102,
+        //->Center
+        MessageType_2C = 103,
+        //->Database
+        MessageType_2D = 104,
     };
 
     // enum MessageCode_ : unsigned char

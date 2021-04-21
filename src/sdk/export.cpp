@@ -39,6 +39,7 @@ void WANDERER_EXPORT Send(wanderer::Network *network, int fd, const char *data, 
 
 void WANDERER_EXPORT Login(wanderer::Network *network, const char *user_name, const char *password, LOGIN_CALLBACK login_callback)
 {
+    network->Login(user_name, password);
 }
 
 // void Send(wanderer::Network &network, const char *data, size_t size)

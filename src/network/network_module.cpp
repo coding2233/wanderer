@@ -111,10 +111,20 @@ namespace wanderer
             }
         }
 
-        // for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
-        // {
-        //     message_receiver_listeners_[i](session, message_type, data, size);
-        // }
+        if (GetSystem()->GetModule<InnerSessionModule>()->IsInner(session))
+        {
+            for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
+            {
+                inner_message_receiver_listeners_[i](session, message_type, data, size);
+            }
+        }
+        else
+        {
+            for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
+            {
+                message_receiver_listeners_[i](session, message_type, data, size);
+            }
+        }
         // delete message;
     }
 
@@ -162,6 +172,11 @@ namespace wanderer
     void NetworkModule::AddReciveListener(MESSAGE_RECEIVE message_receive)
     {
         message_receiver_listeners_.push_back(message_receive);
+    }
+
+    void NetworkModule::AddInnerReceiveListener(MESSAGE_RECEIVE message_receive)
+    {
+        inner_message_receiver_listeners_.push_back(message_receive);
     }
 
 } // namespace wanderer

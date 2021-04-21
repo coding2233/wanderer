@@ -43,8 +43,9 @@ namespace wanderer
     {
     }
 
-    void SocketWindows::Connect(const char *server_ip, int server_port)
+    int SocketWindows::Connect(const char *server_ip, int server_port)
     {
+        return 0;
     }
 
     void SocketWindows::Receive(int socket, const char *data, size_t size)

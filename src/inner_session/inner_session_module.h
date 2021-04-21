@@ -23,6 +23,8 @@ namespace wanderer
         //gate server inner session
         std::map<const char, std::vector<Session *>> inner_center_sessions_;
 
+        std::map<Session *, bool> inner_all_sessions_;
+
     public:
         void OnInit() override;
         void OnUpdate() override;
@@ -35,6 +37,8 @@ namespace wanderer
         Session *GetNormalSession(AppType_ app_type);
 
         void InnerAuth(Session *session);
+
+        bool IsInner(Session *session);
     };
 }
 

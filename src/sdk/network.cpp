@@ -97,5 +97,12 @@ namespace wanderer
         return secret_key;
     }
 
+    void Network::Login(const char *user_name, const char *password)
+    {
+        auto node = YAML::Load("{'id':'','pw':''}");
+        node["id"] = user_name;
+        node["pw"] = OpenSSLUtility::Md5(std::string(password));
+        Send(login_fd_, node.data, node.size());
+    }
 
 }

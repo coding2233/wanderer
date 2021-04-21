@@ -22,7 +22,7 @@ namespace wanderer
 
         virtual void Setup(SOCKET_RECEIVE receive_callback);
 
-        virtual void Connect(const char *server_ip, int server_port) = 0;
+        virtual int Connect(const char *server_ip, int server_port) = 0;
 
         virtual void Receive(int socket, const char *data, size_t size) = 0;
 
