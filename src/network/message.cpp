@@ -4,15 +4,14 @@ namespace wanderer
 {
     CircleBuffer Message::buffer_;
     Message Message::Global;
+    OpenSSLUtility Message::openssl_;
 
     Message::Message(/* args */)
     {
-        openssl_ = new OpenSSLUtility();
     }
 
     Message::~Message()
     {
-        delete openssl_;
     }
 
     Message *Message::Setup(MessageType_ message_type)
@@ -37,14 +36,14 @@ namespace wanderer
         {
             //RSA加密
             const std::string data(buffer_.Read(), buffer_.Length());
-            std::string encrypt_data = openssl_->EncryptRSA(data);
+            std::string encrypt_data = openssl_.EncryptRSA(data);
             buffer_.Flush();
             buffer_.Write(encrypt_data.c_str(), encrypt_data.size());
         }
-        else if (message_type_ == MessageType_InnerAuth)
+        else if (message_type_ > MessageType_Exchange)
         {
             const std::string data(buffer_.Read(), buffer_.Length());
-            std::string encrypt_data = openssl_->EncryptAES(data, secret_key);
+            std::string encrypt_data = openssl_.EncryptAES(data, secret_key);
             buffer_.Flush();
             buffer_.Write(encrypt_data.c_str(), encrypt_data.size());
         }
@@ -71,16 +70,16 @@ namespace wanderer
         {
             //RSA解密
             const std::string data(buffer_.Read(), buffer_.Length());
-            std::string decode_data = openssl_->DecryptRSA(data);
+            std::string decode_data = openssl_.DecryptRSA(data);
             buffer_.Flush();
             buffer_.Write(decode_data.c_str(), decode_data.length());
         }
-        else if (message_type_ == MessageType_InnerAuth)
+        else if (message_type_ > MessageType_Exchange)
         {
-            //RSA解密
+            //AES解密
             const std::string data(buffer_.Read(), buffer_.Length());
             LOG(INFO) << "Message::Unpack DecryptAES: " << data << " secret_key: " << secret_key;
-            std::string decode_data = openssl_->DecryptAES(data, secret_key);
+            std::string decode_data = openssl_.DecryptAES(data, secret_key);
             buffer_.Flush();
             buffer_.Write(decode_data.c_str(), decode_data.length());
         }

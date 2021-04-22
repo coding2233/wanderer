@@ -48,6 +48,10 @@ namespace wanderer
         return 0;
     }
 
+    void SocketWindows::Disconnect(int fd)
+    {
+    }
+
     void SocketWindows::Receive(int socket, const char *data, size_t size)
     {
     }

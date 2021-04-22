@@ -24,6 +24,8 @@ namespace wanderer
 
         virtual int Connect(const char *server_ip, int server_port) = 0;
 
+        virtual void Disconnect(int fd) = 0;
+
         virtual void Receive(int socket, const char *data, size_t size) = 0;
 
         virtual int SendData(int fd, const char *data, size_t size) = 0;

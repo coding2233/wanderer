@@ -43,22 +43,33 @@ namespace wanderer
         return connect_socket;
     }
 
+    void SocketUnix::Disconnect(int fd)
+    {
+        for (auto iter = sockets_.begin(); iter != sockets_.end(); iter++)
+        {
+            if (fd == *iter)
+            {
+                close(fd);
+                sockets_.erase(iter);
+                break;
+            }
+        }
+    }
+
     void SocketUnix::ReceiveThread()
     {
         int buffer_max = 1024;
         char *buffer = new char[buffer_max];
         while (true)
         {
-            int index = 0;
             for (auto iter = sockets_.begin(); iter != sockets_.end(); iter++)
             {
-                int recv_socket = sockets_[index];
+                int recv_socket = *iter;
                 auto size = recv(recv_socket, buffer, buffer_max, 0);
                 if (size > 0)
                 {
                     Receive(recv_socket, (const char *)buffer, size);
                 }
-                index++;
             }
         }
         delete[] buffer;

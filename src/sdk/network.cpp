@@ -17,17 +17,37 @@ namespace wanderer
         delete socket_;
     }
 
-    void Network::Connect(const char *server_ip, int server_port, void *receive_callback, void *connect_faile)
+    int Network::Connect(const char *server_ip, int server_port)
     {
-        socket_->Connect(server_ip, server_port);
+        if (login_fd_ == 0)
+        {
+            login_connected_ = false;
+            login_fd_ = socket_->Connect(server_ip, server_port);
+        }
+        else
+        {
+            gateway_fd_ = socket_->Connect(server_ip, server_port);
+        }
     }
 
     void Network::DisConnect()
     {
+        if (login_fd_ > 0)
+        {
+            socket_->Disconnect(login_fd_);
+            login_fd_ = 0;
+        }
+        if (gateway_fd_ > 0)
+        {
+            socket_->Disconnect(gateway_fd_);
+            gateway_fd_ = 0;
+        }
     }
 
-    void Network::Send(int fd, const char *data, size_t size)
+    void Network::Send(int fd, IMessage *message)
     {
+        const char *data = message->Pack(secret_key_);
+        int size = message->Size();
         socket_->SendData(fd, data, size);
     }
 
@@ -66,6 +86,7 @@ namespace wanderer
         {
             Message *message = new Message();
             const char *data_message = message->Unpack(read_buffer, data_size, session_data->secret_key_);
+            int data_message_size = message->size();
             buffer.erase(0, data_size);
             auto msg_type = (MessageType_)message->message_type_;
             std::cout << "Message type: " << std::to_string(msg_type) << std::endl;
@@ -82,8 +103,35 @@ namespace wanderer
             else if (msg_type == MessageType_Exchange)
             {
                 std::cout << "MessageType_Exchange!" << std::endl;
+                if (fd == login_fd_)
+                {
+                    login_connected_ = true;
+                }
+
+                // if (fd == gateway_fd_)
+                // {
+                // }
+            }
+            else
+            {
+                YAML::Node node_message = YAML::Load(std::string(data_message, data_message_size));
+                OnReceive(fd, node_message);
             }
             delete message;
+        }
+    }
+
+    void Network::OnReceive(int fd, YAML::Node node_message)
+    {
+        if (fd == login_fd_)
+        {
+            auto gateway_ip = node_message["gateway_ip"].as<std::string>();
+            auto gateway_port = node_message["gateway_port"].as<int>();
+            gateway_key_ = node_message["gateway_key"].as<std::string>();
+            Connect(gateway_ip, gateway_port);
+        }
+        else if (fd == gateway_fd_)
+        {
         }
     }
 
@@ -99,10 +147,18 @@ namespace wanderer
 
     void Network::Login(const char *user_name, const char *password)
     {
+        if (!login_connected_)
+        {
+            return;
+        }
+
         auto node = YAML::Load("{'id':'','pw':''}");
         node["id"] = user_name;
         node["pw"] = OpenSSLUtility::Md5(std::string(password));
-        Send(login_fd_, node.data, node.size());
+
+        Message message;
+        message.Setup(MessageType_2L, (const char *)node.data, node.size());
+        Send(login_fd_, &message);
     }
 
 }

@@ -69,10 +69,10 @@ namespace wanderer
     */
     struct Message : public IMessage
     {
-    private:
+    protected:
         static CircleBuffer buffer_;
 
-        OpenSSLUtility *openssl_;
+        static OpenSSLUtility openssl_;
 
     public:
         Message(/* args */);
@@ -90,7 +90,7 @@ namespace wanderer
         // const char *message_;
 
         //The global object of the message.
-        static Message Global;
+        // static Message Global;
 
         Message *Setup(MessageType_ message_type);
 

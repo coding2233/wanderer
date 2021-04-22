@@ -32,21 +32,25 @@ namespace wanderer
         std::map<int, SessionData *> sessions_;
 
         int login_fd_;
+        int gateway_fd_;
 
-    protected:
+        bool login_connected_ = false;
+
+        std::string gateway_key_;
+
         void OnReceive(int fd, const char *data, size_t size);
-
+        void OnReceive(int fd, YAML::Node message);
         std::string CreateSecretKey();
 
     public:
         Network(/* args */);
         ~Network();
 
-        void Connect(const char *server_ip, int server_port, void *receive_callback, void *connect_faile);
+        int Connect(const char *server_ip, int server_port);
 
         void DisConnect();
 
-        void Send(int fd, const char *dta, size_t size);
+        void Send(int fd, IMessage *message);
 
         void Update();
 

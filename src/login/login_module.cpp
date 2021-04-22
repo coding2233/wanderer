@@ -40,6 +40,14 @@ namespace wanderer
             return;
         }
 
+        YAML::Node node = YAML::Load(std::string(data, size));
+        if (GetSystem()->GetModule<InnerSessionModule>()->IsInner())
+        {
+        }
+        else
+        {
+        }
+
         // auto msg = dynamic_cast<Message *>(message);
         // if (msg->message_code_ == MessageCode_Login_C2S)
         // {
