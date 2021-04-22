@@ -49,9 +49,10 @@ namespace wanderer
         std::string auth_str_data = std::to_string((char)app_type) + System::app_config_->secret_key_;
         const char *auth_data = auth_str_data.c_str();
         LOG(INFO) << "Internal authentication request: " << std::to_string(app_type) << " " << System::app_config_->secret_key_;
-        auto auth_message = Message::Global.Setup(MessageType_InnerAuth, auth_data, auth_str_data.size());
+        Message *auth_message = new Message();
+        auth_message->Setup(MessageType_InnerAuth, auth_data, auth_str_data.size());
         Send(auth_message);
-
+        delete auth_message;
         inner_auth_ = true;
     }
 

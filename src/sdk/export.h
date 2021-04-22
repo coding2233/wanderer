@@ -16,13 +16,12 @@ extern "C"
 #elif unix
 #define WANDERER_EXPORT
 #endif
-
     typedef void (*RECEIVE_FUNC)(int, const char *, int);
     typedef void (*LOGIN_CALLBACK)(bool, const char *);
 
     void Test(const char *data);
 
-    wanderer::Network *WANDERER_EXPORT Connect(const char *server_ip, int server_port, RECEIVE_FUNC receive_callback);
+    wanderer::Network *WANDERER_EXPORT Connect(const char *server_ip, int server_port, CONNECT_CALLBACK connect_callback);
 
     void WANDERER_EXPORT DisConnect(wanderer::Network *network);
 

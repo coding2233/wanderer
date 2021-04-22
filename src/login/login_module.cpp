@@ -41,7 +41,7 @@ namespace wanderer
         }
 
         YAML::Node node = YAML::Load(std::string(data, size));
-        if (GetSystem()->GetModule<InnerSessionModule>()->IsInner())
+        if (GetSystem()->GetModule<InnerSessionModule>()->IsInner(session))
         {
         }
         else

@@ -39,7 +39,7 @@ namespace wanderer
         {
             throw std::runtime_error("Innner socket connect server fail !");
         }
-        sockets_.insert(connect_socket);
+        sockets_.push_back(connect_socket);
         return connect_socket;
     }
 
@@ -49,7 +49,7 @@ namespace wanderer
         {
             if (fd == *iter)
             {
-                close(fd);
+                shutdown(fd, SHUT_RD);
                 sockets_.erase(iter);
                 break;
             }

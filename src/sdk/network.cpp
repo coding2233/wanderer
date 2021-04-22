@@ -46,9 +46,13 @@ namespace wanderer
 
     void Network::Send(int fd, IMessage *message)
     {
-        const char *data = message->Pack(secret_key_);
-        int size = message->Size();
-        socket_->SendData(fd, data, size);
+        auto iter = sessions_.find(fd);
+        if (iter != sessions_.end())
+        {
+            const char *data = message->Pack(iter->second->secret_key_);
+            int size = message->Size();
+            socket_->SendData(fd, data, size);
+        }
     }
 
     void Network::Update()
@@ -86,7 +90,7 @@ namespace wanderer
         {
             Message *message = new Message();
             const char *data_message = message->Unpack(read_buffer, data_size, session_data->secret_key_);
-            int data_message_size = message->size();
+            int data_message_size = message->Size();
             buffer.erase(0, data_size);
             auto msg_type = (MessageType_)message->message_type_;
             std::cout << "Message type: " << std::to_string(msg_type) << std::endl;
@@ -96,9 +100,9 @@ namespace wanderer
                 std::cout << "Create secret_key:" << secret_key << std::endl;
                 session_data->secret_key_ = secret_key;
                 message->Setup(MessageType_SecretKey, secret_key.c_str(), secret_key.size());
-                const char *data = message->Pack(secret_key);
-                int size = message->Size();
-                Send(fd, data, size);
+                // const char *data = message->Pack(secret_key);
+                // int size = message->Size();
+                Send(fd, message);
             }
             else if (msg_type == MessageType_Exchange)
             {
@@ -115,20 +119,20 @@ namespace wanderer
             else
             {
                 YAML::Node node_message = YAML::Load(std::string(data_message, data_message_size));
-                OnReceive(fd, node_message);
+                OnYAMLReceive(fd, node_message);
             }
             delete message;
         }
     }
 
-    void Network::OnReceive(int fd, YAML::Node node_message)
+    void Network::OnYAMLReceive(int fd, YAML::Node node_message)
     {
         if (fd == login_fd_)
         {
             auto gateway_ip = node_message["gateway_ip"].as<std::string>();
             auto gateway_port = node_message["gateway_port"].as<int>();
             gateway_key_ = node_message["gateway_key"].as<std::string>();
-            Connect(gateway_ip, gateway_port);
+            Connect(gateway_ip.c_str(), gateway_port);
         }
         else if (fd == gateway_fd_)
         {
@@ -157,7 +161,8 @@ namespace wanderer
         node["pw"] = OpenSSLUtility::Md5(std::string(password));
 
         Message message;
-        message.Setup(MessageType_2L, (const char *)node.data, node.size());
+        std::string data = node.as<std::string>();
+        message.Setup(MessageType_2L, (const char *)data.c_str(), data.size());
         Send(login_fd_, &message);
     }
 

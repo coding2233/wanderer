@@ -8,6 +8,8 @@ namespace wanderer
 {
 
 #define SOCKET_RECEIVE std::function<void(int, const char *data, int size)>
+#define CONNECT_CALLBACK std::function<void(bool, int)>
+    // typedef void (*CONNECT_CALLBACK)(bool, int);
 
     class SocketClientBase
     {

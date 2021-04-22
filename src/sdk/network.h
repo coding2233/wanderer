@@ -39,7 +39,7 @@ namespace wanderer
         std::string gateway_key_;
 
         void OnReceive(int fd, const char *data, size_t size);
-        void OnReceive(int fd, YAML::Node message);
+        void OnYAMLReceive(int fd, YAML::Node message);
         std::string CreateSecretKey();
 
     public:

@@ -3,7 +3,6 @@
 namespace wanderer
 {
     CircleBuffer Message::buffer_;
-    Message Message::Global;
     OpenSSLUtility Message::openssl_;
 
     Message::Message(/* args */)
