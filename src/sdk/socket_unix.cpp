@@ -26,10 +26,12 @@ namespace wanderer
         {
             throw std::runtime_error("Inner socket bind error!");
         }
+
         bzero(&server_addr, sizeof(server_addr));
         server_addr.sin_family = AF_INET;
         server_addr.sin_addr.s_addr = inet_addr(server_ip);
         server_addr.sin_port = htons(server_port);
+
         int result = connect(connect_socket, (const sockaddr *)&server_addr, sizeof(server_addr));
         if (result == 0)
         {
@@ -40,6 +42,7 @@ namespace wanderer
         {
             throw std::runtime_error("Innner socket connect server fail !");
         }
+
         sockets_.push_back(connect_socket);
         return connect_socket;
     }
