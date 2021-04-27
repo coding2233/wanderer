@@ -4,6 +4,9 @@
 * 下载`vscode`,并安装插件`Settings Sync`,同步插件以及配置
 * 使用`gist id`:  `482670641db3f8a4530bea3672f116fb`
 
+### 内存泄漏检测工具
+* [https://www.valgrind.org/downloads/current.html#current](https://www.valgrind.org/downloads/current.html#current)
+
 ### 架构设计
 * 使用在线网站: [https://www.draw.io/](https://www.draw.io/)
 * 打开本地`doc/develop.drawio`文件

@@ -13,21 +13,6 @@ namespace wanderer
     {
     }
 
-    void SocketUnix::Update()
-    {
-        int buffer_max = 1024;
-        char* buffer = new char[buffer_max];
-        for (auto iter = sockets_.begin(); iter != sockets_.end(); iter++)
-        {
-            int recv_socket = *iter;
-            auto size = recv(recv_socket, buffer, buffer_max, 0);
-            if (size > 0)
-            {
-                Receive(recv_socket, (const char*)buffer, size);
-            }
-        }
-        delete[] buffer;
-    }
 
     int SocketUnix::Connect(const char *server_ip, int server_port)
     {
@@ -71,20 +56,6 @@ namespace wanderer
             }
         }
     }
-
-   
-
-    int SocketUnix::SendData(int fd, const char *data, size_t size)
-    {
-        send(fd, data, size, 0);
-        return 0;
-    }
-
-    void SocketUnix::Receive(int fd, const char *data, size_t size)
-    {
-        receive_callback_(fd, data, size);
-    }
-
 }
 
 #endif

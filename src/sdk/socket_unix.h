@@ -23,21 +23,13 @@ namespace wanderer
     {
     private:
         /* data */
-        std::vector<int> sockets_;
-
     public:
         SocketUnix(/* args */);
         ~SocketUnix();
 
-        void Update() override;
-
         int Connect(const char *server_ip, int server_port) override;
 
         void Disconnect(int fd) override;
-
-        void Receive(int socket, const char *data, size_t size) override;
-
-        int SendData(int fd, const char *data, size_t size) override;
 
         //void ReceiveThread();
     };

@@ -6,6 +6,13 @@ namespace wanderer
 {
     SocketWindows::SocketWindows(/* args */)
     {
+        WSADATA wsaData;
+        // Initialize Winsock
+        int wsa_startup_result = WSAStartup(MAKEWORD(2, 2), &wsaData);
+        if (wsa_startup_result != 0) {
+            throw std::runtime_error("WSAStartup failed: "+ std::to_string(wsa_startup_result));
+        }
+
         // int BUF_SIZE = 1024;
         // WSADATA wsd;
         // SOCKET sHost;
@@ -41,30 +48,53 @@ namespace wanderer
 
     SocketWindows::~SocketWindows()
     {
-    }
-
-    void SocketWindows::Update()
-    {
-
+        WSACleanup();
     }
 
     int SocketWindows::Connect(const char *server_ip, int server_port)
     {
-        return 0;
+        SOCKET socket_client= socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (SOCKET_ERROR == socket_client)
+        {
+            throw std::runtime_error("Client socket creation failed.");
+        }
+        //设置非阻塞模式
+        unsigned long ul = 1;
+        if (ioctlsocket(socket_client, FIONBIO, (unsigned long*)&ul) == SOCKET_ERROR)
+        {
+            throw std::runtime_error("ioctlsocket error.");
+            closesocket(socket_client);
+            return -1;
+        }
+        //服务端的ip和地址
+        sockaddr_in server_addr;
+        server_addr.sin_family = AF_INET;
+        server_addr.sin_addr.S_un.S_addr = inet_addr(server_ip);
+        server_addr.sin_port = htons(server_port);
+        int connect_result = connect(socket_client, (SOCKADDR*)&server_addr, sizeof(SOCKADDR));
+        if (connect_result== SOCKET_ERROR)
+        {
+            throw std::runtime_error("Failed to connect to server. Server ip:"+ std::string(server_ip)+" port:"+std::to_string(server_port));
+        }
+        sockets_.push_back(socket_client);
+        return socket_client;
     }
 
     void SocketWindows::Disconnect(int fd)
     {
+        for (auto iter = sockets_.begin(); iter != sockets_.end(); iter++)
+        {
+            if (fd == *iter)
+            {
+                closesocket(fd);
+                sockets_.erase(iter);
+                break;
+            }
+        }
     }
 
-    void SocketWindows::Receive(int socket, const char *data, size_t size)
-    {
-    }
 
-    int SocketWindows::SendData(int fd, const char *data, size_t size)
-    {
-        return 0;
-    }
+
 
     //DWORD SocketWindows::WorkerThreadProc(LPVOID lpParam)
     //{

@@ -5,6 +5,8 @@
 
 #include <windows.h>
 #include <WinSock2.h>
+#include <iostream>
+#include <string>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -22,15 +24,9 @@ namespace wanderer
         SocketWindows(/* args */);
         ~SocketWindows();
 
-        void Update() override;
-
         int Connect(const char *server_ip, int server_port) override;
 
         void Disconnect(int fd) override;
-
-        void Receive(int socket, const char *data, size_t size) override;
-
-        int SendData(int fd, const char *data, size_t size) override;
     };
 }
 
