@@ -3,7 +3,7 @@
 
 #include <functional>
 #include <iostream>
-#include <string>
+#include <cstring>
 
 #if WIN32
 #include <WinSock2.h>

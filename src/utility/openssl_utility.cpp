@@ -39,7 +39,7 @@ namespace wanderer
         rsa = PEM_read_bio_RSA_PUBKEY(bio_key, nullptr, nullptr, nullptr);
         if (rsa == nullptr)
         {
-            LOG(FATAL) << "RSA public key read failed!";
+            LOG(FATAL) << "RSA public key read failed!"<<rsa_public_key;
         }
 
         int rsa_size = RSA_size(rsa);
@@ -72,10 +72,11 @@ namespace wanderer
         {
             LOG(FATAL) << "RSA BIO creation failed!";
         }
+        
         rsa = PEM_read_bio_RSAPrivateKey(bio_key, nullptr, nullptr, nullptr);
         if (rsa == nullptr)
         {
-            LOG(FATAL) << "RSA public key read failed!";
+            LOG(FATAL) << "RSA prvaite key read failed!";
         }
         int rsa_size = RSA_size(rsa);
         char *decode = new char[rsa_size + 1];

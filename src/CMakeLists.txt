@@ -27,7 +27,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  /DWIN32_LEAN_AND_MEAN")
 # include_directories("/usr/include")
 endif(WIN32)
 
-
 add_subdirectory(libraries)
 add_subdirectory(module)
 
@@ -41,6 +40,14 @@ file(GLOB_RECURSE src "base/*.*"
     "center/*.*"
     "login/*.*" 
     "gateway/*.*")
+
+if(BUILD_EXEC)
+    add_definitions("-DBUILD_EXEC")
+endif(BUILD_EXEC)
+
+if(BUILD_SDK)
+    add_definitions("-DBUILD_SDK")
+endif(BUILD_SDK)
 
 
 if(BUILD_EXEC)

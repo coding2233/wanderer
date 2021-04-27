@@ -12,8 +12,10 @@ __        __              _
 * 艺术字生成器，由ASCII字符组成，把文本显示成标题栏。
 
 ### vscode
-* 下载`vscode`,并安装插件`Settings Sync`,同步插件以及配置
-* 使用`gist id`:  `482670641db3f8a4530bea3672f116fb`
+* 使用`vscode`的`Remote - SSH`连接`linux`进行开发,并推荐安装以下插件
+* [vscode-cpptools-linux](https://github.com/Microsoft/vscode-cpptools/releases)
+* [vscode-drawio](https://marketplace.visualstudio.com/items?itemName=eightHundreds.vscode-drawio)
+* [CMake](https://marketplace.visualstudio.com/items?itemName=twxs.cmake)
 
 ### 内存泄漏检测工具
 * [https://www.valgrind.org/downloads/current.html#current](https://www.valgrind.org/downloads/current.html#current)
