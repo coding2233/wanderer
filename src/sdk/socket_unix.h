@@ -29,6 +29,8 @@ namespace wanderer
         SocketUnix(/* args */);
         ~SocketUnix();
 
+        void Update() override;
+
         int Connect(const char *server_ip, int server_port) override;
 
         void Disconnect(int fd) override;
@@ -37,7 +39,7 @@ namespace wanderer
 
         int SendData(int fd, const char *data, size_t size) override;
 
-        void ReceiveThread();
+        //void ReceiveThread();
     };
 }
 

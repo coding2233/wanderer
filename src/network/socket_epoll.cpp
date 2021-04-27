@@ -153,15 +153,15 @@ namespace wanderer
     void SocketEpoll::CreateConnectSocket(const char name, const char *server_ip, int server_port)
     {
         // int sleep_time(++sleep_time_);
-        std::thread socket_thread(&SocketEpoll::CreateClientSocket, this, name, server_ip, server_port, sleep_time_);
-        socket_thread.detach();
-        // CreateClientSocket(name, server_ip, server_port, 0);
+        // std::thread socket_thread(&SocketEpoll::CreateClientSocket, this, name, server_ip, server_port, sleep_time_);
+        // socket_thread.detach();
+         CreateClientSocket(name, server_ip, server_port, 0);
     }
 
     void SocketEpoll::CreateClientSocket(const char name, const char *server_ip, int server_port, int sleep_time)
     {
         sleep_time = 1.0;
-        std::this_thread::sleep_for(std::chrono::seconds(sleep_time));
+        // std::this_thread::sleep_for(std::chrono::seconds(sleep_time));
 
         int sock_client = socket(AF_INET, SOCK_STREAM, 0);
         sockaddr_in addr, server_addr;

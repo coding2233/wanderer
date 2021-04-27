@@ -22,6 +22,8 @@ namespace wanderer
         SocketClientBase(/* args */);
         ~SocketClientBase();
 
+        virtual void Update()=0;
+
         virtual void Setup(SOCKET_RECEIVE receive_callback);
 
         virtual int Connect(const char *server_ip, int server_port) = 0;

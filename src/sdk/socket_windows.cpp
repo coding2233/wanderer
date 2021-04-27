@@ -43,6 +43,11 @@ namespace wanderer
     {
     }
 
+    void SocketWindows::Update()
+    {
+
+    }
+
     int SocketWindows::Connect(const char *server_ip, int server_port)
     {
         return 0;
@@ -61,10 +66,10 @@ namespace wanderer
         return 0;
     }
 
-    DWORD SocketWindows::WorkerThreadProc(LPVOID lpParam)
-    {
-        return 0;
-    }
+    //DWORD SocketWindows::WorkerThreadProc(LPVOID lpParam)
+    //{
+    //    return 0;
+    //}
 
 }
 #endif

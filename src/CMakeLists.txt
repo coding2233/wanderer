@@ -23,6 +23,7 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 if(WIN32)
 include_directories("/usr/x86_64-w64-mingw32/include")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  /DWIN32_LEAN_AND_MEAN")
 # include_directories("/usr/include")
 endif(WIN32)
 

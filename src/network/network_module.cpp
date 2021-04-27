@@ -6,8 +6,8 @@ namespace wanderer
     {
         //message_packer_ = new ProtobufMessagePacker;
 #if WIN32
-        //throw std::runtime_error("IOCP not implemented yet!!");
-        socket_ = new SocketIOCP;
+        throw std::runtime_error("IOCP not implemented yet!!");
+        //socket_ = new SocketIOCP;
 #elif unix
         socket_ = new SocketEpoll;
 #endif

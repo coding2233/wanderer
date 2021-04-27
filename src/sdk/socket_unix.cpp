@@ -5,12 +5,28 @@ namespace wanderer
 {
     SocketUnix::SocketUnix(/* args */)
     {
-        std::thread socket_thread(&SocketUnix::ReceiveThread, this);
-        socket_thread.detach();
+       /* std::thread socket_thread(&SocketUnix::ReceiveThread, this);
+        socket_thread.detach();*/
     }
 
     SocketUnix::~SocketUnix()
     {
+    }
+
+    void SocketUnix::Update()
+    {
+        int buffer_max = 1024;
+        char* buffer = new char[buffer_max];
+        for (auto iter = sockets_.begin(); iter != sockets_.end(); iter++)
+        {
+            int recv_socket = *iter;
+            auto size = recv(recv_socket, buffer, buffer_max, 0);
+            if (size > 0)
+            {
+                Receive(recv_socket, (const char*)buffer, size);
+            }
+        }
+        delete[] buffer;
     }
 
     int SocketUnix::Connect(const char *server_ip, int server_port)
@@ -56,24 +72,7 @@ namespace wanderer
         }
     }
 
-    void SocketUnix::ReceiveThread()
-    {
-        int buffer_max = 1024;
-        char *buffer = new char[buffer_max];
-        while (true)
-        {
-            for (auto iter = sockets_.begin(); iter != sockets_.end(); iter++)
-            {
-                int recv_socket = *iter;
-                auto size = recv(recv_socket, buffer, buffer_max, 0);
-                if (size > 0)
-                {
-                    Receive(recv_socket, (const char *)buffer, size);
-                }
-            }
-        }
-        delete[] buffer;
-    }
+   
 
     int SocketUnix::SendData(int fd, const char *data, size_t size)
     {

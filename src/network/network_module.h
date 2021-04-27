@@ -6,6 +6,7 @@
 
 #include "base/app_config.h"
 #include "base/module.h"
+#include "network/socket_base.h"
 #if unix
 #include "network/socket_epoll.h"
 #elif WIN32

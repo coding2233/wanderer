@@ -19,15 +19,17 @@ namespace wanderer
 
     int Network::Connect(const char *server_ip, int server_port)
     {
+        int fd= socket_->Connect(server_ip, server_port);
         if (login_fd_ == 0)
         {
             login_connected_ = false;
-            login_fd_ = socket_->Connect(server_ip, server_port);
+            login_fd_ = fd;
         }
         else
         {
-            gateway_fd_ = socket_->Connect(server_ip, server_port);
+            gateway_fd_ = fd;
         }
+        return fd;
     }
 
     void Network::DisConnect()
@@ -57,6 +59,7 @@ namespace wanderer
 
     void Network::Update()
     {
+        socket_->Update();
     }
 
     void Network::OnReceive(int fd, const char *data, size_t size)

@@ -4,10 +4,9 @@
 #define __SOCKET_WINDOWS_H__
 
 #include <windows.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
+#include <WinSock2.h>
 
-#pragma comment(lib, "WS2_32.lib")
+#pragma comment(lib, "ws2_32.lib")
 
 #include "socket_client_base.h"
 
@@ -17,11 +16,13 @@ namespace wanderer
     {
     private:
         /* data */
-        static DWORD WINAPI WorkerThreadProc(LPVOID lpParam);
+        //static DWORD WINAPI WorkerThreadProc(LPVOID lpParam);
 
     public:
         SocketWindows(/* args */);
         ~SocketWindows();
+
+        void Update() override;
 
         int Connect(const char *server_ip, int server_port) override;
 
