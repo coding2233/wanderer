@@ -19,7 +19,7 @@ namespace wanderer
         for (auto iter = sockets_.begin(); iter != sockets_.end(); iter++)
         {
             int recv_socket = *iter;
-            memset(recv_buffer_, 0, 1024);
+            memset(recv_buffer_, 0, RECV_BUFFER_SIZE);
             auto size = recv(recv_socket, recv_buffer_, RECV_BUFFER_SIZE, 0);
             if (size > 0)
             {
