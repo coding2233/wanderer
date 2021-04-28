@@ -5,12 +5,22 @@ void Test(const char *data)
     std::cout << "Test data:" << data << std::endl;
 }
 
-wanderer::Network *Connect(const char *server_ip, int server_port, CONNECT_CALLBACK connect_callback)
+wanderer::Network *NewNetwork()
+{
+    static  wanderer::Network network ;
+    // wanderer::Network *network = new wanderer::Network();
+    return &network;
+}
+
+void DeleteNetwork(wanderer::Network * network)
+{
+    delete network;
+}
+
+void Connect(wanderer::Network *network,const char *server_ip, int server_port)
 {
     std::cout << "server ip:" << server_ip << " server port:" << server_port << std::endl;
-    wanderer::Network *network = new wanderer::Network();
     network->Connect(server_ip, server_port);
-    return network;
 }
 
 void DisConnect(wanderer::Network *network)

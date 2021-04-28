@@ -5,9 +5,9 @@ namespace wanderer
     Network::Network(/* args */)
     {
 #if WIN32
-        socket_ = new SocketWindows();
+        socket_ = new SocketWindows;
 #elif unix
-        socket_ = new SocketUnix();
+        socket_ = new SocketUnix;
 #endif
         socket_->Setup(std::bind(&Network::OnReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
@@ -19,6 +19,7 @@ namespace wanderer
 
     int Network::Connect(const char *server_ip, int server_port)
     {
+        SocketUnix su;
         int fd= socket_->Connect(server_ip, server_port);
         if (login_fd_ == 0)
         {

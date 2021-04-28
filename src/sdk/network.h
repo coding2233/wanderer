@@ -4,9 +4,10 @@
 #include <iostream>
 #include <map>
 
+#include "socket_client_base.h"
 #if WIN32
 #include "socket_windows.h"
-#elif unix
+#elif __unix__
 #include "socket_unix.h"
 #endif
 

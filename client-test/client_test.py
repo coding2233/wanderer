@@ -16,11 +16,18 @@ if sys.platform == "win32":
     libPath = '../build/src/Debug/wanderer-sdk.dll'
 elif sys.platform == "linux":
     libPath = '../build/src/libwanderer-sdk.so'
+
+print("load lib path"+libPath)
+
 wd = cdll.LoadLibrary(libPath)
-network = wd.Connect("127.0.0.1".encode('ascii'), 12233, receiveCallback)
+wd.Test("xxxxxxx".encode('ascii'))
+
+network = wd.NewNetwork()
+wd.Connect(network,"127.0.0.1".encode('ascii'), 12233)
 
 while True:
     wd.Update(network)
 
 wd.DisConnect(network)
+# wd.DeleteNetwork(network)
 # wd.Test("xxxxxxx")

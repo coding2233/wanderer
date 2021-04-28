@@ -16,6 +16,7 @@ __        __              _
 * [vscode-cpptools-linux](https://github.com/Microsoft/vscode-cpptools/releases)
 * [vscode-drawio](https://marketplace.visualstudio.com/items?itemName=eightHundreds.vscode-drawio)
 * [CMake](https://marketplace.visualstudio.com/items?itemName=twxs.cmake)
+* [clangd](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd)
 
 ### 内存泄漏检测工具
 * [https://www.valgrind.org/downloads/current.html#current](https://www.valgrind.org/downloads/current.html#current)
@@ -75,4 +76,36 @@ openssl genrsa -out privatekey.pen 1024
 * 公钥生成
 ```sh
 openssl rsa -in privatekey.pem -puout -out publickey.pem 
+```
+
+
+### C++ 平台宏定义示例
+```c++
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+   //define something for Windows (32-bit and 64-bit, this part is common)
+   #ifdef _WIN64
+      //define something for Windows (64-bit only)
+   #else
+      //define something for Windows (32-bit only)
+   #endif
+#elif __APPLE__
+    #include <TargetConditionals.h>
+    #if TARGET_IPHONE_SIMULATOR
+         // iOS Simulator
+    #elif TARGET_OS_IPHONE
+        // iOS device
+    #elif TARGET_OS_MAC
+        // Other kinds of Mac OS
+    #else
+    #   error "Unknown Apple platform"
+    #endif
+#elif __linux__
+    // linux
+#elif __unix__ // all unices not caught above
+    // Unix
+#elif defined(_POSIX_VERSION)
+    // POSIX
+#else
+#   error "Unknown compiler"
+#endif
 ```

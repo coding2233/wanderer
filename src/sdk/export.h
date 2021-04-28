@@ -23,7 +23,11 @@
 
     WANDERER_EXPORT void Test(const char *data);
 
-    WANDERER_EXPORT wanderer::Network * Connect(const char *server_ip, int server_port, CONNECT_CALLBACK connect_callback);
+    WANDERER_EXPORT wanderer::Network *NewNetwork();
+
+    WANDERER_EXPORT void DeleteNetwork(wanderer::Network * network);
+
+    WANDERER_EXPORT void Connect(wanderer::Network * network,const char *server_ip, int server_port);
 
     WANDERER_EXPORT void DisConnect(wanderer::Network *network);
 
