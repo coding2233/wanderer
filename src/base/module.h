@@ -19,7 +19,7 @@ namespace wanderer
 
     public:
         Module(System *system);
-        ~Module();
+        virtual ~Module();
 
         //初始化
         virtual void OnInit() = 0;
