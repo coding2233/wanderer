@@ -1,5 +1,5 @@
-#ifndef __SOCKET_BASE_H__
-#define __SOCKET_BASE_H__
+#ifndef __SOCKET_CLIENT_BASE_H__
+#define __SOCKET_CLIENT_BASE_H__
 
 #include <functional>
 #include <iostream>
@@ -32,7 +32,7 @@ namespace wanderer
 
     public:
         SocketClientBase(/* args */);
-        ~SocketClientBase();
+        virtual ~SocketClientBase();
 
         virtual void Update();
 
@@ -40,9 +40,9 @@ namespace wanderer
 
         virtual int SendData(int fd, const char* data, size_t size);
 
-        virtual int Connect(const char *server_ip, int server_port) = 0;
+        virtual int Connect(const char *server_ip, int server_port) =0;
 
-        virtual void Disconnect(int fd) = 0;
+        virtual void Disconnect(int fd) =0;
 
     };
 }

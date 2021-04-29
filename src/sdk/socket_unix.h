@@ -1,7 +1,9 @@
 #if unix
 
+
 #ifndef __SOCKET_UNIX_H__
 #define __SOCKET_UNIX_H__
+
 
 #include <arpa/inet.h>
 #include <cstring>
@@ -10,10 +12,9 @@
 #include <map>
 #include <netinet/in.h>
 #include <queue>
-#include <string.h>
 #include <sys/epoll.h>
 #include <sys/socket.h>
-#include <thread>
+// #include <thread>
 
 #include "socket_client_base.h"
 
@@ -27,7 +28,7 @@ namespace wanderer
         SocketUnix(/* args */);
         ~SocketUnix();
 
-        int Connect(const char *server_ip, int server_port) override;
+        virtual int Connect(const char *server_ip, int server_port) override;
 
         void Disconnect(int fd) override;
 

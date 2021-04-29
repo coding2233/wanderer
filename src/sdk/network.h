@@ -5,10 +5,10 @@
 #include <map>
 
 #include "socket_client_base.h"
-#if WIN32
-#include "socket_windows.h"
-#elif __unix__
+#if unix
 #include "socket_unix.h"
+#elif WIN32
+#include "socket_windows.h"
 #endif
 
 #include "network/circle_buffer.h"
@@ -28,14 +28,14 @@ namespace wanderer
     {
     private:
         /* data */
-        SocketClientBase *socket_;
+         SocketClientBase *socket_;
 
         std::map<int, SessionData *> sessions_;
 
         int login_fd_;
         int gateway_fd_;
 
-        bool login_connected_ = false;
+        bool login_connected_;
 
         std::string gateway_key_;
 

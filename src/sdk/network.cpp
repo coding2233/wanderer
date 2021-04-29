@@ -1,4 +1,5 @@
 #include "network.h"
+#include <ostream>
 
 namespace wanderer
 {
@@ -19,48 +20,51 @@ namespace wanderer
 
     int Network::Connect(const char *server_ip, int server_port)
     {
-        SocketUnix su;
-        int fd= socket_->Connect(server_ip, server_port);
-        if (login_fd_ == 0)
-        {
-            login_connected_ = false;
-            login_fd_ = fd;
-        }
-        else
-        {
-            gateway_fd_ = fd;
-        }
-        return fd;
+        std::cout<<"Network connect !ip:"<<server_ip<<" port:"<<server_port<<" ## "<<std::endl;
+        // SocketUnix su;
+        socket_->Connect(server_ip, server_port);
+        // int fd= socket_->Connect(server_ip, server_port);
+        // if (login_fd_ == 0)
+        // {
+        //     login_connected_ = false;
+        //     login_fd_ = fd;
+        // }
+        // else
+        // {
+        //     gateway_fd_ = fd;
+        // }
+        // return fd;
+        return 0;
     }
 
     void Network::DisConnect()
     {
-        if (login_fd_ > 0)
-        {
-            socket_->Disconnect(login_fd_);
-            login_fd_ = 0;
-        }
-        if (gateway_fd_ > 0)
-        {
-            socket_->Disconnect(gateway_fd_);
-            gateway_fd_ = 0;
-        }
+        // if (login_fd_ > 0)
+        // {
+        //     socket_->Disconnect(login_fd_);
+        //     login_fd_ = 0;
+        // }
+        // if (gateway_fd_ > 0)
+        // {
+        //     socket_->Disconnect(gateway_fd_);
+        //     gateway_fd_ = 0;
+        // }
     }
 
     void Network::Send(int fd, IMessage *message)
     {
-        auto iter = sessions_.find(fd);
-        if (iter != sessions_.end())
-        {
-            const char *data = message->Pack(iter->second->secret_key_);
-            int size = message->Size();
-            socket_->SendData(fd, data, size);
-        }
+        // auto iter = sessions_.find(fd);
+        // if (iter != sessions_.end())
+        // {
+        //     const char *data = message->Pack(iter->second->secret_key_);
+        //     int size = message->Size();
+        //     socket_->SendData(fd, data, size);
+        // }
     }
 
     void Network::Update()
     {
-        socket_->Update();
+        // socket_->Update();
     }
 
     void Network::OnReceive(int fd, const char *data, size_t size)

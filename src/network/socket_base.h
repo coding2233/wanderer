@@ -18,7 +18,7 @@ namespace wanderer
 
     public:
         SocketBase(/* args */);
-        ~SocketBase();
+        virtual ~SocketBase();
 
         //设置
         virtual void Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char name, int fd)> inner_connected_callback);

@@ -1,3 +1,4 @@
+#include <iostream>
 #if unix
 #include "socket_unix.h"
 
@@ -16,6 +17,7 @@ namespace wanderer
 
     int SocketUnix::Connect(const char *server_ip, int server_port)
     {
+        std::cout<<"SocketUnix::Connect! ip:"<<server_ip<<" port:"<<server_port<<std::endl;
         int connect_socket = socket(AF_INET, SOCK_STREAM, 0);
         sockaddr_in addr, server_addr;
         bzero(&addr, sizeof(addr));

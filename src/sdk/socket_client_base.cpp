@@ -14,6 +14,7 @@ namespace wanderer
         receive_callback_ = receive_callback;
     }
 
+
     void SocketClientBase::Update()
     {
         for (auto iter = sockets_.begin(); iter != sockets_.end(); iter++)
@@ -33,4 +34,6 @@ namespace wanderer
         send(fd, data, size, 0);
         return 0;
     }
+
+ 
 }

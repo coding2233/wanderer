@@ -46,6 +46,7 @@ if(BUILD_EXEC)
 endif(BUILD_EXEC)
 
 if(BUILD_SDK)
+    include_directories(sdk)
     add_definitions("-DBUILD_SDK")
 endif(BUILD_SDK)
 

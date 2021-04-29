@@ -29,5 +29,5 @@ while True:
     wd.Update(network)
 
 wd.DisConnect(network)
-# wd.DeleteNetwork(network)
+wd.DeleteNetwork(network)
 # wd.Test("xxxxxxx")

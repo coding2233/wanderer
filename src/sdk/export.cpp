@@ -7,9 +7,8 @@ void Test(const char *data)
 
 wanderer::Network *NewNetwork()
 {
-    static  wanderer::Network network ;
-    // wanderer::Network *network = new wanderer::Network();
-    return &network;
+    wanderer::Network *network = new wanderer::Network;
+    return network;
 }
 
 void DeleteNetwork(wanderer::Network * network)
