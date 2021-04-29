@@ -8,10 +8,12 @@ namespace wanderer
     {
        /* std::thread socket_thread(&SocketUnix::ReceiveThread, this);
         socket_thread.detach();*/
+        std::cout<<"SocketUnix::SocketUnix"<<std::endl;
     }
 
     SocketUnix::~SocketUnix()
     {
+        std::cout<<"SocketUnix::~SocketUnix()"<<std::endl;
     }
 
 

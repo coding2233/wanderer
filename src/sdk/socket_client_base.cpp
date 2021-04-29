@@ -1,8 +1,10 @@
 #include "socket_client_base.h"
+#include <iostream>
 namespace wanderer
 {
     SocketClientBase::SocketClientBase(/* args */)
     {
+        std::cout<<"SocketClientBase::SocketClientBase"<<std::endl;
     }
 
     SocketClientBase::~SocketClientBase()
@@ -12,6 +14,7 @@ namespace wanderer
     void SocketClientBase::Setup(SOCKET_RECEIVE receive_callback)
     {
         receive_callback_ = receive_callback;
+        std::cout<<"SocketClientBase::Setup SOCKET_RECEIVE"<<std::endl;
     }
 
 

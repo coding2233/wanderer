@@ -22,12 +22,9 @@ print("load lib path"+libPath)
 wd = cdll.LoadLibrary(libPath)
 wd.Test("xxxxxxx".encode('ascii'))
 
-network = wd.NewNetwork()
-wd.Connect(network,"127.0.0.1".encode('ascii'), 12233)
+wd.Connect("127.0.0.1".encode('ascii'), 12233)
 
 while True:
-    wd.Update(network)
+    wd.Update()
 
-wd.DisConnect(network)
-wd.DeleteNetwork(network)
-# wd.Test("xxxxxxx")
+wd.DisConnect()

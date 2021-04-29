@@ -1,4 +1,5 @@
 #include "network.h"
+#include <iostream>
 #include <ostream>
 
 namespace wanderer
@@ -10,61 +11,63 @@ namespace wanderer
 #elif unix
         socket_ = new SocketUnix;
 #endif
-        socket_->Setup(std::bind(&Network::OnReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+       socket_->Setup(std::bind(&Network::OnReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    
+        std::cout<<"socket_ address:"<<socket_<<std::endl;
     }
 
     Network::~Network()
     {
-        delete socket_;
+        std::cout<<"Network::~Network() "<<std::endl;
+         delete socket_;
     }
 
     int Network::Connect(const char *server_ip, int server_port)
     {
-        std::cout<<"Network connect !ip:"<<server_ip<<" port:"<<server_port<<" ## "<<std::endl;
-        // SocketUnix su;
-        socket_->Connect(server_ip, server_port);
-        // int fd= socket_->Connect(server_ip, server_port);
-        // if (login_fd_ == 0)
-        // {
-        //     login_connected_ = false;
-        //     login_fd_ = fd;
-        // }
-        // else
-        // {
-        //     gateway_fd_ = fd;
-        // }
-        // return fd;
-        return 0;
+        std::cout<<"Network connect !ip:"<<server_ip<<" port:"<<server_port<<std::endl;
+
+        std::cout<<"socket_ address:"<<socket_<<std::endl;
+        int fd=socket_->Connect(server_ip, server_port);
+        if (login_fd_ == 0)
+        {
+            login_connected_ = false;
+            login_fd_ = fd;
+        }
+        else
+        {
+            gateway_fd_ = fd;
+        }
+        return fd;
     }
 
     void Network::DisConnect()
     {
-        // if (login_fd_ > 0)
-        // {
-        //     socket_->Disconnect(login_fd_);
-        //     login_fd_ = 0;
-        // }
-        // if (gateway_fd_ > 0)
-        // {
-        //     socket_->Disconnect(gateway_fd_);
-        //     gateway_fd_ = 0;
-        // }
+        if (login_fd_ > 0)
+        {
+            socket_->Disconnect(login_fd_);
+            login_fd_ = 0;
+        }
+        if (gateway_fd_ > 0)
+        {
+            socket_->Disconnect(gateway_fd_);
+            gateway_fd_ = 0;
+        }
     }
 
     void Network::Send(int fd, IMessage *message)
     {
-        // auto iter = sessions_.find(fd);
-        // if (iter != sessions_.end())
-        // {
-        //     const char *data = message->Pack(iter->second->secret_key_);
-        //     int size = message->Size();
-        //     socket_->SendData(fd, data, size);
-        // }
+        auto iter = sessions_.find(fd);
+        if (iter != sessions_.end())
+        {
+            const char *data = message->Pack(iter->second->secret_key_);
+            int size = message->Size();
+            socket_->SendData(fd, data, size);
+        }
     }
 
     void Network::Update()
     {
-        // socket_->Update();
+        socket_->Update();
     }
 
     void Network::OnReceive(int fd, const char *data, size_t size)
