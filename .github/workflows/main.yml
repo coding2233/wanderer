@@ -33,6 +33,8 @@ jobs:
       run: |
         md build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -S ./ -B build
+        dir build
+        dir build/src
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe" build/src/wanderer-sdk.vcxproj -p:Configuration=Release
         dir build\src\Debug
   
@@ -44,5 +46,7 @@ jobs:
       run: |
         md build
         cmake -A Win32 --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -S ./ -B build
+        dir build
+        dir build/src
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe" build/src/wanderer-sdk.vcxproj -p:Configuration=Release
         dir build\src\Debug
