@@ -31,13 +31,10 @@ jobs:
     - uses: actions/checkout@v1
     - name: build
       run: |
-        set SRC=./
-        set BUILD=build
-        set MSBUILD="C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe"
-        md %BUILD%
-        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -S %SRC% -B %BUILD%
-        %MSBUILD% %BUILD%/src/wanderer-sdk.vcxproj -p:Configuration=Release
-        dir %BUILD%\src\Debug
+        md build
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -S ./ -B build
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe" build/src/wanderer-sdk.vcxproj -p:Configuration=Release
+        dir build\src\Debug
   
   build-sdk-windows-x86:
     runs-on: windows-latest
@@ -45,10 +42,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: build
       run: |
-        set SRC=./
-        set BUILD=build
-        set MSBUILD="C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe"
-        md %BUILD%
-        cmake -A Win32 --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -S %SRC% -B %BUILD%
-        %MSBUILD% %BUILD%/src/wanderer-sdk.vcxproj -p:Configuration=Release
-        dir %BUILD%\src\Debug
+        md build
+        cmake -A Win32 --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -S ./ -B build
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe" build/src/wanderer-sdk.vcxproj -p:Configuration=Release
+        dir build\src\Debug
