@@ -54,29 +54,39 @@ namespace wanderer
     int SocketWindows::Connect(const char *server_ip, int server_port)
     {
         SOCKET socket_client= socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-        if (SOCKET_ERROR == socket_client)
+        if (INVALID_SOCKET == socket_client)
         {
             throw std::runtime_error("Client socket creation failed.");
         }
-        //设置非阻塞模式
-        unsigned long ul = 1;
-        if (ioctlsocket(socket_client, FIONBIO, (unsigned long*)&ul) == SOCKET_ERROR)
+        std::cout << "socket_client:" << socket_client << std::endl;
+        sockaddr_in socket_addr;
+        socket_addr.sin_family = AF_INET;
+        socket_addr.sin_addr.S_un.S_addr = INADDR_ANY;
+        socket_addr.sin_port = htons(0);
+        if (bind(socket_client, (SOCKADDR*)&socket_addr, sizeof(SOCKADDR))== SOCKET_ERROR)
         {
-            throw std::runtime_error("ioctlsocket error.");
-            closesocket(socket_client);
-            return -1;
+            throw std::runtime_error("Client socket bind failed.");
         }
+        std::cout << "socket_client Bind success!" << std::endl;
         //服务端的ip和地址
         sockaddr_in server_addr;
         server_addr.sin_family = AF_INET;
         server_addr.sin_addr.S_un.S_addr = inet_addr(server_ip);
         server_addr.sin_port = htons(server_port);
-        int connect_result = connect(socket_client, (SOCKADDR*)&server_addr, sizeof(SOCKADDR));
+        int connect_result = connect(socket_client, (SOCKADDR*)&server_addr, sizeof(sockaddr_in));
         if (connect_result== SOCKET_ERROR)
         {
             throw std::runtime_error("Failed to connect to server. Server ip:"+ std::string(server_ip)+" port:"+std::to_string(server_port));
         }
-        sockets_.push_back(socket_client);
+
+        //设置非阻塞模式
+        unsigned long ul = 1;
+        int ret = ioctlsocket(socket_client, FIONBIO, (unsigned long*)&ul);
+        if (ret == SOCKET_ERROR)
+        {
+            throw std::runtime_error("ioctlsocket error.");
+        }
+        sockets_.push_back((int)socket_client);
         return socket_client;
     }
 

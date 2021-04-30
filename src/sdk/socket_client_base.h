@@ -27,7 +27,7 @@ namespace wanderer
     protected:
         SOCKET_RECEIVE receive_callback_;
 
-        char recv_buffer_[RECV_BUFFER_SIZE];
+        char *recv_buffer_;
         std::vector<int> sockets_;
 
     public:

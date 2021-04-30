@@ -11,9 +11,11 @@ def receive(result, code):
 CFunTypeReceive = CFUNCTYPE(None, c_bool, c_int)
 receiveCallback = CFunTypeReceive(receive)
 
+serverIP = "127.0.0.1"
 libPath = ''
 if sys.platform == "win32":
     libPath = '../build/src/Debug/wanderer-sdk.dll'
+    serverIP = "192.168.0.85"
 elif sys.platform == "linux":
     libPath = '../build/src/libwanderer-sdk.so'
 
@@ -22,7 +24,7 @@ print("load lib path"+libPath)
 wd = cdll.LoadLibrary(libPath)
 wd.Test("xxxxxxx".encode('ascii'))
 
-wd.Connect("127.0.0.1".encode('ascii'), 12233)
+wd.Connect(serverIP.encode('ascii'), 12233)
 
 while True:
     wd.Update()

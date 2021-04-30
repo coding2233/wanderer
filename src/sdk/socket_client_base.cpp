@@ -5,6 +5,7 @@ namespace wanderer
     SocketClientBase::SocketClientBase(/* args */)
     {
         std::cout<<"SocketClientBase::SocketClientBase"<<std::endl;
+        recv_buffer_ = new char[RECV_BUFFER_SIZE];
     }
 
     SocketClientBase::~SocketClientBase()
