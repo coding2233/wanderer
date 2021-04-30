@@ -36,7 +36,7 @@ jobs:
         dir build
         dir build\src
         cmake --build build/ --config Release --target wanderer-sdk
-        dir build\src\Debug
+        dir build\src\Release
   
   build-sdk-windows-x86:
     runs-on: windows-latest
@@ -49,4 +49,4 @@ jobs:
         dir build
         dir build\src
         cmake --build build/ --config Release --target wanderer-sdk
-        dir build\src\Debug
+        dir build\src\Release
