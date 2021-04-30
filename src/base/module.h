@@ -27,6 +27,7 @@ namespace wanderer
         virtual void OnUpdate() = 0;
         //关闭
         virtual void OnClose() = 0;
+      
     };
 } // namespace wanderer
 #endif

@@ -18,7 +18,7 @@
 namespace wanderer
 {
 
-#define byte unsigned char
+//#define byte unsigned char
 
     class OpenSSLUtility
     {

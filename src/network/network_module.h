@@ -15,6 +15,7 @@
 #include "network/session.h"
 //#include "network/protobuf_message_packer.h"
 #include "inner_session/inner_session_module.h"
+#include "utility/jsonrpcpp.hpp"
 
 namespace wanderer
 {
@@ -31,7 +32,7 @@ namespace wanderer
         std::map<int, Session *> sessions_;
         std::map<int, Session *>::iterator sessions_iter_;
         std::vector<MESSAGE_RECEIVE> message_receiver_listeners_;
-        std::vector<MESSAGE_RECEIVE> inner_message_receiver_listeners_;
+        std::vector<MESSAGE_INNER_RECEIVE> inner_message_receiver_listeners_;
         //
         std::map<int, int> alltype_inner_session_;
 
@@ -71,7 +72,7 @@ namespace wanderer
         void CreateInnerSession(AppType_ app_type, const char *server_ip, int server_port);
 
         void AddReciveListener(MESSAGE_RECEIVE message_receive);
-        void AddInnerReceiveListener(MESSAGE_RECEIVE message_receive);
+        void AddInnerReceiveListener(MessageType_ message_type,MESSAGE_INNER_RECEIVE message_receive);
         //void RemoveReciveListener(MESSAGE_RECEIVE& message_receive);
     };
 

@@ -113,9 +113,17 @@ namespace wanderer
 
         if (GetSystem()->GetModule<InnerSessionModule>()->IsInner(session))
         {
+            jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data, size));
             for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
             {
-                inner_message_receiver_listeners_[i](session, message_type, data, size);
+              /*  for (auto imrl_iter = inner_message_receiver_listeners_.begin(); imrl_iter != inner_message_receiver_listeners_.end(); imrl_iter++)
+                {
+                    if (imrl_iter->second== message_type)
+                    {
+                        imrl_iter->first(session, message_type,entity);
+                    }
+                }*/
+                inner_message_receiver_listeners_[i](session, message_type, entity);
             }
         }
         else
@@ -174,9 +182,10 @@ namespace wanderer
         message_receiver_listeners_.push_back(message_receive);
     }
 
-    void NetworkModule::AddInnerReceiveListener(MESSAGE_RECEIVE message_receive)
+    void NetworkModule::AddInnerReceiveListener(MessageType_ message_type, MESSAGE_INNER_RECEIVE message_receive)
     {
         inner_message_receiver_listeners_.push_back(message_receive);
+        //inner_message_receiver_listeners_.insert(std::make_pair( message_receive, message_type));
     }
 
 } // namespace wanderer

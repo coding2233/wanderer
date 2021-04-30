@@ -101,7 +101,7 @@ namespace wanderer
 
     void OpenSSLUtility::RandSecretKey(char *secret_key, int size)
     {
-        byte *rand_bytes = new byte[size];
+        unsigned char*rand_bytes = new unsigned char[size];
         if (!RAND_bytes(rand_bytes, size))
         {
             LOG(FATAL) << "OpenSSL failed to generate a random key!";
@@ -118,22 +118,22 @@ namespace wanderer
     {
         AES_KEY aes_key;
         int key_size = key.size();
-        if (AES_set_encrypt_key((const byte *)key.c_str(), key_size * 8, &aes_key) < 0)
+        if (AES_set_encrypt_key((const unsigned char*)key.c_str(), key_size * 8, &aes_key) < 0)
         {
             LOG(FATAL) << "AES encrypt key creation failed！ ";
         }
         int in_size = data.length() + 4;
         int out_size = in_size + (key_size - (in_size % key_size));
-        byte *out_data = new byte[out_size];
-        byte *in_data = new byte[out_size];
+        unsigned char*out_data = new unsigned char[out_size];
+        unsigned char*in_data = new unsigned char[out_size];
         Int2CharPointer((char *)in_data, data.size());
-        std::memcpy(in_data + 4, (const byte *)data.c_str(), in_size);
+        std::memcpy(in_data + 4, (const unsigned char*)data.c_str(), in_size);
         for (size_t i = in_size; i < out_size; i++)
         {
             in_data[i] = 0;
         }
         int index = 0;
-        byte *buffer = new byte[key_size];
+        unsigned char*buffer = new unsigned char[key_size];
         while (index < out_size)
         {
             AES_cbc_encrypt(in_data + index, out_data + index, key_size, &aes_key, buffer, AES_ENCRYPT);
@@ -159,18 +159,18 @@ namespace wanderer
     {
         AES_KEY aes_key;
         int key_size = key.size();
-        if (AES_set_decrypt_key((const byte *)key.c_str(), key_size * 8, &aes_key) < 0)
+        if (AES_set_decrypt_key((const unsigned char*)key.c_str(), key_size * 8, &aes_key) < 0)
         {
             LOG(FATAL) << "AES decrypt key creation failed！ ";
         }
 
         //unbase64
         int binary_base64_len;
-        byte *binary_base64 = unbase64((const char *)data.c_str(), data.size(), &binary_base64_len);
+        unsigned char*binary_base64 = unbase64((const char *)data.c_str(), data.size(), &binary_base64_len);
         //Decrypt
-        byte *out_data = new byte[binary_base64_len];
+        unsigned char*out_data = new unsigned char[binary_base64_len];
         int index = 0;
-        byte *buffer = new byte[key_size];
+        unsigned char*buffer = new unsigned char[key_size];
         while (index < binary_base64_len)
         {
             AES_cbc_encrypt(binary_base64 + index, out_data + index, key_size, &aes_key, buffer, AES_DECRYPT);
@@ -190,8 +190,8 @@ namespace wanderer
 
     std::string OpenSSLUtility::Md5(const std::string &data)
     {
-        byte *md5_data = new byte[16];
-        MD5((const byte *)data.c_str(), data.size(), md5_data);
+        unsigned char*md5_data = new unsigned char[16];
+        MD5((const unsigned char*)data.c_str(), data.size(), md5_data);
         int ascii_base64_len;
         char *ascii_base64 = base64(md5_data, 16, &ascii_base64_len);
         std::string result_data(ascii_base64, ascii_base64_len);

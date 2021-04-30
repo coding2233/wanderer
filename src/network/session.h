@@ -8,12 +8,14 @@
 #include "network/message.h"
 #include "utility/openssl_utility.h"
 #include "utility/utility.h"
+#include "utility/jsonrpcpp.hpp"
 
 namespace wanderer
 {
 
 #define MESSAGE_SEND std::function<void(int, const char *, size_t)>
 #define MESSAGE_RECEIVE std::function<void(Session *, MessageType_, const char *, size_t)>
+#define MESSAGE_INNER_RECEIVE std::function<void(Session*,MessageType_,jsonrpcpp::entity_ptr)>
 
     class Session
     {

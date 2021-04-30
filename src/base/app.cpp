@@ -64,7 +64,7 @@ namespace wanderer
             // network_module->CreateInnerSession(AppType_Center, app_config->center_ip_.c_str(), app_config->center_port_);
             // network_module->CreateInnerSession(AppType_Battle, app_config->center_ip_.c_str(), app_config->center_port_);
 
-            center_module = new CenterModule(system_);
+            // center_module = new CenterModule(system_);
             // center_module = new CenterModule(system_);
             // gateway_module = new GatewayModule(system_);
             login_module = new LoginModule(system_);
