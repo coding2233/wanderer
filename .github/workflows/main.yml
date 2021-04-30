@@ -4,9 +4,7 @@ on: [push]
 
 jobs:
   build-server-exec:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -25,37 +23,21 @@ jobs:
         export SRC=./
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
-        ls -alh ${BUILD}
+        ls -alh ${BUILD}/src
 
-  # build-sdk-windows-x64:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v1
-  #   - name: build
-  #     run: |
-  #       chmod +x auto.sh && ./auto.sh
-
-  build-sdk-windows-linux:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: build
-      run: |
-        sudo apt-get install -y mingw-w64
-        export SRC=./
-        export BUILD=build
-        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/mingw64_windows.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
-        ls -alh ${BUILD}
-  
   build-sdk-windows-x64:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
     - name: build
       run: |
-        md build
-        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -S ./ -B $./build/ && cmake --build ./build/ -j 10
-        dir build
+        set SRC=./
+        set BUILD=build
+        set MSBUILD="C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe"
+        md %BUILD%
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -S %SRC% -B %BUILD%
+        %MSBUILD% %BUILD%/src/wanderer-sdk.vcxproj -p:Configuration=Release
+        dir %BUILD%\src\Debug
   
   build-sdk-windows-x86:
     runs-on: windows-latest
@@ -63,6 +45,10 @@ jobs:
     - uses: actions/checkout@v1
     - name: build
       run: |
-        md build
-        cmake -A x86 --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -S ./ -B $./build/ && cmake --build ./build/ -j 10
-        dir build
+        set SRC=./
+        set BUILD=build
+        set MSBUILD="C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe"
+        md %BUILD%
+        cmake -A Win32 --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -S %SRC% -B %BUILD%
+        %MSBUILD% %BUILD%/src/wanderer-sdk.vcxproj -p:Configuration=Release
+        dir %BUILD%\src\Debug
