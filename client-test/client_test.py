@@ -21,7 +21,7 @@ def receive(result, code):
 
 
 def login_callback(result,message):
-    pass
+    print("登陆回调：" + str(result)+"  message: "+message)
 
 # 登陆回调回调
 CFunTypeLogin = CFUNCTYPE(None,c_bool,c_char_p)
@@ -29,8 +29,7 @@ login_callback_function = CFunTypeLogin(login_callback)
 
 def connect_callback(result,message):
     print("连接服务器成功")
-    wd.Login(serverIP.encode('ascii'), 12233,login_callback_function)
-
+    wd.Login("admin".encode('ascii'), "admin".encode('ascii'),login_callback_function)
 
 # CFUNCTYPE 第一个是返回值 ，剩下是对应的参数
 CFunTypeReceive = CFUNCTYPE(None, c_bool, c_int)

@@ -186,9 +186,10 @@ namespace wanderer
         login_callback_ = login_callback;
   
         jsonrpcpp::Request login_request = jsonrpcpp::Request(request_index_++,"login",Json({user_name,password}));
-        std::string data= login_request.to_json().dump();
+        auto data= login_request.to_json().dump();
+        std::string message_data(data.c_str(),data.size());
         Message message;
-        message.Setup(MessageType_2L,data.c_str(),data.size());
+        message.Setup(MessageType_2L,message_data.c_str(),message_data.size());
         Send(login_fd_, &message);
     }
 

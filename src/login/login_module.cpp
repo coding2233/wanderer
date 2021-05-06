@@ -1,4 +1,6 @@
 #include "login/login_module.h"
+#include "network/message.h"
+#include <string>
 
 namespace wanderer
 {
@@ -35,35 +37,32 @@ namespace wanderer
 
     void LoginModule::OnInnerMessageReceive(Session* session, MessageType_ message_type, jsonrpcpp::entity_ptr entity)
     {
-        
+
     }
 
     void LoginModule::OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size)
     {
-        YAML::Node node = YAML::Load(std::string(data, size));
-        if (GetSystem()->GetModule<InnerSessionModule>()->IsInner(session))
+        if (message_type != MessageType_2L) 
         {
-        }
-        else
-        {
+            return;
         }
 
-        // auto msg = dynamic_cast<Message *>(message);
-        // if (msg->message_code_ == MessageCode_Login_C2S)
-        // {
-        //     auto app_type = GetSystem()->app_config_->app_type_;
-        //     auto inner_session = GetSystem()->GetModule<InnerSessionModule>()->GetNormalSession(app_type);
-        //     msg->message_type_ = MessageType_Inner;
-        //     msg->inner_sender_ = (char)app_type;
-        //     msg->inner_receiver_ = AppType_DataBase;
-        //     inner_session->Send(msg);
+        LOG(INFO)<<"LoginModule::OnMessageReceive message: "<<std::string(data, size);
 
-        //     //login_sessions_.insert(std::pair<std::string,const Session*>("", session));
-        // }
-        // else if (msg->message_code_ == MessageCode_Login_S2C)
-        // {
-        //     // Sends the login failure result to the client.
-        // }
+        jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data, size));
+        if (entity) 
+        {
+            if (entity->is_request()) 
+            {
+                auto request = std::dynamic_pointer_cast<jsonrpcpp::Request>(entity);
+                if(request->method()=="login")
+                {
+                    LOG(INFO)<<"LOGIN MODULE: "<<request->to_json().dump();
+                    // auto user_name = request->params().get<std::string>("user_name")
+                }
+            }
+        }
+      
     }
 
 } // namespace wanderer

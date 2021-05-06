@@ -130,6 +130,7 @@ namespace wanderer
             }
             else
             {
+                LOG(INFO)<<"Other outer message : "<<std::string(data, size);
                 for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
                 {
                     message_receiver_listeners_[i](session, message_type, data, size);
