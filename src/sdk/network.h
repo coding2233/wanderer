@@ -1,8 +1,10 @@
 #ifndef __NETWORK_H__
 #define __NETWORK_H__
 
+#include <functional>
 #include <iostream>
 #include <map>
+#include <functional>
 
 #include "socket_client_base.h"
 #if unix
@@ -15,9 +17,14 @@
 #include "network/message.h"
 #include "utility/openssl_utility.h"
 #include "utility/utility.h"
+#include "utility/jsonrpcpp.hpp"
 
 namespace wanderer
 {
+
+#define CONNECT_CALLBACK std::function<void(bool,std::string)>
+#define LOGIN_CALLBACK std::function<void(bool,std::string)>
+
     struct SessionData
     {
         std::string buffer_;
@@ -28,26 +35,33 @@ namespace wanderer
     {
     private:
         /* data */
-         SocketClientBase *socket_;
+        SocketClientBase *socket_;
 
         std::map<int, SessionData *> sessions_;
-
+        jsonrpcpp::Parser jsonrpc_parser_;
+        int request_index_;
         int login_fd_;
         int gateway_fd_;
 
         bool login_connected_;
+        bool gateway_connected_;
 
         std::string gateway_key_;
 
+        CONNECT_CALLBACK connect_callback_;
+        LOGIN_CALLBACK login_callback_;
+
         void OnReceive(int fd, const char *data, size_t size);
-        void OnYAMLReceive(int fd, YAML::Node message);
+        void OnJsonRpcReceive(int fd, jsonrpcpp::entity_ptr entity);
         std::string CreateSecretKey();
+
+        int ConnectGateway(const char *server_ip, int server_port);
 
     public:
         Network(/* args */);
         ~Network();
 
-        int Connect(const char *server_ip, int server_port);
+        int Connect(const char *server_ip, int server_port,CONNECT_CALLBACK connect_callback);
 
         void DisConnect();
 
@@ -55,7 +69,7 @@ namespace wanderer
 
         void Update();
 
-        void Login(const char *user_name, const char *password);
+        void Login(const char *user_name, const char *password,LOGIN_CALLBACK login_callback);
     };
 }
 

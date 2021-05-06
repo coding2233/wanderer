@@ -1,9 +1,12 @@
 #include "network.h"
+#include "network/message.h"
+#include "utility/jsonrpcpp.hpp"
 #include <iostream>
 #include <ostream>
 
 namespace wanderer
 {
+
     Network::Network(/* args */)
     {
 #if WIN32
@@ -22,21 +25,28 @@ namespace wanderer
          delete socket_;
     }
 
-    int Network::Connect(const char *server_ip, int server_port)
+    int Network::Connect(const char *server_ip, int server_port,CONNECT_CALLBACK connect_callback)
     {
+        if (login_connected_) 
+        {
+            connect_callback(false,"The login server has been connected.");
+            return -1;
+        }
+        connect_callback_=connect_callback;
         std::cout<<"Network connect !ip:"<<server_ip<<" port:"<<server_port<<std::endl;
 
-        std::cout<<"socket_ address:"<<socket_<<std::endl;
         int fd=socket_->Connect(server_ip, server_port);
-        if (login_fd_ == 0)
-        {
-            login_connected_ = false;
-            login_fd_ = fd;
-        }
-        else
-        {
-            gateway_fd_ = fd;
-        }
+        login_fd_=fd;
+        login_connected_=true;
+        return fd;
+    }
+
+    int Network::ConnectGateway(const char *server_ip, int server_port)
+    {
+        std::cout<<"Network ConnectGateway !ip:"<<server_ip<<" port:"<<server_port<<std::endl;
+        int fd=socket_->Connect(server_ip, server_port);
+        gateway_fd_=fd;
+        gateway_connected_=true;
         return fd;
     }
 
@@ -120,34 +130,40 @@ namespace wanderer
                 std::cout << "MessageType_Exchange!" << std::endl;
                 if (fd == login_fd_)
                 {
-                    login_connected_ = true;
+                    connect_callback_(true,"");
                 }
-
-                // if (fd == gateway_fd_)
-                // {
-                // }
+                else if (fd == gateway_fd_)
+                {
+                }
             }
             else
             {
-                YAML::Node node_message = YAML::Load(std::string(data_message, data_message_size));
-                OnYAMLReceive(fd, node_message);
+                jsonrpcpp::entity_ptr entity=  jsonrpc_parser_.parse(std::string(data_message, data_message_size));
+                OnJsonRpcReceive(fd,entity);
             }
             delete message;
         }
     }
 
-    void Network::OnYAMLReceive(int fd, YAML::Node node_message)
+    void Network::OnJsonRpcReceive(int fd, jsonrpcpp::entity_ptr entity)
     {
-        if (fd == login_fd_)
+        if (entity) 
         {
-            auto gateway_ip = node_message["gateway_ip"].as<std::string>();
-            auto gateway_port = node_message["gateway_port"].as<int>();
-            gateway_key_ = node_message["gateway_key"].as<std::string>();
-            Connect(gateway_ip.c_str(), gateway_port);
+            if (entity->is_response()) 
+            {
+                std::cout<<"entity->is_response(): "<<entity->to_json().dump()<<std::endl;
+            }
         }
-        else if (fd == gateway_fd_)
-        {
-        }
+        // if (fd == login_fd_)
+        // {
+        //     auto gateway_ip = node_message["gateway_ip"].as<std::string>();
+        //     auto gateway_port = node_message["gateway_port"].as<int>();
+        //     gateway_key_ = node_message["gateway_key"].as<std::string>();
+        //     Connect(gateway_ip.c_str(), gateway_port);
+        // }
+        // else if (fd == gateway_fd_)
+        // {
+        // }
     }
 
     std::string Network::CreateSecretKey()
@@ -160,20 +176,19 @@ namespace wanderer
         return secret_key;
     }
 
-    void Network::Login(const char *user_name, const char *password)
+    void Network::Login(const char *user_name, const char *password,LOGIN_CALLBACK login_callback)
     {
         if (!login_connected_)
         {
             return;
         }
 
-        auto node = YAML::Load("{'id':'','pw':''}");
-        node["id"] = user_name;
-        node["pw"] = OpenSSLUtility::Md5(std::string(password));
-
+        login_callback_ = login_callback;
+  
+        jsonrpcpp::Request login_request = jsonrpcpp::Request(request_index_++,"login",Json({user_name,password}));
+        std::string data= login_request.to_json().dump();
         Message message;
-        std::string data = node.as<std::string>();
-        message.Setup(MessageType_2L, (const char *)data.c_str(), data.size());
+        message.Setup(MessageType_2L,data.c_str(),data.size());
         Send(login_fd_, &message);
     }
 

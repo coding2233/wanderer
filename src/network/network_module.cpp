@@ -110,29 +110,33 @@ namespace wanderer
                 GetSystem()->GetModule<InnerSessionModule>()->AddInnerCenterSession(app_type, session);
             }
         }
-
-        if (GetSystem()->GetModule<InnerSessionModule>()->IsInner(session))
+        else 
         {
-            jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data, size));
-            for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
+            if (GetSystem()->GetModule<InnerSessionModule>()->IsInner(session))
             {
-              /*  for (auto imrl_iter = inner_message_receiver_listeners_.begin(); imrl_iter != inner_message_receiver_listeners_.end(); imrl_iter++)
+                LOG(INFO)<<"Other inner message parse jsonrpc: "<<std::string(data, size);
+                jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data, size));
+                for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
                 {
-                    if (imrl_iter->second== message_type)
+                /*  for (auto imrl_iter = inner_message_receiver_listeners_.begin(); imrl_iter != inner_message_receiver_listeners_.end(); imrl_iter++)
                     {
-                        imrl_iter->first(session, message_type,entity);
-                    }
-                }*/
-                inner_message_receiver_listeners_[i](session, message_type, entity);
+                        if (imrl_iter->second== message_type)
+                        {
+                            imrl_iter->first(session, message_type,entity);
+                        }
+                    }*/
+                    inner_message_receiver_listeners_[i](session, message_type, entity);
+                }
             }
-        }
-        else
-        {
-            for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
+            else
             {
-                message_receiver_listeners_[i](session, message_type, data, size);
+                for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
+                {
+                    message_receiver_listeners_[i](session, message_type, data, size);
+                }
             }
         }
+        
         // delete message;
     }
 

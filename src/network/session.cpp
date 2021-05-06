@@ -89,6 +89,11 @@ namespace wanderer
                 LOG(INFO) << "Server-session set secret_key_: [" << fd_ << "] " << secret_key_;
                 Send(MessageType_Exchange);
             }
+            else 
+            {
+                //回调
+                message_receive_(this, (MessageType_)message->message_type_, data_message, message->Size());
+            }
             // else if (msg_type == MessageType_Exchange)
             // {
             //     auto app_type = System::app_config_->app_type_;
@@ -109,10 +114,10 @@ namespace wanderer
             // }
 
             //回调
-            if (message->message_type_ != MessageType_Connected)
-            {
-                message_receive_(this, (MessageType_)message->message_type_, data_message, message->Size());
-            }
+            // if (message->message_type_ != MessageType_Connected)
+            // {
+            //     message_receive_(this, (MessageType_)message->message_type_, data_message, message->Size());
+            // }
 
             delete message;
             //清理数据

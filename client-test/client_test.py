@@ -2,15 +2,6 @@
 import sys
 from ctypes import *
 
-
-def receive(result, code):
-    print(str(result))
-
-
-# CFUNCTYPE 第一个是返回值 ，剩下是对应的参数
-CFunTypeReceive = CFUNCTYPE(None, c_bool, c_int)
-receiveCallback = CFunTypeReceive(receive)
-
 serverIP = "127.0.0.1"
 libPath = ''
 if sys.platform == "win32":
@@ -24,7 +15,33 @@ print("load lib path"+libPath)
 wd = cdll.LoadLibrary(libPath)
 wd.Test("xxxxxxx".encode('ascii'))
 
-wd.Connect(serverIP.encode('ascii'), 12233)
+
+def receive(result, code):
+    print(str(result))
+
+
+def login_callback(result,message):
+    pass
+
+# 登陆回调回调
+CFunTypeLogin = CFUNCTYPE(None,c_bool,c_char_p)
+login_callback_function = CFunTypeLogin(login_callback)
+
+def connect_callback(result,message):
+    print("连接服务器成功")
+    wd.Login(serverIP.encode('ascii'), 12233,login_callback_function)
+
+
+# CFUNCTYPE 第一个是返回值 ，剩下是对应的参数
+CFunTypeReceive = CFUNCTYPE(None, c_bool, c_int)
+receiveCallback = CFunTypeReceive(receive)
+
+# 连接回调
+CFunTypeConnect = CFUNCTYPE(None,c_bool,c_char_p)
+connect_callback_function = CFunTypeConnect(connect_callback)
+
+
+wd.Connect(serverIP.encode('ascii'), 12233,connect_callback_function)
 
 while True:
     wd.Update()

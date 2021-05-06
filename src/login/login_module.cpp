@@ -35,7 +35,7 @@ namespace wanderer
 
     void LoginModule::OnInnerMessageReceive(Session* session, MessageType_ message_type, jsonrpcpp::entity_ptr entity)
     {
-
+        
     }
 
     void LoginModule::OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size)
