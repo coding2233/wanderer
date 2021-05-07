@@ -145,7 +145,7 @@ namespace wanderer
         char *ascii_base64 = base64(out_data, out_size, &ascii_base64_len);
         std::string result_data(ascii_base64, ascii_base64_len);
 
-        LOG(INFO) << "EncryptAES: " << data << " # " << result_data;
+        LOG(INFO) << "EncryptAES: " << data << " # " << result_data<<" size_out:"<<ascii_base64_len<<" size_in:"<<in_size;
 
         delete ascii_base64;
         delete[] buffer;
@@ -179,9 +179,9 @@ namespace wanderer
             index += key_size;
         }
         int out_size = CharPointer2Int((const char *)out_data);
-        std::string result_data = std::string((const char *)(out_data + 4));
+        std::string result_data = std::string((const char *)(out_data + 4),out_size);
 
-        LOG(INFO) << "DecryptAES: " << data << " # " << result_data;
+        LOG(INFO) << "DecryptAES: " << data << " # " << result_data<<" out_size:"<<binary_base64_len<<" in_size:"<<out_size;
 
         delete binary_base64;
         delete[] buffer;
