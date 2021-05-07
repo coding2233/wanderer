@@ -4,6 +4,7 @@
 #include <functional>
 #include <iostream>
 #include <cstring>
+#include <vector>
 
 #if WIN32
 #include <WinSock2.h>

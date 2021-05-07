@@ -12,7 +12,7 @@ namespace wanderer
     enum AppType_ : char
     {
         //没有服务器类型
-        AppType_None = -1,
+        AppType_None = 0,
         //登录服务器
         AppType_Login = 1 << 0,
         //网关服务器

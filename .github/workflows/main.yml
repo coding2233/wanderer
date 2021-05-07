@@ -50,3 +50,48 @@ jobs:
         dir build\src
         cmake --build build/ --config Release --target wanderer-sdk
         dir build\src\Release
+  
+  build-sdk-android-armeabi-v7a:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        wget https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip
+        sudo apt-get install -y unzip
+        unzip android-ndk-r21e-linux-x86_64.zip
+        export ANDROID_NDK=$(pwd)/android-ndk-r21e
+        export SRC=./
+        export BUILD=build
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="armeabi-v7a" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
+        ls -alh ${BUILD}/src
+
+  build-sdk-android-arm64-v8a:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        wget https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip
+        sudo apt-get install -y unzip
+        unzip android-ndk-r21e-linux-x86_64.zip
+        export ANDROID_NDK=$(pwd)/android-ndk-r21e
+        export SRC=./
+        export BUILD=build
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="arm64-v8a" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
+        ls -alh ${BUILD}/src
+  
+  build-sdk-android-x86_64:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        wget https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip
+        sudo apt-get install -y unzip
+        unzip android-ndk-r21e-linux-x86_64.zip
+        export ANDROID_NDK=$(pwd)/android-ndk-r21e
+        export SRC=./
+        export BUILD=build
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="x86_64" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
+        ls -alh ${BUILD}/src
