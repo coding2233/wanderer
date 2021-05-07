@@ -39,13 +39,13 @@ namespace wanderer
             buffer_.Flush();
             buffer_.Write(encrypt_data.c_str(), encrypt_data.size());
         }
-        // else if (message_type_ > MessageType_Exchange)
-        // {
-        //     const std::string data(buffer_.Read(), buffer_.Length());
-        //     std::string encrypt_data = openssl_.EncryptAES(data, secret_key);
-        //     buffer_.Flush();
-        //     buffer_.Write(encrypt_data.c_str(), encrypt_data.size());
-        // }
+        else if (message_type_ > MessageType_Exchange)
+        {
+            const std::string data(buffer_.Read(), buffer_.Length());
+            std::string encrypt_data = openssl_.EncryptAES(data, secret_key);
+            buffer_.Flush();
+            buffer_.Write(encrypt_data.c_str(), encrypt_data.size());
+        }
 
         // unsigned long max_size = 1024 * 4;
         // byte *buf = new byte[max_size];
@@ -73,15 +73,15 @@ namespace wanderer
             buffer_.Flush();
             buffer_.Write(decode_data.c_str(), decode_data.length());
         }
-        // else if (message_type_ > MessageType_Exchange)
-        // {
-        //     //AES解密
-        //     const std::string data(buffer_.Read(), buffer_.Length());
-        //     LOG(INFO) << "Message::Unpack DecryptAES: " << data << " secret_key: " << secret_key;
-        //     std::string decode_data = openssl_.DecryptAES(data, secret_key);
-        //     buffer_.Flush();
-        //     buffer_.Write(decode_data.c_str(), decode_data.length());
-        // }
+        else if (message_type_ > MessageType_Exchange)
+        {
+            //AES解密
+            const std::string data(buffer_.Read(), buffer_.Length());
+            LOG(INFO) << "Message::Unpack DecryptAES: " << data << " secret_key: " << secret_key;
+            std::string decode_data = openssl_.DecryptAES(data, secret_key);
+            buffer_.Flush();
+            buffer_.Write(decode_data.c_str(), decode_data.length());
+        }
         return buffer_.Read();
     }
 

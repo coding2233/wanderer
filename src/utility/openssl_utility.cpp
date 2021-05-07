@@ -136,7 +136,8 @@ namespace wanderer
         unsigned char*buffer = new unsigned char[key_size];
         while (index < out_size)
         {
-            AES_cbc_encrypt(in_data + index, out_data + index, key_size, &aes_key, buffer, AES_ENCRYPT);
+            AES_ecb_encrypt(in_data+index,out_data+index, &aes_key,AES_ENCRYPT);
+            // AES_cbc_encrypt(in_data + index, out_data + index, key_size, &aes_key, buffer, AES_ENCRYPT);
             index += key_size;
         }
 
@@ -173,7 +174,8 @@ namespace wanderer
         unsigned char*buffer = new unsigned char[key_size];
         while (index < binary_base64_len)
         {
-            AES_cbc_encrypt(binary_base64 + index, out_data + index, key_size, &aes_key, buffer, AES_DECRYPT);
+            AES_ecb_encrypt(binary_base64+index,out_data+index, &aes_key,AES_DECRYPT);
+          //  AES_cbc_encrypt(binary_base64 + index, out_data + index, key_size, &aes_key, buffer, AES_DECRYPT);
             index += key_size;
         }
         int out_size = CharPointer2Int((const char *)out_data);
