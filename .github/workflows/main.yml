@@ -69,7 +69,7 @@ jobs:
         cp build/src/Release/wanderer-sdk.dll windows/x64
     - uses: liziwl/git-push-action@master
       with:
-        repository_url: 'https://github.com/coding2233/wanderer-sdk.git'
+        repository_url: 'github.com/coding2233/wanderer-sdk.git'
         git_token_holder: 'coding2233'
         git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
         commit_user: 'wanderer'
@@ -101,7 +101,7 @@ jobs:
         cp build/src/Release/wanderer-sdk.dll windows/x86
     - uses: liziwl/git-push-action@master
       with:
-        repository_url: 'https://github.com/coding2233/wanderer-sdk.git'
+        repository_url: 'github.com/coding2233/wanderer-sdk.git'
         git_token_holder: 'coding2233'
         git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
         commit_user: 'wanderer'
@@ -129,6 +129,17 @@ jobs:
       with:
         name: libwanderer-sdk-android-armv7.so
         path: build/src/libwanderer-sdk.so
+    - name: Copy sdk file
+      run: |
+        mkdir build/sdk
+        cp build/src/libwanderer-sdk.so build/sdk
+    - uses: seanmiddleditch/gha-publish-to-git@master
+      with:
+        repository: coding2233/wanderer-sdk
+        branch: main
+        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
+        source_folder: build/sdk
+        target_folder: android/armv7
 
   build-sdk-android-arm64-v8a:
     runs-on: ubuntu-latest
@@ -149,6 +160,17 @@ jobs:
       with:
         name: libwanderer-sdk-android-armv8.so
         path: build/src/libwanderer-sdk.so
+    - name: Copy sdk file
+      run: |
+        mkdir build/sdk
+        cp build/src/libwanderer-sdk.so build/sdk
+    - uses: seanmiddleditch/gha-publish-to-git@master
+      with:
+        repository: coding2233/wanderer-sdk
+        branch: main
+        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
+        source_folder: build/sdk
+        target_folder: android/armv8
   
   build-sdk-android-x86_64:
     runs-on: ubuntu-latest
@@ -169,6 +191,17 @@ jobs:
       with:
         name: libwanderer-sdk-android-x86_64.so
         path: build/src/libwanderer-sdk.so
+    - name: Copy sdk file
+      run: |
+        mkdir build/sdk
+        cp build/src/libwanderer-sdk.so build/sdk
+    - uses: seanmiddleditch/gha-publish-to-git@master
+      with:
+        repository: coding2233/wanderer-sdk
+        branch: main
+        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
+        source_folder: build/sdk
+        target_folder: android/x86_64
   
   build-sdk-osx:
     runs-on: macos-latest
