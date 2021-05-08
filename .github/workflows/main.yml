@@ -65,15 +65,18 @@ jobs:
         path: build/src/Release/wanderer-sdk.dll
     - name: Copy sdk file
       run: |
-        md build/sdk
-        cp build/src/Release/wanderer-sdk.dll build/sdk
-    - uses: seanmiddleditch/gha-publish-to-git@master
+        md windows/x64
+        cp build/src/Release/wanderer-sdk.dll windows/x64
+    - uses: liziwl/git-push-action@master
       with:
-        repository: coding2233/wanderer-sdk
+        repository_url: 'https://github.com/coding2233/wanderer-sdk.git'
+        git_token_holder: 'coding2233'
+        git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
+        commit_user: 'wanderer'
+        commit_email: 'dutifulwanderer@gmail.com'
+        push_dir: 'windows/x64/'
         branch: main
-        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
-        source_folder: build/sdk
-        target_folder: windows/x64
+        keep_history: true
   
   build-sdk-windows-x86:
     runs-on: windows-latest
@@ -94,15 +97,18 @@ jobs:
         path: build/src/Release/wanderer-sdk.dll
     - name: Copy sdk file
       run: |
-        md build/sdk
-        cp build/src/Release/wanderer-sdk.dll build/sdk
-    - uses: seanmiddleditch/gha-publish-to-git@master
+        md windows/x86
+        cp build/src/Release/wanderer-sdk.dll windows/x86
+    - uses: liziwl/git-push-action@master
       with:
-        repository: coding2233/wanderer-sdk
+        repository_url: 'https://github.com/coding2233/wanderer-sdk.git'
+        git_token_holder: 'coding2233'
+        git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
+        commit_user: 'wanderer'
+        commit_email: 'dutifulwanderer@gmail.com'
+        push_dir: 'windows/x86/'
         branch: main
-        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
-        source_folder: build/sdk
-        target_folder: windows/x86
+        keep_history: true
   
   build-sdk-android-armeabi-v7a:
     runs-on: ubuntu-latest
