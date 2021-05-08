@@ -34,6 +34,17 @@ jobs:
       with:
         name: libwanderer-sdk-linux.so
         path: build/src/libwanderer-sdk.so
+    - name: Copy sdk file
+      run: |
+        mkdir build/sdk
+        cp build/src/libwanderer-sdk.so build/sdk
+    - uses: seanmiddleditch/gha-publish-to-git@master
+      with:
+        repository: coding2233/wanderer-sdk
+        branch: main
+        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
+        source_folder: build/sdk
+        target_folder: linux
 
   build-sdk-windows-x64:
     runs-on: windows-latest
@@ -52,6 +63,17 @@ jobs:
       with:
         name: wanderer-sdk-windows-x64.dll
         path: build/src/Release/wanderer-sdk.dll
+    - name: Copy sdk file
+      run: |
+        md build/sdk
+        cp build/src/Release/wanderer-sdk.dll build/sdk
+    - uses: seanmiddleditch/gha-publish-to-git@master
+      with:
+        repository: coding2233/wanderer-sdk
+        branch: main
+        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
+        source_folder: build/sdk
+        target_folder: windows/x64
   
   build-sdk-windows-x86:
     runs-on: windows-latest
@@ -70,6 +92,17 @@ jobs:
       with:
         name: wanderer-sdk-windows-x86.dll
         path: build/src/Release/wanderer-sdk.dll
+    - name: Copy sdk file
+      run: |
+        md build/sdk
+        cp build/src/Release/wanderer-sdk.dll build/sdk
+    - uses: seanmiddleditch/gha-publish-to-git@master
+      with:
+        repository: coding2233/wanderer-sdk
+        branch: main
+        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
+        source_folder: build/sdk
+        target_folder: windows/x86
   
   build-sdk-android-armeabi-v7a:
     runs-on: ubuntu-latest
