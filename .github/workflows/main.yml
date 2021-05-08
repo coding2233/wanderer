@@ -77,7 +77,7 @@ jobs:
         commit_email: 'dutifulwanderer@gmail.com'
         push_dir: 'build/sdk/'
         branch: main
-        keep_history: false
+        keep_history: true
   
   build-sdk-windows-x86:
     runs-on: windows-latest
@@ -110,7 +110,7 @@ jobs:
         commit_email: 'dutifulwanderer@gmail.com'
         push_dir: 'build/sdk/'
         branch: main
-        keep_history: false
+        keep_history: true
   
   build-sdk-android-armeabi-v7a:
     runs-on: ubuntu-latest
@@ -237,7 +237,7 @@ jobs:
         commit_email: 'dutifulwanderer@gmail.com'
         push_dir: 'build/sdk/'
         branch: main
-        keep_history: false
+        keep_history: true
 
   build-sdk-ios-arm:
     runs-on: macos-latest
@@ -269,7 +269,7 @@ jobs:
         commit_email: 'dutifulwanderer@gmail.com'
         push_dir: 'build/sdk/'
         branch: main
-        keep_history: false
+        keep_history: true
 
   build-sdk-ios-arm64:
     runs-on: macos-latest
@@ -301,7 +301,7 @@ jobs:
         commit_email: 'dutifulwanderer@gmail.com'
         push_dir: 'build/sdk/'
         branch: main
-        keep_history: false
+        keep_history: true
   
   # build-sdk-ios-armv7:
   #   runs-on: macos-latest
