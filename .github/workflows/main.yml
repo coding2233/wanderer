@@ -95,3 +95,74 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="x86_64" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
+  
+  build-sdk-osx:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        export SRC=./
+        export BUILD=build
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
+        ls -alh ${BUILD}/src
+
+  # build-sdk-ios-arm:
+  #   runs-on: macos-latest
+  #   steps:
+  #   - uses: actions/checkout@v1
+  #   - name: build
+  #     run: |
+  #       export SRC=./
+  #       export BUILD=build
+  #       cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS -S ${SRC} -B ${SRC}/${BUILD}
+  #       cmake --build ${SRC}/${BUILD} --config Release -j 10
+  #       ls -alh ${BUILD}/src
+  
+  build-sdk-ios-arm64:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        export SRC=./
+        export BUILD=build
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS64 -S ${SRC} -B ${SRC}/${BUILD}
+        cmake --build ${SRC}/${BUILD} --config Release -j 10
+        ls -alh ${BUILD}/src
+  
+  build-sdk-ios-armv7:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        export SRC=./
+        export BUILD=build
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS -DARCHS=armv7 -S ${SRC} -B ${SRC}/${BUILD}
+        cmake --build ${SRC}/${BUILD} --config Release -j 10
+        ls -alh ${BUILD}/src
+  
+  build-sdk-ios-armv7s:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        export SRC=./
+        export BUILD=build
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS -DARCHS=armv7s -S ${SRC} -B ${SRC}/${BUILD}
+        cmake --build ${SRC}/${BUILD} --config Release -j 10
+        ls -alh ${BUILD}/src
+  
+  build-sdk-ios-x86_64:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: |
+        export SRC=./
+        export BUILD=build
+        cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS -DARCHS=x86_64 -S ${SRC} -B ${SRC}/${BUILD}
+        cmake --build ${SRC}/${BUILD} --config Release -j 10
+        ls -alh ${BUILD}/src

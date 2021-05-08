@@ -8,7 +8,7 @@
 
 #if WIN32
 #include <WinSock2.h>
-#elif unix
+#elif __unix__ || __APPLE__
 #include <sys/socket.h>
 #endif
 

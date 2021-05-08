@@ -14,7 +14,7 @@
 #include "windows.h"
 // _declspec(dllexport) _cdecl
 #define WANDERER_EXPORT extern "C" _declspec(dllexport)
-#elif unix
+#elif __unix__ || __APPLE__
 #define WANDERER_EXPORT extern "C"
 #endif
 
