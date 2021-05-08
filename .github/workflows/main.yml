@@ -13,6 +13,11 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=ON -DBUILD_SDK=OFF -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: wanderer
+        path: build/wanderer
 
   build-sdk-linux:
     runs-on: ubuntu-latest
@@ -24,6 +29,11 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libwanderer-sdk-linux.so
+        path: build/src/libwanderer-sdk.so
 
   build-sdk-windows-x64:
     runs-on: windows-latest
@@ -37,6 +47,11 @@ jobs:
         dir build\src
         cmake --build build/ --config Release --target wanderer-sdk
         dir build\src\Release
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: wanderer-sdk-windows-x64.dll
+        path: build/src/Release/wanderer-sdk.dll
   
   build-sdk-windows-x86:
     runs-on: windows-latest
@@ -50,6 +65,11 @@ jobs:
         dir build\src
         cmake --build build/ --config Release --target wanderer-sdk
         dir build\src\Release
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: wanderer-sdk-windows-x86.dll
+        path: build/src/Release/wanderer-sdk.dll
   
   build-sdk-android-armeabi-v7a:
     runs-on: ubuntu-latest
@@ -65,6 +85,11 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="armeabi-v7a" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libwanderer-sdk-android-armv7.so
+        path: build/src/libwanderer-sdk.so
 
   build-sdk-android-arm64-v8a:
     runs-on: ubuntu-latest
@@ -80,6 +105,11 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="arm64-v8a" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libwanderer-sdk-android-armv8.so
+        path: build/src/libwanderer-sdk.so
   
   build-sdk-android-x86_64:
     runs-on: ubuntu-latest
@@ -95,6 +125,11 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="x86_64" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libwanderer-sdk-android-x86_64.so
+        path: build/src/libwanderer-sdk.so
   
   build-sdk-osx:
     runs-on: macos-latest
@@ -106,6 +141,11 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libwanderer-sdk-osx.dylib
+        path: build/src/libwanderer-sdk.dylib
 
   build-sdk-ios-arm:
     runs-on: macos-latest
@@ -118,6 +158,11 @@ jobs:
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS -S ${SRC} -B ${SRC}/${BUILD}
         cmake --build ${SRC}/${BUILD} --config Release -j 10
         ls -alh ${BUILD}/src
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libwanderer-sdk-armv7-fat.dylib
+        path: build/src/libwanderer-sdk.dylib
 
   build-sdk-ios-arm64:
     runs-on: macos-latest
@@ -130,6 +175,11 @@ jobs:
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS64 -S ${SRC} -B ${SRC}/${BUILD}
         cmake --build ${SRC}/${BUILD} --config Release -j 10
         ls -alh ${BUILD}/src
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libwanderer-sdk-armv64.dylib
+        path: build/src/libwanderer-sdk.dylib
   
   # build-sdk-ios-armv7:
   #   runs-on: macos-latest
