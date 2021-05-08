@@ -65,8 +65,8 @@ jobs:
         path: build/src/Release/wanderer-sdk.dll
     - name: Copy sdk file
       run: |
-        md windows/x64
-        cp build/src/Release/wanderer-sdk.dll windows/x64
+        md build\sdk
+        copy build\src\Release\wanderer-sdk.dll build\sdk\wanderer-sdk-x64.dll
     - uses: liziwl/git-push-action@master
       with:
         repository_url: 'github.com/coding2233/wanderer-sdk.git'
@@ -74,9 +74,9 @@ jobs:
         git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
         commit_user: 'wanderer'
         commit_email: 'dutifulwanderer@gmail.com'
-        push_dir: 'windows/x64/'
+        push_dir: 'build/sdk/'
         branch: main
-        keep_history: true
+        keep_history: false
   
   build-sdk-windows-x86:
     runs-on: windows-latest
@@ -97,8 +97,8 @@ jobs:
         path: build/src/Release/wanderer-sdk.dll
     - name: Copy sdk file
       run: |
-        md windows/x86
-        cp build/src/Release/wanderer-sdk.dll windows/x86
+        md build\sdk
+        copy build\src\Release\wanderer-sdk.dll build\sdk\wanderer-sdk-x86.dll
     - uses: liziwl/git-push-action@master
       with:
         repository_url: 'github.com/coding2233/wanderer-sdk.git'
@@ -106,9 +106,9 @@ jobs:
         git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
         commit_user: 'wanderer'
         commit_email: 'dutifulwanderer@gmail.com'
-        push_dir: 'windows/x86/'
+        push_dir: 'build/sdk/'
         branch: main
-        keep_history: true
+        keep_history: false
   
   build-sdk-android-armeabi-v7a:
     runs-on: ubuntu-latest
@@ -218,6 +218,20 @@ jobs:
       with:
         name: libwanderer-sdk-osx.dylib
         path: build/src/libwanderer-sdk.dylib
+    - name: Copy sdk file
+      run: |
+        mkdir build/sdk
+        cp build/src/libwanderer-sdk.dylib build/sdk/libwanderer-sdk-osx.dylib
+    - uses: liziwl/git-push-action@master
+      with:
+        repository_url: 'github.com/coding2233/wanderer-sdk.git'
+        git_token_holder: 'coding2233'
+        git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
+        commit_user: 'wanderer'
+        commit_email: 'dutifulwanderer@gmail.com'
+        push_dir: 'build/sdk/'
+        branch: main
+        keep_history: false
 
   build-sdk-ios-arm:
     runs-on: macos-latest
@@ -235,6 +249,20 @@ jobs:
       with:
         name: libwanderer-sdk-armv7-fat.dylib
         path: build/src/libwanderer-sdk.dylib
+    - name: Copy sdk file
+      run: |
+        mkdir build/sdk
+        cp build/src/libwanderer-sdk.dylib build/sdk/libwanderer-sdk-armv7.dylib
+    - uses: liziwl/git-push-action@master
+      with:
+        repository_url: 'github.com/coding2233/wanderer-sdk.git'
+        git_token_holder: 'coding2233'
+        git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
+        commit_user: 'wanderer'
+        commit_email: 'dutifulwanderer@gmail.com'
+        push_dir: 'build/sdk/'
+        branch: main
+        keep_history: false
 
   build-sdk-ios-arm64:
     runs-on: macos-latest
@@ -252,6 +280,20 @@ jobs:
       with:
         name: libwanderer-sdk-armv64.dylib
         path: build/src/libwanderer-sdk.dylib
+    - name: Copy sdk file
+      run: |
+        mkdir build/sdk
+        cp build/src/libwanderer-sdk.dylib build/sdk/libwanderer-sdk-arm64.dylib
+    - uses: liziwl/git-push-action@master
+      with:
+        repository_url: 'github.com/coding2233/wanderer-sdk.git'
+        git_token_holder: 'coding2233'
+        git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
+        commit_user: 'wanderer'
+        commit_email: 'dutifulwanderer@gmail.com'
+        push_dir: 'build/sdk/'
+        branch: main
+        keep_history: false
   
   # build-sdk-ios-armv7:
   #   runs-on: macos-latest
