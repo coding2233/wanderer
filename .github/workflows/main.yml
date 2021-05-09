@@ -50,10 +50,11 @@ jobs:
         dir build\src\Release
         md sdk\windows\x64
         copy build\src\Release\wanderer-sdk.dll sdk\windows\x64\
+        dir sdk\windows\x64
     - name: Cache
       uses: actions/cache@v2.1.5
       with:
-        path: sdk/windows/x64/wanderer-sdk.dll
+        path: sdk\windows\x64\wanderer-sdk.dll
         key: build-sdk-windows-x64
   
   build-sdk-windows-x86:
@@ -70,10 +71,11 @@ jobs:
         dir build\src\Release
         md sdk\windows\x86
         copy build\src\Release\wanderer-sdk.dll sdk\windows\x86\
+        dir sdk\windows\x86
     - name: Cache
       uses: actions/cache@v2.1.5
       with:
-        path: sdk/windows/x86/wanderer-sdk.dll
+        path: sdk\windows\x86\wanderer-sdk.dll
         key: build-sdk-windows-x86
   
   build-sdk-android-armv7:
