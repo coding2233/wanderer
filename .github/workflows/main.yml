@@ -29,7 +29,7 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-        mkdir sdk/linux && cp build/src/libwanderer-sdk.so sdk/linux/
+        mkdir -p sdk/linux && cp build/src/libwanderer-sdk.so sdk/linux/
     - name: Cache
       uses: actions/cache@v2.1.5
       with:
@@ -90,7 +90,7 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="armeabi-v7a" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/android/armv7 && mkdir $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
+        export SDKPATH=sdk/android/armv7 && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
     - name: Cache
       uses: actions/cache@v2.1.5
       with:
@@ -111,7 +111,7 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="arm64-v8a" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/android/armv8 && mkdir $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
+        export SDKPATH=sdk/android/armv8 && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
     - name: Cache
       uses: actions/cache@v2.1.5
       with:
@@ -132,7 +132,7 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="x86_64" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/android/x86_64 && mkdir $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
+        export SDKPATH=sdk/android/x86_64 && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
     - name: Cache
       uses: actions/cache@v2.1.5
       with:
@@ -149,7 +149,7 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/osx && mkdir $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
+        export SDKPATH=sdk/osx && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
     - name: Cache
       uses: actions/cache@v2.1.5
       with:
@@ -167,7 +167,7 @@ jobs:
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS -S ${SRC} -B ${SRC}/${BUILD}
         cmake --build ${SRC}/${BUILD} --config Release -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/ios/arm && mkdir $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
+        export SDKPATH=sdk/ios/arm && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
     - name: Cache
       uses: actions/cache@v2.1.5
       with:
@@ -185,7 +185,7 @@ jobs:
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS64 -S ${SRC} -B ${SRC}/${BUILD}
         cmake --build ${SRC}/${BUILD} --config Release -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/ios/arm64 && mkdir $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
+        export SDKPATH=sdk/ios/arm64 && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
     - name: Cache
       uses: actions/cache@v2.1.5
       with:
