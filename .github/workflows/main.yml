@@ -29,26 +29,15 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-    - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+        mkdir sdk/linux && cp build/src/libwanderer-sdk.so sdk/linux/
+    - name: Cache
+      uses: actions/cache@v2.1.5
       with:
-        name: libwanderer-sdk-linux.so
-        path: build/src/libwanderer-sdk.so
-    - name: Copy sdk file
-      run: |
-        mkdir build/sdk
-        cp build/src/libwanderer-sdk.so build/sdk
-    - uses: seanmiddleditch/gha-publish-to-git@master
-      with:
-        repository: coding2233/wanderer-sdk
-        branch: main
-        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
-        source_folder: build/sdk
-        target_folder: linux
+        path: sdk/linux/libwanderer-sdk.so
+        key: build-sdk-linux
 
   build-sdk-windows-x64:
     runs-on: windows-latest
-    needs: build-sdk-linux
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -59,29 +48,16 @@ jobs:
         dir build\src
         cmake --build build/ --config Release --target wanderer-sdk
         dir build\src\Release
-    - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+        md sdk\windows\x64
+        copy build\src\Release\wanderer-sdk.dll sdk\windows\x64\
+    - name: Cache
+      uses: actions/cache@v2.1.5
       with:
-        name: wanderer-sdk-windows-x64.dll
-        path: build/src/Release/wanderer-sdk.dll
-    - name: Copy sdk file
-      run: |
-        md build\sdk
-        copy build\src\Release\wanderer-sdk.dll build\sdk\wanderer-sdk-x64.dll
-    - uses: liziwl/git-push-action@master
-      with:
-        repository_url: 'github.com/coding2233/wanderer-sdk.git'
-        git_token_holder: 'coding2233'
-        git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
-        commit_user: 'wanderer'
-        commit_email: 'dutifulwanderer@gmail.com'
-        push_dir: 'build/sdk/'
-        branch: main
-        keep_history: true
+        path: sdk/windows/x64/wanderer-sdk.dll
+        key: build-sdk-windows-x64
   
   build-sdk-windows-x86:
     runs-on: windows-latest
-    needs: build-sdk-windows-x64
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -92,29 +68,16 @@ jobs:
         dir build\src
         cmake --build build/ --config Release --target wanderer-sdk
         dir build\src\Release
-    - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+        md sdk\windows\x86
+        copy build\src\Release\wanderer-sdk.dll sdk\windows\x86\
+    - name: Cache
+      uses: actions/cache@v2.1.5
       with:
-        name: wanderer-sdk-windows-x86.dll
-        path: build/src/Release/wanderer-sdk.dll
-    - name: Copy sdk file
-      run: |
-        md build\sdk
-        copy build\src\Release\wanderer-sdk.dll build\sdk\wanderer-sdk-x86.dll
-    - uses: liziwl/git-push-action@master
-      with:
-        repository_url: 'github.com/coding2233/wanderer-sdk.git'
-        git_token_holder: 'coding2233'
-        git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
-        commit_user: 'wanderer'
-        commit_email: 'dutifulwanderer@gmail.com'
-        push_dir: 'build/sdk/'
-        branch: main
-        keep_history: true
+        path: sdk/windows/x86/wanderer-sdk.dll
+        key: build-sdk-windows-x86
   
-  build-sdk-android-armeabi-v7a:
+  build-sdk-android-armv7:
     runs-on: ubuntu-latest
-    needs: build-sdk-windows-x86
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -127,26 +90,15 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="armeabi-v7a" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-    - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+        export SDKPATH=sdk/android/armv7 && mkdir $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
+    - name: Cache
+      uses: actions/cache@v2.1.5
       with:
-        name: libwanderer-sdk-android-armv7.so
-        path: build/src/libwanderer-sdk.so
-    - name: Copy sdk file
-      run: |
-        mkdir build/sdk
-        cp build/src/libwanderer-sdk.so build/sdk
-    - uses: seanmiddleditch/gha-publish-to-git@master
-      with:
-        repository: coding2233/wanderer-sdk
-        branch: main
-        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
-        source_folder: build/sdk
-        target_folder: android/armv7
+        path: sdk/android/armv7/libwanderer-sdk.so
+        key: build-sdk-android-armv7
 
-  build-sdk-android-arm64-v8a:
+  build-sdk-android-armv8:
     runs-on: ubuntu-latest
-    needs: build-sdk-android-armeabi-v7a
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -159,26 +111,15 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="arm64-v8a" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-    - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+        export SDKPATH=sdk/android/armv8 && mkdir $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
+    - name: Cache
+      uses: actions/cache@v2.1.5
       with:
-        name: libwanderer-sdk-android-armv8.so
-        path: build/src/libwanderer-sdk.so
-    - name: Copy sdk file
-      run: |
-        mkdir build/sdk
-        cp build/src/libwanderer-sdk.so build/sdk
-    - uses: seanmiddleditch/gha-publish-to-git@master
-      with:
-        repository: coding2233/wanderer-sdk
-        branch: main
-        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
-        source_folder: build/sdk
-        target_folder: android/armv8
+        path: sdk/android/armv8/libwanderer-sdk.so
+        key: build-sdk-android-armv8
   
   build-sdk-android-x86_64:
     runs-on: ubuntu-latest
-    needs: build-sdk-android-arm64-v8a
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -191,26 +132,15 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="x86_64" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-    - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+        export SDKPATH=sdk/android/x86_64 && mkdir $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
+    - name: Cache
+      uses: actions/cache@v2.1.5
       with:
-        name: libwanderer-sdk-android-x86_64.so
-        path: build/src/libwanderer-sdk.so
-    - name: Copy sdk file
-      run: |
-        mkdir build/sdk
-        cp build/src/libwanderer-sdk.so build/sdk
-    - uses: seanmiddleditch/gha-publish-to-git@master
-      with:
-        repository: coding2233/wanderer-sdk
-        branch: main
-        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
-        source_folder: build/sdk
-        target_folder: android/x86_64
+        path: sdk/android/x86_64/libwanderer-sdk.so
+        key: build-sdk-android-x86_64
   
   build-sdk-osx:
     runs-on: macos-latest
-    needs: build-sdk-android-x86_64
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -219,29 +149,15 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-    - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+        export SDKPATH=sdk/osx && mkdir $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
+    - name: Cache
+      uses: actions/cache@v2.1.5
       with:
-        name: libwanderer-sdk-osx.dylib
-        path: build/src/libwanderer-sdk.dylib
-    - name: Copy sdk file
-      run: |
-        mkdir build/sdk
-        cp build/src/libwanderer-sdk.dylib build/sdk/libwanderer-sdk-osx.dylib
-    - uses: liziwl/git-push-action@master
-      with:
-        repository_url: 'github.com/coding2233/wanderer-sdk.git'
-        git_token_holder: 'coding2233'
-        git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
-        commit_user: 'wanderer'
-        commit_email: 'dutifulwanderer@gmail.com'
-        push_dir: 'build/sdk/'
-        branch: main
-        keep_history: true
+        path: sdk/osx/libwanderer-sdk.dylib
+        key: build-sdk-osx
 
   build-sdk-ios-arm:
     runs-on: macos-latest
-    needs: build-sdk-osx
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -251,29 +167,15 @@ jobs:
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS -S ${SRC} -B ${SRC}/${BUILD}
         cmake --build ${SRC}/${BUILD} --config Release -j 10
         ls -alh ${BUILD}/src
-    - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+        export SDKPATH=sdk/ios/arm && mkdir $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
+    - name: Cache
+      uses: actions/cache@v2.1.5
       with:
-        name: libwanderer-sdk-armv7-fat.dylib
-        path: build/src/libwanderer-sdk.dylib
-    - name: Copy sdk file
-      run: |
-        mkdir build/sdk
-        cp build/src/libwanderer-sdk.dylib build/sdk/libwanderer-sdk-armv7.dylib
-    - uses: liziwl/git-push-action@master
-      with:
-        repository_url: 'github.com/coding2233/wanderer-sdk.git'
-        git_token_holder: 'coding2233'
-        git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
-        commit_user: 'wanderer'
-        commit_email: 'dutifulwanderer@gmail.com'
-        push_dir: 'build/sdk/'
-        branch: main
-        keep_history: true
+        path: sdk/ios/arm/libwanderer-sdk.dylib
+        key: build-sdk-ios-arm
 
   build-sdk-ios-arm64:
     runs-on: macos-latest
-    needs: build-sdk-ios-arm
     steps:
     - uses: actions/checkout@v1
     - name: build
@@ -283,26 +185,77 @@ jobs:
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS64 -S ${SRC} -B ${SRC}/${BUILD}
         cmake --build ${SRC}/${BUILD} --config Release -j 10
         ls -alh ${BUILD}/src
-    - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+        export SDKPATH=sdk/ios/arm64 && mkdir $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
+    - name: Cache
+      uses: actions/cache@v2.1.5
       with:
-        name: libwanderer-sdk-armv64.dylib
-        path: build/src/libwanderer-sdk.dylib
-    - name: Copy sdk file
-      run: |
-        mkdir build/sdk
-        cp build/src/libwanderer-sdk.dylib build/sdk/libwanderer-sdk-arm64.dylib
-    - uses: liziwl/git-push-action@master
-      with:
-        repository_url: 'github.com/coding2233/wanderer-sdk.git'
-        git_token_holder: 'coding2233'
-        git_token: '${{ secrets.WANDERER_SDK_TOKEN }}'
-        commit_user: 'wanderer'
-        commit_email: 'dutifulwanderer@gmail.com'
-        push_dir: 'build/sdk/'
-        branch: main
-        keep_history: true
+        path: sdk/ios/arm64/libwanderer-sdk.dylib
+        key: build-sdk-ios-arm64
   
+  push-sdk:
+    runs-on: ubuntu-latest
+    needs: [build-sdk-linux,build-sdk-windows-x64,build-sdk-windows-x86,build-sdk-android-armv7,build-sdk-android-armv8,build-sdk-android-x86_64,build-sdk-osx,build-sdk-ios-arm,build-sdk-ios-arm64]
+    steps:
+    - name: Cache-build-sdk-linux
+      uses: actions/cache@v2.1.5
+      with:
+        path: sdk/linux/libwanderer-sdk.so
+        key: build-sdk-linux
+    - name: Cache-build-sdk-windows-x64
+      uses: actions/cache@v2.1.5
+      with:
+        path: sdk/windows/x64/wanderer-sdk.dll
+        key: build-sdk-windows-x64
+    - name: Cache-build-sdk-windows-x86
+      uses: actions/cache@v2.1.5
+      with:
+        path: sdk/windows/x86/wanderer-sdk.dll
+        key: build-sdk-windows-x86
+    - name: Cache-build-sdk-android-armv7
+      uses: actions/cache@v2.1.5
+      with:
+        path: sdk/android/armv7/libwanderer-sdk.so
+        key: build-sdk-android-armv7
+    - name: Cache-build-sdk-android-armv8
+      uses: actions/cache@v2.1.5
+      with:
+        path: sdk/android/armv8/libwanderer-sdk.so
+        key: build-sdk-android-armv8
+    - name: Cache-build-sdk-android-x86_64
+      uses: actions/cache@v2.1.5
+      with:
+        path: sdk/android/x86_64/libwanderer-sdk.so
+        key: build-sdk-android-x86_64
+    - name: Cache-build-sdk-osx
+      uses: actions/cache@v2.1.5
+      with:
+        path: sdk/osx/libwanderer-sdk.dylib
+        key: build-sdk-osx
+    - name: Cache-build-sdk-ios-arm
+      uses: actions/cache@v2.1.5
+      with:
+        path: sdk/ios/arm/libwanderer-sdk.dylib
+        key: build-sdk-ios-arm
+    - name: Cache-build-sdk-ios-arm64
+      uses: actions/cache@v2.1.5
+      with:
+        path: sdk/ios/arm64/libwanderer-sdk.dylib
+        key: build-sdk-ios-arm64
+    - name: Check-files
+      run: |
+        ls -alh
+        ls -alh sdk
+    - uses: seanmiddleditch/gha-publish-to-git@master
+      with:
+        repository: coding2233/wanderer-sdk
+        branch: main
+        github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
+        source_folder: sdk
+        target_folder: .
+
+
+
+
   # build-sdk-ios-armv7:
   #   runs-on: macos-latest
   #   steps:
