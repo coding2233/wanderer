@@ -142,7 +142,7 @@ jobs:
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
     - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: wanderer-sdk-osx
         path: build/src/libwanderer-sdk.dylib
@@ -216,7 +216,7 @@ jobs:
         name: wanderer-sdk-android-x86_64
         path: android/x86_64/
     - name: Download an artifact - osx
-      uses: actions/upload-artifact@v1
+      uses: actions/download-artifact@v2
       with:
         name: wanderer-sdk-osx
         path: osx/
