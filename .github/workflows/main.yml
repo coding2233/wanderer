@@ -14,7 +14,7 @@ jobs:
         cmake --no-warn-unused-cli -DBUILD_EXEC=ON -DBUILD_SDK=OFF -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}
     - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: wanderer
         path: build/wanderer
@@ -29,12 +29,11 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-        mkdir -p sdk/linux && cp build/src/libwanderer-sdk.so sdk/linux/
-    - name: Cache
-      uses: actions/cache@v2.1.5
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v2
       with:
-        path: sdk/linux/libwanderer-sdk.so
-        key: build-sdk-linux
+        name: wanderer-sdk-linux
+        path: build/src/libwanderer-sdk.so
 
   build-sdk-windows-x64:
     runs-on: windows-latest
@@ -48,14 +47,11 @@ jobs:
         dir build\src
         cmake --build build/ --config Release --target wanderer-sdk
         dir build\src\Release
-        md sdk\windows\x64
-        copy build\src\Release\wanderer-sdk.dll sdk\windows\x64\
-        dir sdk\windows\x64
-    - name: Cache
-      uses: actions/cache@v2.1.5
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v2
       with:
-        path: sdk\windows\x64\wanderer-sdk.dll
-        key: build-sdk-windows-x64
+        name: wanderer-sdk-windows-x64
+        path: build/src/Release/wanderer-sdk.dll
   
   build-sdk-windows-x86:
     runs-on: windows-latest
@@ -69,14 +65,11 @@ jobs:
         dir build\src
         cmake --build build/ --config Release --target wanderer-sdk
         dir build\src\Release
-        md sdk\windows\x86
-        copy build\src\Release\wanderer-sdk.dll sdk\windows\x86\
-        dir sdk\windows\x86
-    - name: Cache
-      uses: actions/cache@v2.1.5
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v2
       with:
-        path: sdk\windows\x86\wanderer-sdk.dll
-        key: build-sdk-windows-x86
+        name: wanderer-sdk-windows-x86
+        path: build/src/Release/wanderer-sdk.dll
   
   build-sdk-android-armv7:
     runs-on: ubuntu-latest
@@ -92,12 +85,11 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="armeabi-v7a" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/android/armv7 && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
-    - name: Cache
-      uses: actions/cache@v2.1.5
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v2
       with:
-        path: sdk/android/armv7/libwanderer-sdk.so
-        key: build-sdk-android-armv7
+        name: wanderer-sdk-android-armv7
+        path: build/src/libwanderer-sdk.so
 
   build-sdk-android-armv8:
     runs-on: ubuntu-latest
@@ -113,12 +105,11 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="arm64-v8a" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/android/armv8 && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
-    - name: Cache
-      uses: actions/cache@v2.1.5
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v2
       with:
-        path: sdk/android/armv8/libwanderer-sdk.so
-        key: build-sdk-android-armv8
+        name: wanderer-sdk-android-armv8
+        path: build/src/libwanderer-sdk.so
   
   build-sdk-android-x86_64:
     runs-on: ubuntu-latest
@@ -134,12 +125,11 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake -DANDROID_ABI="x86_64" -DANDROID_NDK=$ANDROID_NDK -DANDROID_PLATFORM=android-22 -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/android/x86_64 && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.so $SDKPATH
-    - name: Cache
-      uses: actions/cache@v2.1.5
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v2
       with:
-        path: sdk/android/x86_64/libwanderer-sdk.so
-        key: build-sdk-android-x86_64
+        name: wanderer-sdk-android-x86_64
+        path: build/src/libwanderer-sdk.so
   
   build-sdk-osx:
     runs-on: macos-latest
@@ -151,12 +141,11 @@ jobs:
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/osx && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
-    - name: Cache
-      uses: actions/cache@v2.1.5
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
       with:
-        path: sdk/osx/libwanderer-sdk.dylib
-        key: build-sdk-osx
+        name: wanderer-sdk-osx
+        path: build/src/libwanderer-sdk.dylib
 
   build-sdk-ios-arm:
     runs-on: macos-latest
@@ -169,12 +158,11 @@ jobs:
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS -S ${SRC} -B ${SRC}/${BUILD}
         cmake --build ${SRC}/${BUILD} --config Release -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/ios/arm && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
-    - name: Cache
-      uses: actions/cache@v2.1.5
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v2
       with:
-        path: sdk/ios/arm/libwanderer-sdk.dylib
-        key: build-sdk-ios-arm
+        name: wanderer-sdk-ios-arm
+        path: build/src/libwanderer-sdk.dylib
 
   build-sdk-ios-arm64:
     runs-on: macos-latest
@@ -187,62 +175,61 @@ jobs:
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/ios.toolchain.cmake -DPLATFORM=OS64 -S ${SRC} -B ${SRC}/${BUILD}
         cmake --build ${SRC}/${BUILD} --config Release -j 10
         ls -alh ${BUILD}/src
-        export SDKPATH=sdk/ios/arm64 && mkdir -p $SDKPATH && cp build/src/libwanderer-sdk.dylib $SDKPATH
-    - name: Cache
-      uses: actions/cache@v2.1.5
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v2
       with:
-        path: sdk/ios/arm64/libwanderer-sdk.dylib
-        key: build-sdk-ios-arm64
+        name: wanderer-sdk-ios-arm64
+        path: build/src/libwanderer-sdk.dylib
   
   push-sdk:
     runs-on: ubuntu-latest
     needs: [build-sdk-linux,build-sdk-windows-x64,build-sdk-windows-x86,build-sdk-android-armv7,build-sdk-android-armv8,build-sdk-android-x86_64,build-sdk-osx,build-sdk-ios-arm,build-sdk-ios-arm64]
     steps:
-    - name: Cache-build-sdk-linux
-      uses: actions/cache@v2.1.5
+    - name: Download an artifact - linux
+      uses: actions/download-artifact@v2
       with:
-        path: sdk/linux/libwanderer-sdk.so
-        key: build-sdk-linux
-    - name: Cache-build-sdk-windows-x64
-      uses: actions/cache@v2.1.5
+        name: wanderer-sdk-linux
+        path: linux/
+    - name: Download an artifact -  windows-x64
+      uses: actions/download-artifact@v2
       with:
-        path: sdk/windows/x64/wanderer-sdk.dll
-        key: build-sdk-windows-x64
-    - name: Cache-build-sdk-windows-x86
-      uses: actions/cache@v2.1.5
+        name: wanderer-sdk-windows-x64
+        path: windows/x64/
+    - name: Download an artifact -  windows-x86
+      uses: actions/download-artifact@v2
       with:
-        path: sdk/windows/x86/wanderer-sdk.dll
-        key: build-sdk-windows-x86
-    - name: Cache-build-sdk-android-armv7
-      uses: actions/cache@v2.1.5
+        name: wanderer-sdk-windows-x86
+        path: windows/x86/
+    - name: Download an artifact - android-armv7
+      uses: actions/download-artifact@v2
       with:
-        path: sdk/android/armv7/libwanderer-sdk.so
-        key: build-sdk-android-armv7
-    - name: Cache-build-sdk-android-armv8
-      uses: actions/cache@v2.1.5
+        name: wanderer-sdk-android-armv7
+        path: android/armv7/
+    - name: Download an artifact - android-armv8
+      uses: actions/download-artifact@v2
       with:
-        path: sdk/android/armv8/libwanderer-sdk.so
-        key: build-sdk-android-armv8
-    - name: Cache-build-sdk-android-x86_64
-      uses: actions/cache@v2.1.5
+        name: wanderer-sdk-android-armv8
+        path: android/armv8/
+    - name: Download an artifact - android-x68_64
+      uses: actions/download-artifact@v2
       with:
-        path: sdk/android/x86_64/libwanderer-sdk.so
-        key: build-sdk-android-x86_64
-    - name: Cache-build-sdk-osx
-      uses: actions/cache@v2.1.5
+        name: wanderer-sdk-android-x86_64
+        path: android/x86_64/
+    - name: Download an artifact - osx
+      uses: actions/upload-artifact@v1
       with:
-        path: sdk/osx/libwanderer-sdk.dylib
-        key: build-sdk-osx
-    - name: Cache-build-sdk-ios-arm
-      uses: actions/cache@v2.1.5
+        name: wanderer-sdk-osx
+        path: osx
+    - name: Download an artifact - ios-arm
+      uses: actions/download-artifact@v2
       with:
-        path: sdk/ios/arm/libwanderer-sdk.dylib
-        key: build-sdk-ios-arm
-    - name: Cache-build-sdk-ios-arm64
-      uses: actions/cache@v2.1.5
+        name: wanderer-sdk-ios-arm
+        path: ios/arm/
+    - name: Download an artifact - ios-arm64
+      uses: actions/download-artifact@v2
       with:
-        path: sdk/ios/arm64/libwanderer-sdk.dylib
-        key: build-sdk-ios-arm64
+        name: wanderer-sdk-ios-arm64
+        path: ios/arm64/
     - name: Check-files
       run: |
         ls -alh
