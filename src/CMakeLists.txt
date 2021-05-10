@@ -32,12 +32,16 @@ add_subdirectory(libraries)
 add_subdirectory(module)
 
 # 获取所有的第三方库
-get_property(LIBRARYIES GLOBAL PROPERTY libraries)
+# get_property(LIBRARYIES GLOBAL PROPERTY libraries)
 
-file(GLOB_RECURSE src "base/*.*"
-    "inner_session/*.*"
+file(GLOB_RECURSE base_src
+    "base/*.*"
     "network/*.*"
-    "utility/*.*"
+    "utility/*.*"    
+)
+
+file(GLOB_RECURSE src
+    "inner_session/*.*"
     "center/*.*"
     "login/*.*" 
     "gateway/*.*")
@@ -51,17 +55,19 @@ if(BUILD_SDK)
     add_definitions("-DBUILD_SDK")
 endif(BUILD_SDK)
 
+set(openssl_libs ssl crypto)
+set(link_libraries ${openssl_libs} zlib yaml-cpp)
 
 if(BUILD_EXEC)
-    add_library(core STATIC ${src})
-    target_link_libraries(core ${LIBRARYIES} module)
+    add_library(core STATIC ${base_src} ${src})
+    target_link_libraries(core ${link_libraries} module)
 endif(BUILD_EXEC)
 
 option(BUILD_SDK "The SDK is released simultaneously by default." ON)
 if(BUILD_SDK)
     set(SDK_NAME "${PROJECT_NAME}-sdk")
-    file(GLOB_RECURSE sdk-src "sdk/*.*")
-    add_library(${SDK_NAME} SHARED ${sdk-src} ${src})
+    file(GLOB_RECURSE sdk_src "sdk/*.*")
+    add_library(${SDK_NAME} SHARED ${sdk_src} ${base_src} ${src})
   
-    target_link_libraries(${SDK_NAME} ${LIBRARYIES} module)  
+    target_link_libraries(${SDK_NAME} ${link_libraries} module)  
 endif(BUILD_SDK)
