@@ -233,13 +233,12 @@ jobs:
     - name: Check-files
       run: |
         ls -alh
-        ls -alh sdk
     - uses: seanmiddleditch/gha-publish-to-git@master
       with:
         repository: coding2233/wanderer-sdk
         branch: main
         github_token: '${{ secrets.WANDERER_SDK_TOKEN  }}'
-        source_folder: sdk
+        source_folder: .
         target_folder: .
 
 
