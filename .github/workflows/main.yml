@@ -219,7 +219,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: wanderer-sdk-osx
-        path: osx
+        path: osx/
     - name: Download an artifact - ios-arm
       uses: actions/download-artifact@v2
       with:
