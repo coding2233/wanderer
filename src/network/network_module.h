@@ -18,6 +18,7 @@
 //#include "network/protobuf_message_packer.h"
 #include "inner_session/inner_session_module.h"
 #include "utility/jsonrpcpp.hpp"
+#include "utility/pool.h"
 
 namespace wanderer
 {
@@ -30,6 +31,8 @@ namespace wanderer
     private:
         //socket epoll
         SocketBase *socket_;
+        //Session pool
+        Pool<Session> session_pool_;
         //session map
         std::map<int, Session *> sessions_;
         std::map<int, Session *>::iterator sessions_iter_;
@@ -37,8 +40,6 @@ namespace wanderer
         std::vector<MESSAGE_INNER_RECEIVE> inner_message_receiver_listeners_;
         //
         std::map<int, int> alltype_inner_session_;
-        //cache circle buffer
-        std::queue<CircleBuffer*> circle_buffer_cache_;
 
         //inner session map
         //std::map<std::string, Session *> inner_session_;
@@ -78,12 +79,6 @@ namespace wanderer
         void AddReciveListener(MESSAGE_RECEIVE message_receive);
         void AddInnerReceiveListener(MessageType_ message_type,MESSAGE_INNER_RECEIVE message_receive);
         //void RemoveReciveListener(MESSAGE_RECEIVE& message_receive);
-
-        //Get CircleBuffer from circle_buffer_cache_
-        CircleBuffer* GetCircleBuffer();
-        //Recycle circlebuffer
-        void PutCircleBuffer( CircleBuffer* circle_buffer);
-
     };
 
     // #ifdef __cplusplus

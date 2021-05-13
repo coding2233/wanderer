@@ -66,7 +66,7 @@ namespace wanderer
         sessions_iter_ = sessions_.find(fd);
         if (sessions_iter_ == sessions_.end())
         {
-            Session *session = new Session;
+            Session *session = session_pool_.Pop();
             session->Setup(fd, message_send_, message_receive_);
             sessions_.insert(std::make_pair(fd, session));
 
@@ -174,7 +174,7 @@ namespace wanderer
         sessions_iter_ = sessions_.find(fd);
         if (sessions_iter_ == sessions_.end())
         {
-            Session *session = new Session;
+            Session *session = session_pool_.Pop();
             session->Setup(fd, message_send_, message_receive_);
             sessions_.insert(std::make_pair(fd, session));
             //内部的session
@@ -193,26 +193,5 @@ namespace wanderer
         //inner_message_receiver_listeners_.insert(std::make_pair( message_receive, message_type));
     }
 
-
-     //Get CircleBuffer from circle_buffer_cache_
-    CircleBuffer* NetworkModule::GetCircleBuffer()
-    {
-        CircleBuffer* circle_buffer;
-        if (circle_buffer_cache_.size()>0) 
-        {
-            circle_buffer=circle_buffer_cache_.front();
-             circle_buffer_cache_.pop();
-        }
-        else 
-        {
-            circle_buffer=new CircleBuffer;
-        }
-        return circle_buffer;
-    }
-        //Recycle circlebuffer
-    void NetworkModule::PutCircleBuffer(CircleBuffer* circle_buffer)
-    {
-        circle_buffer_cache_.push(circle_buffer);
-    }
 
 } // namespace wanderer
