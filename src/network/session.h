@@ -9,6 +9,7 @@
 #include "utility/openssl_utility.h"
 #include "utility/utility.h"
 #include "utility/jsonrpcpp.hpp"
+#include "utility/pool.h"
 
 namespace wanderer
 {
@@ -24,6 +25,7 @@ namespace wanderer
         int fd_;
         //AES密钥
         std::string secret_key_;
+        bool inner_auth_ = false;
 
         //   SocketBase *socket_;
         //   ProtobufMessagePacker *message_packer_;
@@ -40,8 +42,9 @@ namespace wanderer
         //创建密钥
         void CreateSecretKey();
 
-        bool inner_auth_ = false;
-
+        //检查缓存
+        void CheckCircleBuffer(bool get);
+        
     public:
         Session(/* args */);
         ~Session();

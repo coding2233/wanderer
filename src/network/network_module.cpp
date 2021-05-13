@@ -193,4 +193,26 @@ namespace wanderer
         //inner_message_receiver_listeners_.insert(std::make_pair( message_receive, message_type));
     }
 
+
+     //Get CircleBuffer from circle_buffer_cache_
+    CircleBuffer* NetworkModule::GetCircleBuffer()
+    {
+        CircleBuffer* circle_buffer;
+        if (circle_buffer_cache_.size()>0) 
+        {
+            circle_buffer=circle_buffer_cache_.front();
+             circle_buffer_cache_.pop();
+        }
+        else 
+        {
+            circle_buffer=new CircleBuffer;
+        }
+        return circle_buffer;
+    }
+        //Recycle circlebuffer
+    void NetworkModule::PutCircleBuffer(CircleBuffer* circle_buffer)
+    {
+        circle_buffer_cache_.push(circle_buffer);
+    }
+
 } // namespace wanderer

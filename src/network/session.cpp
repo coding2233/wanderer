@@ -1,16 +1,19 @@
 #include "network/session.h"
+#include "utility/pool.h"
+#include <string>
 
 namespace wanderer
 {
 
     Session::Session(/* args */)
     {
-        circle_buffer_ = new CircleBuffer;
+        circle_buffer_=nullptr;
+        // circle_buffer_ = new CircleBuffer;
     }
 
     Session::~Session()
     {
-        delete circle_buffer_;
+        // delete circle_buffer_;
     }
 
     void Session::Setup(int fd, MESSAGE_SEND message_send, MESSAGE_RECEIVE message_receive)
@@ -58,6 +61,8 @@ namespace wanderer
 
     void Session::Receive(const char *data, int size)
     {
+        CheckCircleBuffer(true);
+
         circle_buffer_->Write(data, size);
         if (circle_buffer_->Length() < 5)
         {
@@ -123,6 +128,8 @@ namespace wanderer
             //清理数据
             // circle_buffer_->Flush(data_size);
         }
+
+        CheckCircleBuffer(false);
     }
 
     void Session::CreateSecretKey()
@@ -149,5 +156,26 @@ namespace wanderer
     //     }
     //     return result;
     // }
+
+    void Session::CheckCircleBuffer(bool get)
+    {
+        static Pool<CircleBuffer> circle_buffer_pool;
+        if (get) 
+        {
+            if (circle_buffer_==nullptr) 
+            {
+                circle_buffer_=circle_buffer_pool.Pop();
+            }
+        }
+        else 
+        {
+            if (circle_buffer_ != nullptr && circle_buffer_->Length()==0) 
+            {
+                circle_buffer_pool.Pop();
+                circle_buffer_=nullptr;
+            }
+        }
+
+    }
 
 } // namespace wanderer
