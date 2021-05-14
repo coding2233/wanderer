@@ -30,6 +30,8 @@ namespace wanderer
         MessageType_InnerAuth = 3,
         //心跳包 S->C
         MessageType_Heartbeat = 9,
+        //actor消息
+        MessageType_Actor=99,
         //普通信息 S<->C
         MessageType_Normal = 100,
         //->Login

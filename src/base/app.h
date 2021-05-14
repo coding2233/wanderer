@@ -18,6 +18,7 @@
 #include "login/login_module.h"
 #include "module/custom_module.h"
 #include "network/network_module.h"
+#include "actor/actor_module.h"
 
 namespace wanderer
 {

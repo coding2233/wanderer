@@ -1,4 +1,5 @@
 #include "base/app.h"
+#include "actor/actor_module.h"
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -50,6 +51,7 @@ namespace wanderer
     {
         NetworkModule *network_module = new NetworkModule(system_);
         InnerSessionModule *inner_session_module = new InnerSessionModule(system_);
+        ActorModule *actor_module = new ActorModule(system_);
 
         CenterModule *center_module = nullptr;
         LoginModule *login_module = nullptr;
@@ -104,6 +106,7 @@ namespace wanderer
         AddModule(center_module);
         AddModule(login_module);
         AddModule(gateway_module);
+        AddModule(actor_module);
 
         //load custom module
         CustomModule custom_module(&modules_, system_);
