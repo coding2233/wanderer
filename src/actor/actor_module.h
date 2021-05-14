@@ -23,6 +23,9 @@ namespace wanderer
         ActorAddress_CENTER=-2,
         ActorAddress_DATABASE=-3,
         ActorAddress_GATEWAY=-4,
+        ActorAddress_LOGIN2CENTER=-5,
+        ActorAddress_DATABASE2CENTER=-6,
+        ActorAddress_GATEWAY2CENTER=-7,
     };
 
     class ActorModule:public Module

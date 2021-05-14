@@ -57,8 +57,9 @@ namespace wanderer
     {
         int to_address = CharPointer2Int(data);
         int from_address = CharPointer2Int(data+4);
-
-        // CheckActorMapSessions(to_address,from_address,session);
+        
+        //优先判断from_address 是不是ToCenter的 ，然后由Center转发
+        //剩下再去找制定的Actor
 
         jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data+8, size-8));
         auto actor_iter = actors_.find(to_address);
