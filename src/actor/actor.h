@@ -3,10 +3,13 @@
 
 #include <queue>
 #include <mutex>
+#if __unix
+#include <bits/stdint-intn.h>
+#endif
 
 #include "network/session.h"
 #include "utility/jsonrpcpp.hpp"
-#include <bits/stdint-intn.h>
+
 
 namespace wanderer 
 {
