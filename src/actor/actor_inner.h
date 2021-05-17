@@ -2,16 +2,16 @@
 #define __ACTOR_INNER_H__
 
 #include "actor/actor.h"
+#include "base/easylogging++.h"
 
-namespace wanderer 
+namespace wanderer
 {
-    class ActorInner:public Actor
+    class ActorInner : public Actor
     {
-    public: 
-        ActorInner(int address);
+    public:
+        ActorInner();
         ~ActorInner();
     };
 }
-
 
 #endif

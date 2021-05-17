@@ -98,6 +98,11 @@ namespace wanderer
             break;
         }
 
+        if (app_config->app_type_ != AppType_Center) 
+        {
+            network_module->CreateInnerSession(app_config->app_type_, app_config->center_ip_.c_str(), app_config->center_port_);
+        }
+
         //Add modules to map
         AddModule(network_module);
         AddModule(center_module);
@@ -107,11 +112,6 @@ namespace wanderer
 
         //load custom module
         CustomModule custom_module(&modules_, system_);
-
-        if (app_config->app_type_ != AppType_Center) 
-        {
-            network_module->CreateInnerSession(app_config->app_type_, app_config->center_ip_.c_str(), app_config->center_port_);
-        }
     }
 
     void App::Init()

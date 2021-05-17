@@ -2,15 +2,14 @@
 
 namespace wanderer
 {
-    Actor::Actor(int address)
+
+    Actor::Actor()
     {
-        processing_=false;
-        address_=address;
+        processing_ = false;
     }
 
     Actor::~Actor()
     {
-
     }
 
     void Actor::ToMailBox(Mail mail)
@@ -20,15 +19,17 @@ namespace wanderer
         mtx_.unlock();
     }
 
-    void Actor::SendMail(int to_address,jsonrpcpp::entity_ptr message_entilty_)
+    void Actor::SendMail(int to_address, jsonrpcpp::entity_ptr message_entilty_)
     {
-        
     }
-
 
     void Actor::MailHandler(Mail mail)
     {
+    }
 
+    void Actor::SetAddress(const int address)
+    {
+        address_ = address;
     }
 
     int Actor::GetAddress()
@@ -38,25 +39,24 @@ namespace wanderer
 
     int Actor::GetState()
     {
-        if (processing_) 
+        if (processing_)
         {
             return 2;
         }
-        else 
+        else
         {
-            if (mail_box_.size()>0) 
+            if (mail_box_.size() > 0)
             {
                 return 1;
             }
-            
         }
-        return  0;
+        return 0;
     }
 
     void Actor::Handle()
     {
-        processing_=true;
-        if (mail_box_.size()>0) 
+        processing_ = true;
+        if (mail_box_.size() > 0)
         {
             mtx_.lock();
             Mail mail = mail_box_.front();
@@ -65,6 +65,6 @@ namespace wanderer
             //处理消息
             MailHandler(mail);
         }
-        processing_=false;
+        processing_ = false;
     }
 }

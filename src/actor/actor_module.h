@@ -11,32 +11,33 @@
 
 #include "actor/actor.h"
 #include "base/module.h"
+#include "network/session.h"
 #include "utility/thread_pool.h"
 #include "utility/utility.h"
-#include "network/session.h"
 
-namespace wanderer 
+namespace wanderer
 {
-    enum ActorAddress_:int
+    enum ActorAddress_ : int
     {
-        ActorAddress_LOGIN=-1,
-        ActorAddress_CENTER=-2,
-        ActorAddress_DATABASE=-3,
-        ActorAddress_GATEWAY=-4,
-        ActorAddress_CENTER_AUTH = -5 
+        ActorAddress_LOGIN = -1,
+        ActorAddress_CENTER = -2,
+        ActorAddress_DATABASE = -3,
+        ActorAddress_GATEWAY = -4,
+        ActorAddress_CENTER_AUTH = -5
     };
 
-    class ActorModule:public Module
+    class ActorModule : public Module
     {
     private:
         int thread_count_;
         ThreadPool *thread_pool_;
 
-        std::map<int, Actor*> actors_;
-        int actor_address_index;
+        std::map<const int, Actor *> actors_;
+        static int actor_address_index;
 
-        std::vector<Actor*> work_actors_;
-public:
+        std::vector<Actor *> work_actors_;
+
+    public:
         ActorModule(System *system);
         ~ActorModule();
 
@@ -47,20 +48,9 @@ public:
         //关闭
         void OnClose() override;
 
-        template<class T>
-        Actor *SpawnActor(int address=0)
-        {
-            if (address ==0) 
-            {
-                address=++actor_address_index;
-            }
-            Actor *actor= dynamic_cast< Actor *>(new T(address));
-            actors_.insert(std::pair<int, Actor*>(address, actor));
-            return actor;
-        }
+        void Register(Actor *actor, int address = 0);
 
-        void HandleMessage(Session *session,const char * data,size_t size);
-        
+        void HandleMessage(Session *session, const char *data, size_t size);
     };
 }
 #endif

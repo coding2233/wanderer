@@ -7,10 +7,12 @@ namespace wanderer
 
     Message::Message(/* args */)
     {
+        // buffer_=new CircleBuffer;
     }
 
     Message::~Message()
     {
+        // delete CircleBuffer;
     }
 
     Message *Message::Setup(MessageType_ message_type)
@@ -32,6 +34,7 @@ namespace wanderer
     Message *Message::Setup(MessageType_ message_type,int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty)
     {
         buffer_.Flush();
+        message_type_ = message_type;
         char to_buffer[4];
         char from_buffer[4];
         Int2CharPointer(to_buffer,to_address);

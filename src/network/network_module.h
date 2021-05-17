@@ -36,7 +36,7 @@ namespace wanderer
         Pool<Session> session_pool_;
         //session map
         std::map<int, Session *> sessions_;
-        std::map<int, Session *>::iterator sessions_iter_;
+        // std::map<int, Session *>::iterator sessions_iter_;
         // std::vector<MESSAGE_RECEIVE> message_receiver_listeners_;
         // std::vector<MESSAGE_INNER_RECEIVE> inner_message_receiver_listeners_;
         //
@@ -83,7 +83,7 @@ namespace wanderer
         
         Session *SpawnSession(int fd);
 
-        Session *GetInnerSession() const;
+        // Session *GetInnerSession() const;
 
     };
 

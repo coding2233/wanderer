@@ -16,7 +16,9 @@ __        __              _
 * [vscode-cpptools-linux](https://github.com/Microsoft/vscode-cpptools/releases)
 * [vscode-drawio](https://marketplace.visualstudio.com/items?itemName=eightHundreds.vscode-drawio)
 * [CMake](https://marketplace.visualstudio.com/items?itemName=twxs.cmake)
-* [clangd](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd)
+* ~~[clangd](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd)~~
+* 装`vscode`插件`C++ Intellisense`,并安装`sudo apt install global`,并设置`vscode`配置文件`"C_Cpp.intelliSenseEngine": "Default"
+}`
 
 ### 内存泄漏检测工具
 * [https://www.valgrind.org/downloads/current.html#current](https://www.valgrind.org/downloads/current.html#current)

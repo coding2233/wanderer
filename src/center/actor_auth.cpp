@@ -1,21 +1,19 @@
 #include "center/actor_auth.h"
 #include "actor/actor.h"
 
-namespace wanderer 
+namespace wanderer
 {
-    ActorAuth::ActorAuth(int address):Actor(address)
+    ActorAuth::ActorAuth() 
     {
     }
 
-
     ActorAuth::~ActorAuth()
     {
-
     }
 
     void ActorAuth::MailHandler(Mail mail)
     {
-        std::cout<<"xxx"<<std::endl;
+        std::cout << "xxx" << std::endl;
     }
 
 }

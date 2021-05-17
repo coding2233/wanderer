@@ -47,17 +47,17 @@ namespace wanderer
 
     void Session::Send(int to_address,int from_address,const std::string& method, const jsonrpcpp::Parameter& params)
     {
-        request_index_=0;
-        std::make_shared<jsonrpcpp::Request> request(new jsonrpcpp::Request(request_index_++,method,params));
+        auto request = std::make_shared<jsonrpcpp::Request>(request_index_++,method,params);
         Send(to_address,from_address,request);
     }
 
     void Session::Send(int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty)
     {
-        Message *message = new Message();
-        message->Setup(MessageType_Actor,to_address,from_address,message_entilty);
-        Send(message);
-        delete message;
+        LOG(DEBUG)<<to_address<<"  "<<from_address<<"  "<<message_entilty->to_json().dump();
+        Message message;
+        message.Setup(MessageType_Actor,to_address,from_address,message_entilty);
+        Send(&message);
+        // delete message;
     }
 
     //内部认证
@@ -118,34 +118,8 @@ namespace wanderer
                 //回调
                 message_receive_(this, (MessageType_)message->message_type_, data_message, message->Size());
             }
-            // else if (msg_type == MessageType_Exchange)
-            // {
-            //     auto app_type = System::app_config_->app_type_;
-            //     LOG(INFO) << "MessageType_Exchange " << std::to_string(app_type);
-            //     // System::GetModule<InnerSessionModule>()->InnerAuth(app_type);
-            //     // this->InnerAuth(app_type);
-            // }
-            // else if (msg_type == MessageType_InnerAuth)
-            // {
-            //     auto app_type = (AppType_)data[0];
-            //     std::string secret_key(data + 1);
-            //     LOG(INFO) << "Internal session authentication key: " << data;
-            //     if (secret_key == System::app_config_->secret_key_)
-            //     {
-            //         LOG(INFO) << "successful authentication!";
-            //         // System::GetModule<InnerSessionModule>()->AddInnerCenterSession(app_type, this);
-            //     }
-            // }
-
-            //回调
-            // if (message->message_type_ != MessageType_Connected)
-            // {
-            //     message_receive_(this, (MessageType_)message->message_type_, data_message, message->Size());
-            // }
-
+            
             delete message;
-            //清理数据
-            // circle_buffer_->Flush(data_size);
         }
 
         CheckCircleBuffer(false);

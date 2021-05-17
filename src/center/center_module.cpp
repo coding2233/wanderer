@@ -15,7 +15,7 @@ namespace wanderer
     //初始化函数
     void CenterModule::OnInit()
     {
-        GetSystem()->GetModule<ActorModule>()->SpawnActor<ActorInner>(ActorAddress_CENTER_AUTH);
+        // GetSystem()->GetModule<ActorModule>()->SpawnActor<ActorInner>(ActorAddress_CENTER_AUTH);
     }
 
     //循环
@@ -28,6 +28,5 @@ namespace wanderer
     {
     }
 
-   
 
 } // namespace wanderer

@@ -3,20 +3,19 @@
 
 #include <iostream>
 
-
 #include "actor/actor.h"
 
-namespace wanderer 
+namespace wanderer
 {
-    class ActorAuth:public Actor
+    class ActorAuth : public Actor
     {
     protected:
         void MailHandler(Mail mail) override;
-    public: 
-        ActorAuth(int address);
+
+    public:
+        ActorAuth();
         ~ActorAuth();
     };
 }
-
 
 #endif
