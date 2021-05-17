@@ -7,6 +7,8 @@
 #include "base/easylogging++.h"
 #include "network/circle_buffer.h"
 #include "utility/openssl_utility.h"
+#include "utility/jsonrpcpp.hpp"
+
 // #include "zlib.h"
 namespace wanderer
 {
@@ -30,10 +32,10 @@ namespace wanderer
         MessageType_InnerAuth = 3,
         //心跳包 S->C
         MessageType_Heartbeat = 9,
+        //普通信息 S<->C
+        MessageType_Normal = 90,
         //actor消息
         MessageType_Actor=99,
-        //普通信息 S<->C
-        MessageType_Normal = 100,
         //->Login
         MessageType_2L = 101,
         //->Gateway
@@ -97,6 +99,9 @@ namespace wanderer
         Message *Setup(MessageType_ message_type);
 
         Message *Setup(MessageType_ message_type, const char *data, size_t size);
+
+        Message *Setup(MessageType_ message_type,int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty);
+
         // Message *Setup(MessageType_ message_type, MessageCode_ message_code, AppType_ inner_sender, AppType_ inner_receiver, const char *message);
 
         const char *Pack(const std::string &secret_key) override;

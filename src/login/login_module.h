@@ -18,10 +18,10 @@ namespace wanderer
 
         std::map<std::string, const Session *> login_sessions_;
 
-        //处理消息
-        void OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size);
+        // //处理消息
+        // void OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size);
 
-        void OnInnerMessageReceive(Session* session, MessageType_ message_type, jsonrpcpp::entity_ptr entity);
+        // void OnInnerMessageReceive(Session* session, MessageType_ message_type, jsonrpcpp::entity_ptr entity);
 
     public:
         LoginModule(System *system);

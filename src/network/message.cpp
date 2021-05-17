@@ -28,6 +28,22 @@ namespace wanderer
         return this;
     }
 
+
+    Message *Message::Setup(MessageType_ message_type,int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty)
+    {
+        buffer_.Flush();
+        char to_buffer[4];
+        char from_buffer[4];
+        Int2CharPointer(to_buffer,to_address);
+        Int2CharPointer(from_buffer,from_address);
+        buffer_.Write(to_buffer, 4);
+        buffer_.Write(from_buffer, 4);
+        auto message_data= message_entilty->to_json().dump();
+        buffer_.Write(message_data.c_str(),message_data.size());
+        return this;
+    }
+
+
     const char *Message::Pack(const std::string &secret_key)
     {
         //加密 - 压缩

@@ -41,7 +41,6 @@ file(GLOB_RECURSE base_src
 )
 
 file(GLOB_RECURSE src
-    "inner_session/*.*"
     "actor/*.*"
     "center/*.*"
     "login/*.*" 

@@ -5,6 +5,9 @@
 
 #include "base/module.h"
 #include "network/network_module.h"
+#include "actor/actor_module.h"
+#include "center/actor_auth.h"
+
 
 namespace wanderer
 {

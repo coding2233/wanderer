@@ -1,0 +1,22 @@
+#ifndef __ACTOR_AUTH_H__
+#define __ACTOR_AUTH_H__
+
+#include <iostream>
+
+
+#include "actor/actor.h"
+
+namespace wanderer 
+{
+    class ActorAuth:public Actor
+    {
+    protected:
+        void MailHandler(Mail mail) override;
+    public: 
+        ActorAuth(int address);
+        ~ActorAuth();
+    };
+}
+
+
+#endif

@@ -56,9 +56,9 @@ namespace wanderer
                   << "**" << std::endl;
     }
 
-    void SocketEpoll::Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char name, int fd)> inner_connected_callback)
+    void SocketEpoll::Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback)
     {
-        SocketBase::Setup(connected_callback, receive_callback, inner_connected_callback);
+        SocketBase::Setup(connected_callback, receive_callback);
 
         //创建epoll
         epoll_fd_ = epoll_create(MAX_EVENTS);
@@ -150,19 +150,8 @@ namespace wanderer
         return listen_socket_;
     }
 
-    void SocketEpoll::CreateConnectSocket(const char name, const char *server_ip, int server_port)
+    int SocketEpoll::CreateConnectSocket(const char *server_ip, int server_port)
     {
-        // int sleep_time(++sleep_time_);
-        // std::thread socket_thread(&SocketEpoll::CreateClientSocket, this, name, server_ip, server_port, sleep_time_);
-        // socket_thread.detach();
-         CreateClientSocket(name, server_ip, server_port, 0);
-    }
-
-    void SocketEpoll::CreateClientSocket(const char name, const char *server_ip, int server_port, int sleep_time)
-    {
-        sleep_time = 1.0;
-        // std::this_thread::sleep_for(std::chrono::seconds(sleep_time));
-
         int sock_client = socket(AF_INET, SOCK_STREAM, 0);
         sockaddr_in addr, server_addr;
         bzero(&addr, sizeof(addr));
@@ -189,13 +178,16 @@ namespace wanderer
             ev_.data.fd = sock_client;
             epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, sock_client, &ev_);
             //回调
-            inner_connected_callback_(name, sock_client);
+            // inner_connected_callback_(name, sock_client);
         }
         else if (result < 0)
         {
             throw std::runtime_error("Innner socket connect server fail !");
         }
+
+        return sock_client;
     }
+
 
     void SocketEpoll::Close()
     {

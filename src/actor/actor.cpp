@@ -20,6 +20,12 @@ namespace wanderer
         mtx_.unlock();
     }
 
+    void Actor::SendMail(int to_address,jsonrpcpp::entity_ptr message_entilty_)
+    {
+        
+    }
+
+
     void Actor::MailHandler(Mail mail)
     {
 

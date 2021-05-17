@@ -46,14 +46,12 @@ namespace wanderer
         std::map<int, std::queue<std::string>> message_sending_queue_;
         //设置非阻塞模式
         int SetNonblocking(int sfd);
-        //创建客户端段的socket
-        void CreateClientSocket(const char name, const char *server_ip, int server_port, int sleep_time);
 
     public:
         SocketEpoll(/* args */);
         ~SocketEpoll();
         //设置
-        virtual void Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback, std::function<void(const char name, int fd)> inner_connected_callback) override;
+        virtual void Setup(std::function<void(int)> connected_callback, std::function<void(int, const char *data, int size)> receive_callback) override;
         //循环
         void Loop() override;
         //关闭
@@ -63,7 +61,7 @@ namespace wanderer
         //创建服务端监听socket
         int CreateListenSocket(const char *server_ip, int server_port) override;
         //创建客户端的socket
-        void CreateConnectSocket(const char name, const char *server_ip, int server_port) override;
+        int CreateConnectSocket(const char *server_ip, int server_port) override;
 
     protected:
         //设置logo

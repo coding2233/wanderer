@@ -5,6 +5,8 @@
 #include <map>
 #include <queue>
 
+#include "actor/actor_module.h"
+#include "actor/actor_inner.h"
 #include "base/app_config.h"
 #include "base/module.h"
 #include "network/circle_buffer.h"
@@ -16,7 +18,6 @@
 #endif
 #include "network/session.h"
 //#include "network/protobuf_message_packer.h"
-#include "inner_session/inner_session_module.h"
 #include "utility/jsonrpcpp.hpp"
 #include "utility/pool.h"
 
@@ -36,10 +37,12 @@ namespace wanderer
         //session map
         std::map<int, Session *> sessions_;
         std::map<int, Session *>::iterator sessions_iter_;
-        std::vector<MESSAGE_RECEIVE> message_receiver_listeners_;
-        std::vector<MESSAGE_INNER_RECEIVE> inner_message_receiver_listeners_;
+        // std::vector<MESSAGE_RECEIVE> message_receiver_listeners_;
+        // std::vector<MESSAGE_INNER_RECEIVE> inner_message_receiver_listeners_;
         //
-        std::map<int, int> alltype_inner_session_;
+        // std::map<int, int> alltype_inner_session_;
+        //非center服务器都会由这个session
+        Session *inner_session_;
 
         //inner session map
         //std::map<std::string, Session *> inner_session_;
@@ -58,8 +61,6 @@ namespace wanderer
         void OnMessageSend(int fd, const char *message, size_t size);
         //处理消息
         void OnMessageReceive(Session *session, MessageType_, const char *, size_t);
-        //内部通信的回调
-        void OnInnerConnected(const char name, int fd);
 
     public:
         NetworkModule(System *system);
@@ -76,9 +77,14 @@ namespace wanderer
         //创建内部的交流通信
         void CreateInnerSession(AppType_ app_type, const char *server_ip, int server_port);
 
-        void AddReciveListener(MESSAGE_RECEIVE message_receive);
-        void AddInnerReceiveListener(MessageType_ message_type,MESSAGE_INNER_RECEIVE message_receive);
+        // void AddReciveListener(MESSAGE_RECEIVE message_receive);
+        // void AddInnerReceiveListener(MessageType_ message_type,MESSAGE_INNER_RECEIVE message_receive);
         //void RemoveReciveListener(MESSAGE_RECEIVE& message_receive);
+        
+        Session *SpawnSession(int fd);
+
+        Session *GetInnerSession() const;
+
     };
 
     // #ifdef __cplusplus

@@ -23,9 +23,7 @@ namespace wanderer
         ActorAddress_CENTER=-2,
         ActorAddress_DATABASE=-3,
         ActorAddress_GATEWAY=-4,
-        ActorAddress_LOGIN2CENTER=-5,
-        ActorAddress_DATABASE2CENTER=-6,
-        ActorAddress_GATEWAY2CENTER=-7,
+        ActorAddress_CENTER_AUTH = -5 
     };
 
     class ActorModule:public Module
@@ -50,13 +48,19 @@ public:
         void OnClose() override;
 
         template<class T>
-        void SpawnActor(int address=0)
+        Actor *SpawnActor(int address=0)
         {
+            if (address ==0) 
+            {
+                address=++actor_address_index;
+            }
             Actor *actor= dynamic_cast< Actor *>(new T(address));
             actors_.insert(std::pair<int, Actor*>(address, actor));
+            return actor;
         }
 
         void HandleMessage(Session *session,const char * data,size_t size);
+        
     };
 }
 #endif

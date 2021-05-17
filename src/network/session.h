@@ -27,6 +27,8 @@ namespace wanderer
         std::string secret_key_;
         bool inner_auth_ = false;
 
+        int request_index_;
+
         //   SocketBase *socket_;
         //   ProtobufMessagePacker *message_packer_;
         //  MESSAGE_CALLBACK message_callback_;
@@ -54,6 +56,10 @@ namespace wanderer
         void Send(IMessage *message);
         //发送信息
         void Send(MessageType_ message_type);
+        //发送信息
+        void Send(int to_address,int from_address,const std::string& method, const jsonrpcpp::Parameter& params = nullptr);
+        //发送消息
+        void Send(int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty);
         //内部认证
         void InnerAuth(AppType_ app_type);
         //接收的数据

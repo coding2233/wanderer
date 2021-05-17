@@ -1,9 +1,12 @@
 #include "network/network_module.h"
+#include "actor/actor_inner.h"
 namespace wanderer
 {
 
     NetworkModule::NetworkModule(System *system) : Module(system)
     {
+        inner_session_=nullptr;
+
         //message_packer_ = new ProtobufMessagePacker;
 #if WIN32
         throw std::runtime_error("IOCP not implemented yet!!");
@@ -17,9 +20,9 @@ namespace wanderer
 
         auto receive_callback = std::bind(&NetworkModule::OnReceiveData, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
         auto connect_callback = std::bind(&NetworkModule::OnConnected, this, std::placeholders::_1);
-        auto inner_connected_callback = std::bind(&NetworkModule::OnInnerConnected, this, std::placeholders::_1, std::placeholders::_2);
+        // auto inner_connected_callback = std::bind(&NetworkModule::OnInnerConnected, this, std::placeholders::_1, std::placeholders::_2);
 
-        socket_->Setup(connect_callback, receive_callback, inner_connected_callback);
+        socket_->Setup(connect_callback, receive_callback);
     }
 
     NetworkModule::~NetworkModule()
@@ -62,81 +65,72 @@ namespace wanderer
     {
         LOG(INFO) << "The client connects to the server: "
                   << " [" << fd << "]";
-
-        sessions_iter_ = sessions_.find(fd);
-        if (sessions_iter_ == sessions_.end())
-        {
-            Session *session = session_pool_.Pop();
-            session->Setup(fd, message_send_, message_receive_);
-            sessions_.insert(std::make_pair(fd, session));
-
-            session->Send(MessageType_Connected);
-            // session->Send(Message::Global.Setup(MessageType_Connected));
-        }
+        Session *session = SpawnSession(fd);
+        session->Send(MessageType_Connected);
     }
 
     void NetworkModule::OnMessageSend(int fd, const char *message, size_t size)
     {
         //size_t size = message_packer_->ToBytes(message);
         // int size = sizeof(message);
-        auto ais = alltype_inner_session_.find(fd);
-        if (ais != alltype_inner_session_.end())
-        {
-            LOG(INFO) << "Inner message session -> session: " << fd << " ---> " << ais->second << " head:" << std::to_string(message[4]) << std::endl;
-            OnReceiveData(ais->second, message, size);
-        }
-        else
-        {
-            socket_->SendData(fd, message, size);
-        }
+
+        socket_->SendData(fd, message, size);
     }
 
     void NetworkModule::OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size)
     {
-        if (message_type == MessageType_Exchange)
+        if (message_type == MessageType_Exchange && session==inner_session_)
         {
             auto app_type = GetSystem()->app_config_->app_type_;
             LOG(INFO) << "MessageType_Exchange " << std::to_string(app_type);
-            GetSystem()->GetModule<InnerSessionModule>()->InnerAuth(session);
-        }
-        else if (message_type == MessageType_InnerAuth)
-        {
-            auto app_type = (AppType_)data[0];
-            std::string secret_key(data + 1);
-            LOG(INFO) << "Internal session authentication key: " << data;
-            if (secret_key == GetSystem()->app_config_->secret_key_)
-            {
-                LOG(INFO) << "successful authentication!";
-                GetSystem()->GetModule<InnerSessionModule>()->AddInnerCenterSession(app_type, session);
-            }
+            auto actor = GetSystem()->GetModule<ActorModule>()->SpawnActor<ActorInner>();
+            // auto e = jsonrpcpp::Request(request_index_++,"auth",Json({user_name,password}));
+            session->Send((int)ActorAddress_CENTER_AUTH,actor->GetAddress(),"auth");
         }
         else 
         {
-            if (GetSystem()->GetModule<InnerSessionModule>()->IsInner(session))
-            {
-                LOG(INFO)<<"Other inner message parse jsonrpc: "<<std::string(data, size);
-                jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data, size));
-                for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
-                {
-                /*  for (auto imrl_iter = inner_message_receiver_listeners_.begin(); imrl_iter != inner_message_receiver_listeners_.end(); imrl_iter++)
-                    {
-                        if (imrl_iter->second== message_type)
-                        {
-                            imrl_iter->first(session, message_type,entity);
-                        }
-                    }*/
-                    inner_message_receiver_listeners_[i](session, message_type, entity);
-                }
-            }
-            else
-            {
-                LOG(INFO)<<"Other outer message : "<<std::string(data, size);
-                for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
-                {
-                    message_receiver_listeners_[i](session, message_type, data, size);
-                }
-            }
+            GetSystem()->GetModule<ActorModule>()->HandleMessage(session, data, size);
         }
+
+
+        // else if (message_type == MessageType_InnerAuth)
+        // {
+        //     auto app_type = (AppType_)data[0];
+        //     std::string secret_key(data + 1);
+        //     LOG(INFO) << "Internal session authentication key: " << data;
+        //     if (secret_key == GetSystem()->app_config_->secret_key_)
+        //     {
+        //         LOG(INFO) << "successful authentication!";
+        //         GetSystem()->GetModule<InnerSessionModule>()->AddInnerCenterSession(app_type, session);
+        //     }
+        // }
+        // else 
+        // {
+        //     if (GetSystem()->GetModule<InnerSessionModule>()->IsInner(session))
+        //     {
+        //         LOG(INFO)<<"Other inner message parse jsonrpc: "<<std::string(data, size);
+        //         jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data, size));
+        //         for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
+        //         {
+        //         /*  for (auto imrl_iter = inner_message_receiver_listeners_.begin(); imrl_iter != inner_message_receiver_listeners_.end(); imrl_iter++)
+        //             {
+        //                 if (imrl_iter->second== message_type)
+        //                 {
+        //                     imrl_iter->first(session, message_type,entity);
+        //                 }
+        //             }*/
+        //             inner_message_receiver_listeners_[i](session, message_type, entity);
+        //         }
+        //     }
+        //     else
+        //     {
+        //         LOG(INFO)<<"Other outer message : "<<std::string(data, size);
+        //         for (size_t i = 0; i < message_receiver_listeners_.size(); i++)
+        //         {
+        //             message_receiver_listeners_[i](session, message_type, data, size);
+        //         }
+        //     }
+        // }
         
         // delete message;
     }
@@ -151,26 +145,25 @@ namespace wanderer
     {
         LOG(INFO) << "Waiting for inner session connecting, app_type: "
                   << std::to_string(app_type) << " server: " << server_ip << ":" << server_port;
-        if (GetSystem()->app_config_->app_type_ == AppType_All)
-        {
-            int fd_c = -99 - (int)app_type;
-            //模拟服务器连接
-            int fd_s = -999 - (int)app_type;
-            // --- 添加所有的内部通信
-            alltype_inner_session_.insert(std::make_pair(fd_c, fd_s));
-            alltype_inner_session_.insert(std::make_pair(fd_s, fd_c));
-            //模拟连接
-            OnInnerConnected(app_type, fd_c);
-            OnConnected(fd_s);
-        }
-        else
-        {
-            socket_->CreateConnectSocket(app_type, server_ip, server_port);
-        }
+        int conn_fd =socket_->CreateConnectSocket(server_ip, server_port);
+        inner_session_= SpawnSession(conn_fd);
     }
 
-    void NetworkModule::OnInnerConnected(const char name, int fd)
-    {
+
+    // void NetworkModule::AddReciveListener(MESSAGE_RECEIVE message_receive)
+    // {
+    //     message_receiver_listeners_.push_back(message_receive);
+    // }
+
+    // void NetworkModule::AddInnerReceiveListener(MessageType_ message_type, MESSAGE_INNER_RECEIVE message_receive)
+    // {
+    //     inner_message_receiver_listeners_.push_back(message_receive);
+    //     //inner_message_receiver_listeners_.insert(std::make_pair( message_receive, message_type));
+    // }
+
+
+     Session *NetworkModule::SpawnSession(int fd)
+     {
         sessions_iter_ = sessions_.find(fd);
         if (sessions_iter_ == sessions_.end())
         {
@@ -178,19 +171,16 @@ namespace wanderer
             session->Setup(fd, message_send_, message_receive_);
             sessions_.insert(std::make_pair(fd, session));
             //内部的session
-            GetSystem()->GetModule<InnerSessionModule>()->AddInnerSession(name, session);
+            // GetSystem()->GetModule<InnerSessionModule>()->AddInnerSession(name, session);
+            return  session;
         }
-    }
+        
+        return sessions_iter_->second;
+     }
 
-    void NetworkModule::AddReciveListener(MESSAGE_RECEIVE message_receive)
+    Session *NetworkModule::GetInnerSession() const
     {
-        message_receiver_listeners_.push_back(message_receive);
-    }
-
-    void NetworkModule::AddInnerReceiveListener(MessageType_ message_type, MESSAGE_INNER_RECEIVE message_receive)
-    {
-        inner_message_receiver_listeners_.push_back(message_receive);
-        //inner_message_receiver_listeners_.insert(std::make_pair( message_receive, message_type));
+        return inner_session_;
     }
 
 

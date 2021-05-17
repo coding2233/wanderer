@@ -3,13 +3,9 @@
 
 #include <queue>
 #include <mutex>
-#if __unix
-#include <bits/stdint-intn.h>
-#endif
 
 #include "network/session.h"
 #include "utility/jsonrpcpp.hpp"
-
 
 namespace wanderer 
 {
@@ -21,9 +17,9 @@ namespace wanderer
 
         Mail(Session* session,jsonrpcpp::entity_ptr message_entilty, int from_address)
         {
-            session_=session;
-            message_entilty_=message_entilty;
-            from_address_=from_address;
+            session_ = session;
+            message_entilty_ = message_entilty;
+            from_address_ = from_address;
         }
     };
 
@@ -46,6 +42,7 @@ namespace wanderer
 
         void ToMailBox(Mail mail);
 
+        void SendMail(int to_address,jsonrpcpp::entity_ptr message_entilty_);
 
         void Handle();
     };

@@ -50,7 +50,6 @@ namespace wanderer
     void App::InitModule(AppConfig *app_config)
     {
         NetworkModule *network_module = new NetworkModule(system_);
-        InnerSessionModule *inner_session_module = new InnerSessionModule(system_);
         ActorModule *actor_module = new ActorModule(system_);
 
         CenterModule *center_module = nullptr;
@@ -66,9 +65,8 @@ namespace wanderer
             // network_module->CreateInnerSession(AppType_Center, app_config->center_ip_.c_str(), app_config->center_port_);
             // network_module->CreateInnerSession(AppType_Battle, app_config->center_ip_.c_str(), app_config->center_port_);
 
-            // center_module = new CenterModule(system_);
-            // center_module = new CenterModule(system_);
             // gateway_module = new GatewayModule(system_);
+            center_module = new CenterModule(system_);
             login_module = new LoginModule(system_);
 
             break;
@@ -102,7 +100,6 @@ namespace wanderer
 
         //Add modules to map
         AddModule(network_module);
-        AddModule(inner_session_module);
         AddModule(center_module);
         AddModule(login_module);
         AddModule(gateway_module);
@@ -110,6 +107,11 @@ namespace wanderer
 
         //load custom module
         CustomModule custom_module(&modules_, system_);
+
+        if (app_config->app_type_ != AppType_Center) 
+        {
+            network_module->CreateInnerSession(app_config->app_type_, app_config->center_ip_.c_str(), app_config->center_port_);
+        }
     }
 
     void App::Init()

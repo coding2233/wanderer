@@ -1,5 +1,7 @@
 #include "network/session.h"
+#include "utility/jsonrpcpp.hpp"
 #include "utility/pool.h"
+#include <memory>
 #include <string>
 
 namespace wanderer
@@ -22,6 +24,8 @@ namespace wanderer
         fd_ = fd;
         message_send_ = message_send;
         message_receive_ = message_receive;
+
+        request_index_=0;
     }
 
     void Session::Send(IMessage *message)
@@ -37,6 +41,23 @@ namespace wanderer
     {
         Message *message = new Message();
         message->Setup(message_type);
+        Send(message);
+        delete message;
+    }
+
+    void Session::Send(int to_address,int from_address,const std::string& method, const jsonrpcpp::Parameter& params)
+    {
+        request_index_=0;
+
+        jsonrpcpp::Request request = jsonrpcpp::Request(request_index_++,method,params);
+        jsonrpcpp::request_ptr r = std::make_unique<jsonrpcpp::Request>(request);
+        Send(to_address,from_address,r);
+    }
+
+    void Session::Send(int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty)
+    {
+        Message *message = new Message();
+        message->Setup(MessageType_Actor,to_address,from_address,message_entilty);
         Send(message);
         delete message;
     }
