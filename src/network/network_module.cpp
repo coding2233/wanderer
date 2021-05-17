@@ -1,5 +1,6 @@
 #include "network/network_module.h"
 #include "actor/actor_inner.h"
+#include "utility/jsonrpcpp.hpp"
 namespace wanderer
 {
 
@@ -82,10 +83,11 @@ namespace wanderer
         if (message_type == MessageType_Exchange && session==inner_session_)
         {
             auto app_type = GetSystem()->app_config_->app_type_;
+            std::string secret_key = GetSystem()->app_config_->secret_key_;
             LOG(INFO) << "MessageType_Exchange " << std::to_string(app_type);
             auto actor = GetSystem()->GetModule<ActorModule>()->SpawnActor<ActorInner>();
             // auto e = jsonrpcpp::Request(request_index_++,"auth",Json({user_name,password}));
-            session->Send((int)ActorAddress_CENTER_AUTH,actor->GetAddress(),"auth");
+            session->Send((int)ActorAddress_CENTER_AUTH,actor->GetAddress(),"auth",Json({(int)app_type,secret_key}));
         }
         else 
         {

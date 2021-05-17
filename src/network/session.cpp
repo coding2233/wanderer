@@ -20,7 +20,7 @@ namespace wanderer
 
     void Session::Setup(int fd, MESSAGE_SEND message_send, MESSAGE_RECEIVE message_receive)
     {
-        inner_auth_ = false;
+        // inner_auth_ = false;
         fd_ = fd;
         message_send_ = message_send;
         message_receive_ = message_receive;
@@ -48,10 +48,8 @@ namespace wanderer
     void Session::Send(int to_address,int from_address,const std::string& method, const jsonrpcpp::Parameter& params)
     {
         request_index_=0;
-
-        jsonrpcpp::Request request = jsonrpcpp::Request(request_index_++,method,params);
-        jsonrpcpp::request_ptr r = std::make_unique<jsonrpcpp::Request>(request);
-        Send(to_address,from_address,r);
+        std::make_shared<jsonrpcpp::Request> request(new jsonrpcpp::Request(request_index_++,method,params));
+        Send(to_address,from_address,request);
     }
 
     void Session::Send(int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty)
@@ -63,22 +61,22 @@ namespace wanderer
     }
 
     //内部认证
-    void Session::InnerAuth(AppType_ app_type)
-    {
-        if (inner_auth_)
-        {
-            return;
-        }
+    // void Session::InnerAuth(AppType_ app_type)
+    // {
+    //     if (inner_auth_)
+    //     {
+    //         return;
+    //     }
 
-        std::string auth_str_data = std::to_string((char)app_type) + System::app_config_->secret_key_;
-        const char *auth_data = auth_str_data.c_str();
-        LOG(INFO) << "Internal authentication request: " << std::to_string(app_type) << " " << System::app_config_->secret_key_;
-        Message *auth_message = new Message();
-        auth_message->Setup(MessageType_InnerAuth, auth_data, auth_str_data.size());
-        Send(auth_message);
-        delete auth_message;
-        inner_auth_ = true;
-    }
+    //     std::string auth_str_data = std::to_string((char)app_type) + System::app_config_->secret_key_;
+    //     const char *auth_data = auth_str_data.c_str();
+    //     LOG(INFO) << "Internal authentication request: " << std::to_string(app_type) << " " << System::app_config_->secret_key_;
+    //     Message *auth_message = new Message();
+    //     auth_message->Setup(MessageType_InnerAuth, auth_data, auth_str_data.size());
+    //     Send(auth_message);
+    //     delete auth_message;
+    //     inner_auth_ = true;
+    // }
 
     void Session::Receive(const char *data, int size)
     {

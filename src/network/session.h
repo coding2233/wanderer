@@ -25,7 +25,7 @@ namespace wanderer
         int fd_;
         //AES密钥
         std::string secret_key_;
-        bool inner_auth_ = false;
+        // bool inner_auth_ = false;
 
         int request_index_;
 
@@ -61,7 +61,7 @@ namespace wanderer
         //发送消息
         void Send(int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty);
         //内部认证
-        void InnerAuth(AppType_ app_type);
+        // void InnerAuth(AppType_ app_type);
         //接收的数据
         void Receive(const char *data, int size);
     };
