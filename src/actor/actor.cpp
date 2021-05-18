@@ -55,6 +55,9 @@ namespace wanderer
 
     void Actor::Handle()
     {
+        if (processing_)
+            return;
+
         processing_ = true;
         LOG(DEBUG) << "Actor::Handle() mail_box_.size(): " << mail_box_.size();
         if (mail_box_.size() > 0)

@@ -72,15 +72,15 @@ namespace wanderer
 
     void NetworkModule::OnMessageSend(int fd, const char *message, size_t size)
     {
-        if (fd == -99)
-        {
-            OnReceiveData(-999, message, size);
-        }
-        else if (fd == -999)
-        {
-            OnReceiveData(-99, message, size);
-        }
-        else
+        // if (fd == -99)
+        // {
+        //     OnReceiveData(-999, message, size);
+        // }
+        // else if (fd == -999)
+        // {
+        //     OnReceiveData(-99, message, size);
+        // }
+        // else
         {
             socket_->SendData(fd, message, size);
         }
@@ -121,14 +121,14 @@ namespace wanderer
         LOG(INFO) << "Waiting for inner session connecting, app_type: "
                   << std::to_string(app_type) << " server: " << server_ip << ":" << server_port;
         int fd_c = -1;
-        if (app_type == AppType_All)
-        {
-            fd_c = -99;
-            int fd_s = -999;
-            inner_session_ = SpawnSession(fd_c);
-            OnConnected(fd_s);
-        }
-        else
+        // if (app_type == AppType_All)
+        // {
+        //     fd_c = -99;
+        //     int fd_s = -999;
+        //     inner_session_ = SpawnSession(fd_c);
+        //     OnConnected(fd_s);
+        // }
+        // else
         {
             fd_c = socket_->CreateConnectSocket(server_ip, server_port);
             inner_session_ = SpawnSession(fd_c);

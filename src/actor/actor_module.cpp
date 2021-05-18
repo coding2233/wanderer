@@ -32,26 +32,27 @@ namespace wanderer
     //循环
     void ActorModule::OnUpdate()
     {
+        if (work_actors_.size() == 0)
+            return;
         // LOG(INFO) << "[00] ActorModule::OnUpdate() work_actors_.size(): " << work_actors_.size();
 
-        // if (work_actors_.size() == 0)
-        //     return;
-        // // for (auto iter = work_actors_.begin(); iter != work_actors_.end(); iter++)
-        // // {
-        // //     Actor *actor = (*iter);
-        // //     int state = actor->GetState();
-        // //     if (state == 1)
-        // //     {
-        // //         thread_pool_->enqueue([](Actor *actor)
-        // //                               { actor->Handle(); },
-        // //                               actor);
-        // //     }
-        // //     else if (state == 0)
-        // //     {
-        // //         work_actors_.erase(iter++);
-        // //         // break;
-        // //     }
-        // // }
+        for (auto iter = work_actors_.begin(); iter != work_actors_.end(); iter++)
+        {
+            Actor *actor = (*iter);
+            int state = actor->GetState();
+            if (state == 1)
+            {
+                thread_pool_->enqueue([](Actor *actor)
+                                      { actor->Handle(); },
+                                      actor);
+            }
+            else if (state == 0)
+            {
+                work_actors_.erase(iter);
+                // work_actors_.erase(iter++);
+                break;
+            }
+        }
     }
 
     //关闭
@@ -91,24 +92,6 @@ namespace wanderer
                 LOG(INFO) << "Get ready for email. " << to_address << " work_actors_.size(): " << work_actors_.size();
                 work_actors_.push_back(actor);
             }
-
-            // //Exec
-            // for (auto iter = work_actors_.begin(); iter != work_actors_.end(); iter++)
-            // {
-            //     Actor *actor = (*iter);
-            //     int state = actor->GetState();
-            //     if (state == 1)
-            //     {
-            //         thread_pool_->enqueue([](Actor *actor)
-            //                               { actor->Handle(); },
-            //                               actor);
-            //     }
-            //     else if (state == 0)
-            //     {
-            //         work_actors_.erase(iter++);
-            //         // break;
-            //     }
-            // }
         }
         else
         {
