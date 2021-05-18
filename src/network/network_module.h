@@ -5,8 +5,8 @@
 #include <map>
 #include <queue>
 
+#include "actor/actor_auth.h"
 #include "actor/actor_module.h"
-#include "actor/actor_inner.h"
 #include "base/app_config.h"
 #include "base/module.h"
 #include "network/circle_buffer.h"
@@ -28,7 +28,6 @@ namespace wanderer
 
     class NetworkModule : public Module
     {
-
     private:
         //socket epoll
         SocketBase *socket_;
@@ -36,19 +35,12 @@ namespace wanderer
         Pool<Session> session_pool_;
         //session map
         std::map<int, Session *> sessions_;
-        // std::map<int, Session *>::iterator sessions_iter_;
-        // std::vector<MESSAGE_RECEIVE> message_receiver_listeners_;
-        // std::vector<MESSAGE_INNER_RECEIVE> inner_message_receiver_listeners_;
-        //
-        // std::map<int, int> alltype_inner_session_;
+
         //非center服务器都会由这个session
         Session *inner_session_;
+        //内部会话是否通过验证
+        bool inner_session_auth_;
 
-        //inner session map
-        //std::map<std::string, Session *> inner_session_;
-        //std::map<std::string, Session *>::iterator inner_session_iter_;
-        //消息打包
-        //ProtobufMessagePacker *message_packer_;
         //消息发送绑定
         MESSAGE_SEND message_send_;
         //消息绑定回调
@@ -80,11 +72,10 @@ namespace wanderer
         // void AddReciveListener(MESSAGE_RECEIVE message_receive);
         // void AddInnerReceiveListener(MessageType_ message_type,MESSAGE_INNER_RECEIVE message_receive);
         //void RemoveReciveListener(MESSAGE_RECEIVE& message_receive);
-        
+
         Session *SpawnSession(int fd);
 
-        // Session *GetInnerSession() const;
-
+        Session *GetInnerSession();
     };
 
     // #ifdef __cplusplus

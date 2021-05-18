@@ -6,8 +6,8 @@
 #include "base/app_config.h"
 #include "base/easylogging++.h"
 #include "network/circle_buffer.h"
-#include "utility/openssl_utility.h"
 #include "utility/jsonrpcpp.hpp"
+#include "utility/openssl_utility.h"
 
 // #include "zlib.h"
 namespace wanderer
@@ -28,31 +28,11 @@ namespace wanderer
         MessageType_SecretKey = 1,
         //可通信交流 S->C
         MessageType_Exchange = 2,
-        //内部通信认证 C->S
-        MessageType_InnerAuth = 3,
-        //心跳包 S->C
-        MessageType_Heartbeat = 9,
-        //普通信息 S<->C
-        MessageType_Normal = 90,
-        //actor消息
-        MessageType_Actor=99,
-        //->Login
-        MessageType_2L = 101,
-        //->Gateway
-        MessageType_2G = 102,
-        //->Center
-        MessageType_2C = 103,
-        //->Database
-        MessageType_2D = 104,
+
+        //actor消息 - 普通消息
+        MessageType_Actor = 99,
     };
 
-    // enum MessageCode_ : unsigned char
-    // {
-    //     MessageCode_Login_C2S = 0,
-    //     MessageCode_Login_S2C = 1,
-    //     MessageCode_UserInfo_L2D = 2,
-    //     MessageCode_UserInfo_D2L = 3,
-    // };
     /*
     传输数据:
     |0000|*|
@@ -100,7 +80,7 @@ namespace wanderer
 
         Message *Setup(MessageType_ message_type, const char *data, size_t size);
 
-        Message *Setup(MessageType_ message_type,int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty);
+        Message *Setup(MessageType_ message_type, int to_address, int from_address, jsonrpcpp::entity_ptr message_entilty);
 
         // Message *Setup(MessageType_ message_type, MessageCode_ message_code, AppType_ inner_sender, AppType_ inner_receiver, const char *message);
 

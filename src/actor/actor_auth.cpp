@@ -1,21 +1,20 @@
-#include "actor/actor_inner.h"
-#include "actor/actor.h"
+#include "actor/actor_auth.h"
 
 namespace wanderer
 {
 
-    ActorInner::ActorInner() : Actor()
+    ActorAuth::ActorAuth() : Actor()
     {
-        LOG(DEBUG) << "ActorInner::ActorInner ";
+        LOG(DEBUG) << "ActorAuth::ActorAuth ";
     }
 
-    ActorInner::~ActorInner()
+    ActorAuth::~ActorAuth()
     {
     }
 
-    void ActorInner::MailHandler(Mail mail)
+    void ActorAuth::MailHandler(Mail mail)
     {
-        LOG(DEBUG) << "ActorInner::MailHandler(Mail mail): " << mail.from_address_;
+        LOG(DEBUG) << "ActorAuth::MailHandler(Mail mail): " << mail.from_address_;
 
         if (mail.message_->is_response())
         {

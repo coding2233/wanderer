@@ -1,12 +1,11 @@
 #include "network/network_module.h"
-#include "actor/actor_inner.h"
-#include "utility/jsonrpcpp.hpp"
 namespace wanderer
 {
 
     NetworkModule::NetworkModule(System *system) : Module(system)
     {
         inner_session_ = nullptr;
+        inner_session_auth_ = false;
 
         //message_packer_ = new ProtobufMessagePacker;
 #if WIN32
@@ -102,10 +101,10 @@ namespace wanderer
                 auto app_type = GetSystem()->app_config_->app_type_;
                 std::string secret_key = GetSystem()->app_config_->secret_key_;
                 LOG(INFO) << "MessageType_Exchange " << std::to_string(app_type);
-                static ActorInner actor_inner;
-                LOG(DEBUG) << "ActorInner actor_inner " << actor_inner.GetAddress();
-                GetSystem()->GetModule<ActorModule>()->Register(&actor_inner, 0);
-                session->Send((int)ActorAddress_CENTER, actor_inner.GetAddress(), "auth", Json({(int)app_type, secret_key}));
+                static ActorAuth actor_auth;
+                LOG(DEBUG) << "ActorInner actor_inner " << actor_auth.GetAddress();
+                GetSystem()->GetModule<ActorModule>()->Register(&actor_auth);
+                session->Send((int)ActorAddress_CENTER, actor_auth.GetAddress(), "auth", Json({(int)app_type, secret_key}));
             }
         }
     }
@@ -120,6 +119,7 @@ namespace wanderer
     {
         LOG(INFO) << "Waiting for inner session connecting, app_type: "
                   << std::to_string(app_type) << " server: " << server_ip << ":" << server_port;
+        inner_session_auth_ = false;
         int fd_c = -1;
         // if (app_type == AppType_All)
         // {
@@ -149,9 +149,13 @@ namespace wanderer
         return iter->second;
     }
 
-    // Session *NetworkModule::GetInnerSession() const
-    // {
-    //     return inner_session_;
-    // }
+    Session *NetworkModule::GetInnerSession()
+    {
+        if (inner_session_auth_)
+        {
+            return inner_session_;
+        }
+        return nullptr;
+    }
 
 } // namespace wanderer

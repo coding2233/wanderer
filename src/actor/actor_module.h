@@ -9,7 +9,7 @@
 #endif
 
 #include "actor/actor.h"
-#include "actor/actor_inner.h"
+#include "actor/actor_auth.h"
 #include "base/module.h"
 #include "network/session.h"
 #include "utility/jsonrpcpp.hpp"
@@ -32,7 +32,7 @@ namespace wanderer
 
         SEND_MAIL send_mail_;
 
-        std::map<int,Session* > sessions_;
+        std::map<int, Session *> sessions_;
 
     public:
         ActorModule(System *system);
