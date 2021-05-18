@@ -4,7 +4,6 @@
 #include <functional>
 #include <iostream>
 #include <map>
-#include <functional>
 
 #include "socket_client_base.h"
 #if unix
@@ -13,17 +12,18 @@
 #include "socket_windows.h"
 #endif
 
+#include "actor/actor.h"
 #include "network/circle_buffer.h"
 #include "network/message.h"
+#include "utility/jsonrpcpp.hpp"
 #include "utility/openssl_utility.h"
 #include "utility/utility.h"
-#include "utility/jsonrpcpp.hpp"
 
 namespace wanderer
 {
 
-#define CONNECT_CALLBACK std::function<void(bool,std::string)>
-#define LOGIN_CALLBACK std::function<void(bool,std::string)>
+#define CONNECT_CALLBACK std::function<void(bool, std::string)>
+#define LOGIN_CALLBACK std::function<void(bool, std::string)>
 
     struct SessionData
     {
@@ -46,6 +46,9 @@ namespace wanderer
         bool login_connected_;
         bool gateway_connected_;
 
+        int login_address_;
+        int gateway_address_;
+
         std::string gateway_key_;
 
         CONNECT_CALLBACK connect_callback_;
@@ -61,7 +64,7 @@ namespace wanderer
         Network(/* args */);
         ~Network();
 
-        int Connect(const char *server_ip, int server_port,CONNECT_CALLBACK connect_callback);
+        int Connect(const char *server_ip, int server_port, CONNECT_CALLBACK connect_callback);
 
         void DisConnect();
 
@@ -69,7 +72,7 @@ namespace wanderer
 
         void Update();
 
-        void Login(const char *user_name, const char *password,LOGIN_CALLBACK login_callback);
+        void Login(const char *user_name, const char *password, LOGIN_CALLBACK login_callback);
     };
 }
 

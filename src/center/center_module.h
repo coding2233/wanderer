@@ -15,6 +15,7 @@ namespace wanderer
     private:
         /* data */
         // InnerSession *inner_session_;
+        std::map<int, int> forward_address_;
 
     public:
         CenterModule(System *system);
@@ -28,6 +29,8 @@ namespace wanderer
         void OnClose() override;
 
         void AppAuth(AppType_ app_type, int address);
+
+        int ForwardAddress(int address);
     };
 } // namespace wanderer
 #endif

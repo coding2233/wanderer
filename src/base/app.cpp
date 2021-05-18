@@ -120,7 +120,7 @@ namespace wanderer
         //初始化完所有操作后，才进行内部通信的连接
         AppConfig *app_config = System::app_config_;
         NetworkModule *network_module = System::GetModule<NetworkModule>();
-        if (app_config->app_type_ != AppType_Center)
+        if (app_config->app_type_ != AppType_Center && app_config->app_type_ != AppType_All)
         {
             network_module->CreateInnerSession(app_config->app_type_, app_config->center_ip_.c_str(), app_config->center_port_);
         }

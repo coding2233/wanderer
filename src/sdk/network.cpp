@@ -14,39 +14,39 @@ namespace wanderer
 #elif unix
         socket_ = new SocketUnix;
 #endif
-       socket_->Setup(std::bind(&Network::OnReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-    
-        std::cout<<"socket_ address:"<<socket_<<std::endl;
+        socket_->Setup(std::bind(&Network::OnReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+
+        std::cout << "socket_ address:" << socket_ << std::endl;
     }
 
     Network::~Network()
     {
-        std::cout<<"Network::~Network() "<<std::endl;
-         delete socket_;
+        std::cout << "Network::~Network() " << std::endl;
+        delete socket_;
     }
 
-    int Network::Connect(const char *server_ip, int server_port,CONNECT_CALLBACK connect_callback)
+    int Network::Connect(const char *server_ip, int server_port, CONNECT_CALLBACK connect_callback)
     {
-        if (login_connected_) 
+        if (login_connected_)
         {
-            connect_callback(false,"The login server has been connected.");
+            connect_callback(false, "The login server has been connected.");
             return -1;
         }
-        connect_callback_=connect_callback;
-        std::cout<<"Network connect !ip:"<<server_ip<<" port:"<<server_port<<std::endl;
+        connect_callback_ = connect_callback;
+        std::cout << "Network connect !ip:" << server_ip << " port:" << server_port << std::endl;
 
-        int fd=socket_->Connect(server_ip, server_port);
-        login_fd_=fd;
-        login_connected_=true;
+        int fd = socket_->Connect(server_ip, server_port);
+        login_fd_ = fd;
+        login_connected_ = true;
         return fd;
     }
 
     int Network::ConnectGateway(const char *server_ip, int server_port)
     {
-        std::cout<<"Network ConnectGateway !ip:"<<server_ip<<" port:"<<server_port<<std::endl;
-        int fd=socket_->Connect(server_ip, server_port);
-        gateway_fd_=fd;
-        gateway_connected_=true;
+        std::cout << "Network ConnectGateway !ip:" << server_ip << " port:" << server_port << std::endl;
+        int fd = socket_->Connect(server_ip, server_port);
+        gateway_fd_ = fd;
+        gateway_connected_ = true;
         return fd;
     }
 
@@ -128,18 +128,21 @@ namespace wanderer
             else if (msg_type == MessageType_Exchange)
             {
                 std::cout << "MessageType_Exchange!" << std::endl;
+                int address = CharPointer2Int(data_message);
                 if (fd == login_fd_)
                 {
-                    connect_callback_(true,"");
+                    login_address_ = address;
+                    connect_callback_(true, "");
                 }
                 else if (fd == gateway_fd_)
                 {
+                    gateway_address_ = address;
                 }
             }
             else
             {
-                jsonrpcpp::entity_ptr entity=  jsonrpc_parser_.parse(std::string(data_message, data_message_size));
-                OnJsonRpcReceive(fd,entity);
+                jsonrpcpp::entity_ptr entity = jsonrpc_parser_.parse(std::string(data_message, data_message_size));
+                OnJsonRpcReceive(fd, entity);
             }
             delete message;
         }
@@ -147,11 +150,11 @@ namespace wanderer
 
     void Network::OnJsonRpcReceive(int fd, jsonrpcpp::entity_ptr entity)
     {
-        if (entity) 
+        if (entity)
         {
-            if (entity->is_response()) 
+            if (entity->is_response())
             {
-                std::cout<<"entity->is_response(): "<<entity->to_json().dump()<<std::endl;
+                std::cout << "entity->is_response(): " << entity->to_json().dump() << std::endl;
             }
         }
         // if (fd == login_fd_)
@@ -176,7 +179,7 @@ namespace wanderer
         return secret_key;
     }
 
-    void Network::Login(const char *user_name, const char *password,LOGIN_CALLBACK login_callback)
+    void Network::Login(const char *user_name, const char *password, LOGIN_CALLBACK login_callback)
     {
         if (!login_connected_)
         {
@@ -184,12 +187,12 @@ namespace wanderer
         }
 
         login_callback_ = login_callback;
-  
-        jsonrpcpp::Request login_request = jsonrpcpp::Request(request_index_++,"login",Json({user_name,password}));
-        auto data= login_request.to_json().dump();
-        std::string message_data(data.c_str(),data.size());
+
+        jsonrpcpp::request_ptr login_request = std::make_shared<jsonrpcpp::Request>(request_index_++, "login", Json({user_name, password}));
+        // auto data = login_request.to_json().dump();
+        // std::string message_data(data.c_str(), data.size());
         Message message;
-        message.Setup(MessageType_2L,message_data.c_str(),message_data.size());
+        message.Setup(MessageType_Actor, ActorAddress_LOGIN, login_address_, login_request);
         Send(login_fd_, &message);
     }
 

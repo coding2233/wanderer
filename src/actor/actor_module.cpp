@@ -100,7 +100,8 @@ namespace wanderer
             //找不到目标地址，就全由center转发
             if (GetSystem()->app_config_->app_type_ == AppType_Center)
             {
-                auto forward_iter = sessions_.find(to_address);
+                int forward_address = GetSystem()->GetModule<CenterModule>()->ForwardAddress(to_address);
+                auto forward_iter = sessions_.find(forward_address);
                 if (forward_iter != sessions_.end())
                 {
                     forward_iter->second->Send(MessageType_Actor, data, size);

@@ -37,11 +37,11 @@ add_subdirectory(module)
 file(GLOB_RECURSE base_src
     "base/*.*"
     "network/*.*"
-    "utility/*.*"    
+    "utility/*.*"   
+    "actor/*.*" 
 )
 
 file(GLOB_RECURSE src
-    "actor/*.*"
     "center/*.*"
     "login/*.*" 
     "gateway/*.*")

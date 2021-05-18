@@ -22,7 +22,7 @@ namespace wanderer
             Json result = response->to_json();
             bool success = result["result"][0].get<bool>();
             int new_address = result["result"][1].get<int>();
-            System::GetModule<ActorModule>()->UpdateAddress(GetAddress(), new_address, this);
+            // System::GetModule<ActorModule>()->UpdateAddress(GetAddress(), new_address, this);
             System::GetModule<NetworkModule>()->InnerSessionAuth(success);
             if (success)
             {
