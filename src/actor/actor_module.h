@@ -11,6 +11,7 @@
 #include "actor/actor.h"
 #include "actor/actor_auth.h"
 #include "base/module.h"
+#include "center/center_module.h"
 #include "network/session.h"
 #include "utility/jsonrpcpp.hpp"
 #include "utility/thread_pool.h"
@@ -22,6 +23,7 @@ namespace wanderer
     {
     private:
         int actor_address_index;
+        int actor_address_center_index;
 
         int thread_count_;
         ThreadPool *thread_pool_;
@@ -46,6 +48,10 @@ namespace wanderer
         void OnClose() override;
 
         void Register(Actor *actor, int address = 0);
+
+        void UpdateAddress(int old_address, int new_address, Actor *actor);
+
+        int GetNewAddress();
 
         void HandleMessage(Session *session, const char *data, size_t size);
 

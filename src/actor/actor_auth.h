@@ -3,6 +3,7 @@
 
 #include "actor/actor.h"
 #include "base/easylogging++.h"
+#include "network/network_module.h"
 
 namespace wanderer
 {

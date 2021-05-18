@@ -10,11 +10,13 @@ namespace wanderer
     ActorModule::ActorModule(System *system) : Module(system)
     {
         actor_address_index = 0;
+        actor_address_center_index = (int)ActorAddress_CENTER_START_INDEX;
         thread_count_ = 16;
 #if __unix__
         //Only Linux gets the number of CPUs
         thread_count_ = sysconf(_SC_NPROCESSORS_ONLN) * 2;
 #endif
+        LOG(INFO) << "[ActorModule] Number of threads: " << thread_count_;
         thread_pool_ = new ThreadPool(thread_count_);
 
         send_mail_ = std::bind(&ActorModule::SendMail, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
@@ -111,6 +113,34 @@ namespace wanderer
         actors_[address] = actor;
     }
 
+    void ActorModule::UpdateAddress(int old_address, int new_address, Actor *actor)
+    {
+        auto iter = actors_.find(old_address);
+        if (iter != actors_.end())
+        {
+            actors_.erase(iter);
+        }
+        // iter = actors_.find(new_address);
+        // if (iter != actors_.end()||)
+        // {
+        //     /* code */
+        // }
+        Register(actor, new_address);
+        //更新地址对应的session
+        auto session_iter = sessions_.find(old_address);
+        if (session_iter != sessions_.end())
+        {
+            Session *session = session_iter->second;
+            sessions_.erase(session_iter);
+            sessions_[new_address] = session;
+        }
+    }
+
+    int ActorModule::GetNewAddress()
+    {
+        return --actor_address_center_index;
+    }
+
     void ActorModule::SendMail(int to_address, int from_address, jsonrpcpp::entity_ptr message_entilty_)
     {
         auto iter = sessions_.find(to_address);
@@ -120,7 +150,16 @@ namespace wanderer
         }
         else
         {
-            LOG(ERROR) << "No Session corresponding to the address was found! [" << to_address << "]";
+            if (GetSystem()->app_config_->app_type_ != AppType_Center)
+            {
+                auto inner_session = GetSystem()->GetModule<NetworkModule>()->GetInnerSession();
+                inner_session->Send(to_address, from_address, message_entilty_);
+            }
+            else
+            {
+                // GetSystem()->GetModule<CenterModule>()->
+                LOG(ERROR) << "No Session corresponding to the address was found! [" << to_address << "]";
+            }
         }
     }
 

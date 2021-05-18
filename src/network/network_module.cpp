@@ -149,6 +149,11 @@ namespace wanderer
         return iter->second;
     }
 
+    void NetworkModule::InnerSessionAuth(bool success)
+    {
+        inner_session_auth_ = success;
+    }
+
     Session *NetworkModule::GetInnerSession()
     {
         if (inner_session_auth_)

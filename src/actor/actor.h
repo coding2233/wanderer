@@ -30,10 +30,13 @@ namespace wanderer
 
     enum ActorAddress_ : int
     {
-        ActorAddress_LOGIN = -1,
-        ActorAddress_CENTER = -2,
-        ActorAddress_DATABASE = -3,
-        ActorAddress_GATEWAY = -4,
+        ActorAddress_START_INDEX = 0,
+        ActorAddress_ALL = -1,
+        ActorAddress_LOGIN = -2,
+        ActorAddress_CENTER = -3,
+        ActorAddress_DATABASE = -4,
+        ActorAddress_GATEWAY = -5,
+        ActorAddress_CENTER_START_INDEX = -100,
     };
 
     class Actor

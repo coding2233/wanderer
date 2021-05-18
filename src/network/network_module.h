@@ -75,6 +75,8 @@ namespace wanderer
 
         Session *SpawnSession(int fd);
 
+        void InnerSessionAuth(bool success);
+
         Session *GetInnerSession();
     };
 

@@ -26,4 +26,8 @@ namespace wanderer
     {
     }
 
+    void CenterModule::AppAuth(AppType_ app_type, int address)
+    {
+    }
+
 } // namespace wanderer

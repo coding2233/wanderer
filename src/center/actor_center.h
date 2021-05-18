@@ -5,6 +5,7 @@
 
 #include "actor/actor.h"
 #include "base/easylogging++.h"
+#include "center/center_module.h"
 
 namespace wanderer
 {

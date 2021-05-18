@@ -29,6 +29,8 @@ namespace wanderer
         void OnUpdate() override;
         //关闭
         void OnClose() override;
+
+        void AppAuth(AppType_ app_type, int address);
     };
 } // namespace wanderer
 #endif

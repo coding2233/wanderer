@@ -14,12 +14,20 @@ namespace wanderer
 
     void ActorAuth::MailHandler(Mail mail)
     {
-        LOG(DEBUG) << "ActorAuth::MailHandler(Mail mail): " << mail.from_address_;
+        LOG(DEBUG) << "from address: " << mail.from_address_ << " message: " << mail.message_->to_json().dump();
 
         if (mail.message_->is_response())
         {
             jsonrpcpp::response_ptr response = std::dynamic_pointer_cast<jsonrpcpp::Response>(mail.message_);
-            LOG(DEBUG) << "[[[[[[[[[[[[[[[[[" << response->to_json().dump() << "]]]]]]]]]]]]]]]]]]]]]";
+            Json result = response->to_json();
+            bool success = result["result"][0].get<bool>();
+            int new_address = result["result"][1].get<int>();
+            System::GetModule<ActorModule>()->UpdateAddress(GetAddress(), new_address, this);
+            System::GetModule<NetworkModule>()->InnerSessionAuth(success);
+            if (success)
+            {
+                LOG(INFO) << "Authentication is successful and the corresponding Actor address is set: " << new_address;
+            }
         }
     }
 
