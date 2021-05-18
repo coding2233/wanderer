@@ -1,6 +1,4 @@
 #include "center/center_module.h"
-#include "actor/actor_inner.h"
-#include "actor/actor_module.h"
 
 namespace wanderer
 {
@@ -15,6 +13,7 @@ namespace wanderer
     //初始化函数
     void CenterModule::OnInit()
     {
+        GetSystem()->GetModule<ActorModule>()->Register(new ActorAuth, ActorAddress_CENTER_AUTH);
         // GetSystem()->GetModule<ActorModule>()->SpawnActor<ActorInner>(ActorAddress_CENTER_AUTH);
     }
 
@@ -27,6 +26,5 @@ namespace wanderer
     void CenterModule::OnClose()
     {
     }
-
 
 } // namespace wanderer

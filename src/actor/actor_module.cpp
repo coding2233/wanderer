@@ -6,11 +6,10 @@
 namespace wanderer
 {
     // std::vector<Actor*> ActorModule::work_actors_;
-    int ActorModule::actor_address_index = 0;
 
     ActorModule::ActorModule(System *system) : Module(system)
     {
-        // actor_address_index = 0;
+        actor_address_index = 0;
         thread_count_ = 16;
 #if __unix__
         //Only Linux gets the number of CPUs
@@ -39,7 +38,9 @@ namespace wanderer
             int state = actor->GetState();
             if (state == 1)
             {
-                thread_pool_->enqueue([](Actor *actor) { actor->Handle(); }, actor);
+                thread_pool_->enqueue([](Actor *actor)
+                                      { actor->Handle(); },
+                                      actor);
             }
             else if (state == 0)
             {
@@ -59,12 +60,13 @@ namespace wanderer
         int to_address = CharPointer2Int(data);
         int from_address = CharPointer2Int(data + 4);
 
-        //找不到目标地址，就全由center转发
-
-        jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data + 8, size - 8));
+        LOG(INFO) << "ActorModule::HandleMessage to_address: " << to_address << " from_address: " << from_address << " actors_.size(): " << actors_.size();
         auto actor_iter = actors_.find(to_address);
         if (actor_iter != actors_.end())
         {
+            LOG(DEBUG) << "actors_ find to_address !!";
+
+            jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data + 8, size - 8));
             actor_iter->second->ToMailBox(Mail(session, entity, from_address));
             //Add Actor to the Work array.
             bool has_same_actor = false;
@@ -82,6 +84,12 @@ namespace wanderer
                 work_actors_.push_back(actor);
             }
         }
+        else
+        {
+            LOG(DEBUG) << "actors_ not find to_address !!";
+            //找不到目标地址，就全由center转发
+            //
+        }
     }
 
     void ActorModule::Register(Actor *actor, int address)
@@ -91,15 +99,7 @@ namespace wanderer
             address = ++actor_address_index;
         }
         actor->SetAddress(address);
-        LOG(DEBUG) << "ActorModule::Register" << address << " " << actor_address_index << "  " << actor->GetAddress();
-        auto iter = actors_.find(address);
-        if (iter == actors_.end())
-        {
-            actors_.insert(std::make_pair(address, actor));
-        }
-
-        // actors_.insert(std::make_pair(address, actor));
-        // return actor;
+        actors_[address] = actor;
     }
 
 }

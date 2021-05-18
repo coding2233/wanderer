@@ -24,6 +24,15 @@ namespace wanderer
         }
     };
 
+    enum ActorAddress_ : int
+    {
+        ActorAddress_LOGIN = -1,
+        ActorAddress_CENTER = -2,
+        ActorAddress_DATABASE = -3,
+        ActorAddress_GATEWAY = -4,
+        ActorAddress_CENTER_AUTH = -5
+    };
+
     class Actor
     {
     private:

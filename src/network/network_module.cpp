@@ -91,7 +91,7 @@ namespace wanderer
         if (message_type == MessageType_Actor)
         {
             LOG(INFO) << "NetworkModule::OnMessageReceive [ActorMessage]";
-            // GetSystem()->GetModule<ActorModule>()->HandleMessage(session, data, size);
+            GetSystem()->GetModule<ActorModule>()->HandleMessage(session, data, size);
             return;
         }
 

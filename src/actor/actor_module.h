@@ -1,7 +1,6 @@
 #ifndef __ACTOR_MODEUL_H__
 #define __ACTOR_MODEUL_H__
 
-#include "utility/jsonrpcpp.hpp"
 #include <map>
 #include <utility>
 #include <vector>
@@ -10,30 +9,24 @@
 #endif
 
 #include "actor/actor.h"
+#include "actor/actor_inner.h"
 #include "base/module.h"
 #include "network/session.h"
+#include "utility/jsonrpcpp.hpp"
 #include "utility/thread_pool.h"
 #include "utility/utility.h"
 
 namespace wanderer
 {
-    enum ActorAddress_ : int
-    {
-        ActorAddress_LOGIN = -1,
-        ActorAddress_CENTER = -2,
-        ActorAddress_DATABASE = -3,
-        ActorAddress_GATEWAY = -4,
-        ActorAddress_CENTER_AUTH = -5
-    };
-
     class ActorModule : public Module
     {
     private:
+        int actor_address_index;
+
         int thread_count_;
         ThreadPool *thread_pool_;
 
-        std::map<const int, Actor *> actors_;
-        static int actor_address_index;
+        std::map<int, Actor *> actors_;
 
         std::vector<Actor *> work_actors_;
 

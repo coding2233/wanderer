@@ -3,11 +3,10 @@
 
 #include <functional>
 
-#include "base/module.h"
-#include "network/network_module.h"
 #include "actor/actor_module.h"
+#include "base/module.h"
 #include "center/actor_auth.h"
-
+#include "network/network_module.h"
 
 namespace wanderer
 {

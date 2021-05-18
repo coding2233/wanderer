@@ -98,11 +98,6 @@ namespace wanderer
             break;
         }
 
-        if (app_config->app_type_ != AppType_Center) 
-        {
-            network_module->CreateInnerSession(app_config->app_type_, app_config->center_ip_.c_str(), app_config->center_port_);
-        }
-
         //Add modules to map
         AddModule(network_module);
         AddModule(center_module);
@@ -120,6 +115,14 @@ namespace wanderer
         for (module_iter_ = modules_.begin(); module_iter_ != modules_.end(); module_iter_++)
         {
             module_iter_->second->OnInit();
+        }
+
+        //初始化完所有操作后，才进行内部通信的连接
+        AppConfig *app_config = System::app_config_;
+        NetworkModule *network_module = System::GetModule<NetworkModule>();
+        if (app_config->app_type_ != AppType_Center)
+        {
+            network_module->CreateInnerSession(app_config->app_type_, app_config->center_ip_.c_str(), app_config->center_port_);
         }
     }
 

@@ -3,7 +3,7 @@
 
 namespace wanderer
 {
-    ActorAuth::ActorAuth() 
+    ActorAuth::ActorAuth()
     {
     }
 
@@ -13,7 +13,7 @@ namespace wanderer
 
     void ActorAuth::MailHandler(Mail mail)
     {
-        std::cout << "xxx" << std::endl;
+        LOG(DEBUG) << "ActorAuth::MailHandler(Mail mail): " << mail.from_address_;
     }
 
 }

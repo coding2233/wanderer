@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "actor/actor.h"
+#include "base/easylogging++.h"
 
 namespace wanderer
 {
