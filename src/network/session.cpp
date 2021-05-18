@@ -9,7 +9,7 @@ namespace wanderer
 
     Session::Session(/* args */)
     {
-        circle_buffer_=nullptr;
+        circle_buffer_ = nullptr;
         // circle_buffer_ = new CircleBuffer;
     }
 
@@ -25,7 +25,7 @@ namespace wanderer
         message_send_ = message_send;
         message_receive_ = message_receive;
 
-        request_index_=0;
+        request_index_ = 0;
     }
 
     void Session::Send(IMessage *message)
@@ -45,17 +45,26 @@ namespace wanderer
         delete message;
     }
 
-    void Session::Send(int to_address,int from_address,const std::string& method, const jsonrpcpp::Parameter& params)
+    //发送信息
+    void Session::Send(MessageType_ message_type, const char *data, size_t size)
     {
-        auto request = std::make_shared<jsonrpcpp::Request>(request_index_++,method,params);
-        Send(to_address,from_address,request);
+        Message *message = new Message();
+        message->Setup(message_type, data, size);
+        Send(message);
+        delete message;
     }
 
-    void Session::Send(int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty)
+    void Session::Send(int to_address, int from_address, const std::string &method, const jsonrpcpp::Parameter &params)
     {
-        LOG(DEBUG)<<to_address<<"  "<<from_address<<"  "<<message_entilty->to_json().dump();
+        auto request = std::make_shared<jsonrpcpp::Request>(request_index_++, method, params);
+        Send(to_address, from_address, request);
+    }
+
+    void Session::Send(int to_address, int from_address, jsonrpcpp::entity_ptr message_entilty)
+    {
+        LOG(DEBUG) << to_address << "  " << from_address << "  " << message_entilty->to_json().dump();
         Message message;
-        message.Setup(MessageType_Actor,to_address,from_address,message_entilty);
+        message.Setup(MessageType_Actor, to_address, from_address, message_entilty);
         Send(&message);
         // delete message;
     }
@@ -113,12 +122,12 @@ namespace wanderer
                 LOG(INFO) << "Server-session set secret_key_: [" << fd_ << "] " << secret_key_;
                 Send(MessageType_Exchange);
             }
-            else 
+            else
             {
                 //回调
                 message_receive_(this, (MessageType_)message->message_type_, data_message, message->Size());
             }
-            
+
             delete message;
         }
 
@@ -153,22 +162,21 @@ namespace wanderer
     void Session::CheckCircleBuffer(bool get)
     {
         static Pool<CircleBuffer> circle_buffer_pool;
-        if (get) 
+        if (get)
         {
-            if (circle_buffer_==nullptr) 
+            if (circle_buffer_ == nullptr)
             {
-                circle_buffer_=circle_buffer_pool.Pop();
+                circle_buffer_ = circle_buffer_pool.Pop();
             }
         }
-        else 
+        else
         {
-            if (circle_buffer_ != nullptr && circle_buffer_->Length()==0) 
+            if (circle_buffer_ != nullptr && circle_buffer_->Length() == 0)
             {
                 circle_buffer_pool.Pop();
-                circle_buffer_=nullptr;
+                circle_buffer_ = nullptr;
             }
         }
-
     }
 
 } // namespace wanderer

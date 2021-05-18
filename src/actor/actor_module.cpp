@@ -97,9 +97,24 @@ namespace wanderer
         }
         else
         {
-            LOG(DEBUG) << " [*****] actors_ not find to_address !!";
             //找不到目标地址，就全由center转发
-            //
+            if (GetSystem()->app_config_->app_type_ == AppType_Center)
+            {
+                auto forward_iter = sessions_.find(to_address);
+                if (forward_iter != sessions_.end())
+                {
+                    forward_iter->second->Send(MessageType_Actor, data, size);
+                }
+                else
+                {
+                    LOG(ERROR) << "The center server does not have a corresponding forwarded Session: "
+                               << " to_address: " << to_address << " from_address: " << from_address;
+                }
+            }
+            else
+            {
+                LOG(ERROR) << " actors_ not find to_address !! from_address: " << from_address << " to_address: " << to_address;
+            }
         }
     }
 

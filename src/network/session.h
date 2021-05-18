@@ -6,17 +6,17 @@
 #include "base/system.h"
 #include "network/circle_buffer.h"
 #include "network/message.h"
-#include "utility/openssl_utility.h"
-#include "utility/utility.h"
 #include "utility/jsonrpcpp.hpp"
+#include "utility/openssl_utility.h"
 #include "utility/pool.h"
+#include "utility/utility.h"
 
 namespace wanderer
 {
 
 #define MESSAGE_SEND std::function<void(int, const char *, size_t)>
 #define MESSAGE_RECEIVE std::function<void(Session *, MessageType_, const char *, size_t)>
-#define MESSAGE_INNER_RECEIVE std::function<void(Session*,MessageType_,jsonrpcpp::entity_ptr)>
+#define MESSAGE_INNER_RECEIVE std::function<void(Session *, MessageType_, jsonrpcpp::entity_ptr)>
 
     class Session
     {
@@ -46,7 +46,7 @@ namespace wanderer
 
         //检查缓存
         void CheckCircleBuffer(bool get);
-        
+
     public:
         Session(/* args */);
         ~Session();
@@ -56,10 +56,11 @@ namespace wanderer
         void Send(IMessage *message);
         //发送信息
         void Send(MessageType_ message_type);
+        void Send(MessageType_ message_type, const char *data, size_t size);
         //发送信息
-        void Send(int to_address,int from_address,const std::string& method, const jsonrpcpp::Parameter& params = nullptr);
+        void Send(int to_address, int from_address, const std::string &method, const jsonrpcpp::Parameter &params = nullptr);
         //发送消息
-        void Send(int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty);
+        void Send(int to_address, int from_address, jsonrpcpp::entity_ptr message_entilty);
         //内部认证
         // void InnerAuth(AppType_ app_type);
         //接收的数据
