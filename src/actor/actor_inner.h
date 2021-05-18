@@ -8,6 +8,9 @@ namespace wanderer
 {
     class ActorInner : public Actor
     {
+    protected:
+        void MailHandler(Mail mail) override;
+
     public:
         ActorInner();
         ~ActorInner();

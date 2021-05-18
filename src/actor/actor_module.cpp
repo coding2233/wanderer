@@ -16,6 +16,8 @@ namespace wanderer
         thread_count_ = sysconf(_SC_NPROCESSORS_ONLN) * 2;
 #endif
         thread_pool_ = new ThreadPool(thread_count_);
+
+        send_mail_ = std::bind(&ActorModule::SendMail, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     }
 
     ActorModule::~ActorModule()
@@ -30,24 +32,26 @@ namespace wanderer
     //循环
     void ActorModule::OnUpdate()
     {
-        if (work_actors_.size() == 0)
-            return;
-        for (auto iter = work_actors_.begin(); iter != work_actors_.end(); iter++)
-        {
-            Actor *actor = (*iter);
-            int state = actor->GetState();
-            if (state == 1)
-            {
-                thread_pool_->enqueue([](Actor *actor)
-                                      { actor->Handle(); },
-                                      actor);
-            }
-            else if (state == 0)
-            {
-                work_actors_.erase(iter);
-                break;
-            }
-        }
+        // LOG(INFO) << "[00] ActorModule::OnUpdate() work_actors_.size(): " << work_actors_.size();
+
+        // if (work_actors_.size() == 0)
+        //     return;
+        // // for (auto iter = work_actors_.begin(); iter != work_actors_.end(); iter++)
+        // // {
+        // //     Actor *actor = (*iter);
+        // //     int state = actor->GetState();
+        // //     if (state == 1)
+        // //     {
+        // //         thread_pool_->enqueue([](Actor *actor)
+        // //                               { actor->Handle(); },
+        // //                               actor);
+        // //     }
+        // //     else if (state == 0)
+        // //     {
+        // //         work_actors_.erase(iter++);
+        // //         // break;
+        // //     }
+        // // }
     }
 
     //关闭
@@ -59,6 +63,8 @@ namespace wanderer
     {
         int to_address = CharPointer2Int(data);
         int from_address = CharPointer2Int(data + 4);
+
+        sessions_[from_address] = session;
 
         LOG(INFO) << "ActorModule::HandleMessage to_address: " << to_address << " from_address: " << from_address << " actors_.size(): " << actors_.size();
         auto actor_iter = actors_.find(to_address);
@@ -75,18 +81,38 @@ namespace wanderer
             {
                 if (actor == *iter)
                 {
+                    LOG(INFO) << "Receive multiple Mails. " << to_address;
                     has_same_actor = true;
                     break;
                 }
             }
             if (!has_same_actor)
             {
+                LOG(INFO) << "Get ready for email. " << to_address << " work_actors_.size(): " << work_actors_.size();
                 work_actors_.push_back(actor);
             }
+
+            // //Exec
+            // for (auto iter = work_actors_.begin(); iter != work_actors_.end(); iter++)
+            // {
+            //     Actor *actor = (*iter);
+            //     int state = actor->GetState();
+            //     if (state == 1)
+            //     {
+            //         thread_pool_->enqueue([](Actor *actor)
+            //                               { actor->Handle(); },
+            //                               actor);
+            //     }
+            //     else if (state == 0)
+            //     {
+            //         work_actors_.erase(iter++);
+            //         // break;
+            //     }
+            // }
         }
         else
         {
-            LOG(DEBUG) << "actors_ not find to_address !!";
+            LOG(DEBUG) << " [*****] actors_ not find to_address !!";
             //找不到目标地址，就全由center转发
             //
         }
@@ -98,8 +124,21 @@ namespace wanderer
         {
             address = ++actor_address_index;
         }
-        actor->SetAddress(address);
+        actor->Setup(address, send_mail_);
         actors_[address] = actor;
+    }
+
+    void ActorModule::SendMail(int to_address, int from_address, jsonrpcpp::entity_ptr message_entilty_)
+    {
+        auto iter = sessions_.find(to_address);
+        if (iter != sessions_.end())
+        {
+            iter->second->Send(to_address, from_address, message_entilty_);
+        }
+        else
+        {
+            LOG(ERROR) << "No Session corresponding to the address was found! [" << to_address << "]";
+        }
     }
 
 }

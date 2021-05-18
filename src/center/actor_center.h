@@ -1,5 +1,5 @@
-#ifndef __ACTOR_AUTH_H__
-#define __ACTOR_AUTH_H__
+#ifndef __ACTOR_CENTER_H__
+#define __ACTOR_CENTER_H__
 
 #include <iostream>
 
@@ -8,14 +8,14 @@
 
 namespace wanderer
 {
-    class ActorAuth : public Actor
+    class ActorCenter : public Actor
     {
     protected:
         void MailHandler(Mail mail) override;
 
     public:
-        ActorAuth();
-        ~ActorAuth();
+        ActorCenter();
+        ~ActorCenter();
     };
 }
 

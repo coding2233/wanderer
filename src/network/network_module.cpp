@@ -102,10 +102,10 @@ namespace wanderer
                 auto app_type = GetSystem()->app_config_->app_type_;
                 std::string secret_key = GetSystem()->app_config_->secret_key_;
                 LOG(INFO) << "MessageType_Exchange " << std::to_string(app_type);
-                ActorInner actor_inner;
+                static ActorInner actor_inner;
                 LOG(DEBUG) << "ActorInner actor_inner " << actor_inner.GetAddress();
                 GetSystem()->GetModule<ActorModule>()->Register(&actor_inner, 0);
-                session->Send((int)ActorAddress_CENTER_AUTH, actor_inner.GetAddress(), "auth", Json({(int)app_type, secret_key}));
+                session->Send((int)ActorAddress_CENTER, actor_inner.GetAddress(), "auth", Json({(int)app_type, secret_key}));
             }
         }
     }

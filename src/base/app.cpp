@@ -130,8 +130,10 @@ namespace wanderer
     {
         while (signal_flag_ == 0)
         {
+            int index = 0;
             for (module_iter_ = modules_.begin(); module_iter_ != modules_.end(); module_iter_++)
             {
+                LOG(INFO) << "App::MainLoop  " << index++;
                 module_iter_->second->OnUpdate();
             }
         }

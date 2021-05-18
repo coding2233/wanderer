@@ -30,6 +30,10 @@ namespace wanderer
 
         std::vector<Actor *> work_actors_;
 
+        SEND_MAIL send_mail_;
+
+        std::map<int,Session* > sessions_;
+
     public:
         ActorModule(System *system);
         ~ActorModule();
@@ -44,6 +48,8 @@ namespace wanderer
         void Register(Actor *actor, int address = 0);
 
         void HandleMessage(Session *session, const char *data, size_t size);
+
+        void SendMail(int to_address, int from_address, jsonrpcpp::entity_ptr message_entilty_);
     };
 }
 #endif
