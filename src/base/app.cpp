@@ -55,44 +55,29 @@ namespace wanderer
         CenterModule *center_module = nullptr;
         LoginModule *login_module = nullptr;
         GatewayModule *gateway_module = nullptr;
+        DatabaseModule *database_module = nullptr;
 
         switch (app_config->app_type_)
         {
         case AppType_All:
-            network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            // network_module->CreateInnerSession(AppType_Login, app_config->center_ip_.c_str(), app_config->center_port_);
-            // network_module->CreateInnerSession(AppType_DataBase, app_config->center_ip_.c_str(), app_config->center_port_);
-            // network_module->CreateInnerSession(AppType_Center, app_config->center_ip_.c_str(), app_config->center_port_);
-            // network_module->CreateInnerSession(AppType_Battle, app_config->center_ip_.c_str(), app_config->center_port_);
-
             // gateway_module = new GatewayModule(system_);
             center_module = new CenterModule(system_);
             login_module = new LoginModule(system_);
-
+            database_module = new DatabaseModule(system_);
             break;
         case AppType_Login:
-            network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            // network_module->CreateInnerSession(AppType_Login, app_config->center_ip_.c_str(), app_config->center_port_);
-
             login_module = new LoginModule(system_);
             break;
         case AppType_Gateway:
-            network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-
             gateway_module = new GatewayModule(system_);
             break;
         case AppType_DataBase:
-            // network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            // network_module->CreateInnerSession(AppType_DataBase, app_config->center_ip_.c_str(), app_config->center_port_);
+            database_module = new DatabaseModule(system_);
             break;
         case AppType_Center:
-            network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            // network_module->CreateInnerSession(AppType_Center, app_config->center_ip_.c_str(), app_config->center_port_);
             center_module = new CenterModule(system_);
             break;
         case AppType_Battle:
-            network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
-            // network_module->CreateInnerSession(AppType_Battle, app_config->center_ip_.c_str(), app_config->center_port_);
             break;
         default:
             break;
@@ -104,9 +89,16 @@ namespace wanderer
         AddModule(login_module);
         AddModule(gateway_module);
         AddModule(actor_module);
+        AddModule(database_module);
 
         //load custom module
         CustomModule custom_module(&modules_, system_);
+
+        //除数据库服务器，都创建了连接端口
+        if (app_config->app_type_ != AppType_DataBase)
+        {
+            network_module->CreateServer(app_config->server_ip_.c_str(), app_config->server_port_);
+        }
     }
 
     void App::Init()

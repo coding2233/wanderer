@@ -8,16 +8,17 @@
 #include <map>
 #include <string>
 
+#include "actor/actor_module.h"
 #include "base/app_config.h"
 #include "base/easylogging++.h"
 #include "base/module.h"
 #include "base/system.h"
 #include "center/center_module.h"
+#include "database/database_module.h"
 #include "gateway/gateway_module.h"
 #include "login/login_module.h"
 #include "module/custom_module.h"
 #include "network/network_module.h"
-#include "actor/actor_module.h"
 
 namespace wanderer
 {

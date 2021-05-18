@@ -44,7 +44,9 @@ file(GLOB_RECURSE base_src
 file(GLOB_RECURSE src
     "center/*.*"
     "login/*.*" 
-    "gateway/*.*")
+    "gateway/*.*"
+    "database/*.*"
+    )
 
 if(BUILD_EXEC)
     add_definitions("-DBUILD_EXEC")
