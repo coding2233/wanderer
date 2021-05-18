@@ -120,13 +120,12 @@ namespace wanderer
             {
                 secret_key_ = std::string(data_message, message->Size());
                 LOG(INFO) << "Server-session set secret_key_: [" << fd_ << "] " << secret_key_;
-                Send(MessageType_Exchange);
             }
             else
             {
-                //回调
-                message_receive_(this, (MessageType_)message->message_type_, data_message, message->Size());
             }
+            //回调
+            message_receive_(this, (MessageType_)message->message_type_, data_message, message->Size());
 
             delete message;
         }

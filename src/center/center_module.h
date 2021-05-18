@@ -16,9 +16,6 @@ namespace wanderer
         /* data */
         // InnerSession *inner_session_;
 
-        //处理消息
-        void OnMessageReceive(const Session *session, IMessage *message);
-
     public:
         CenterModule(System *system);
         ~CenterModule();

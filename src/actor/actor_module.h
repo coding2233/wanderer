@@ -7,6 +7,7 @@
 #if __unix__
 #include <unistd.h>
 #endif
+#include <cstdlib>
 
 #include "actor/actor.h"
 #include "actor/actor_auth.h"
@@ -22,8 +23,8 @@ namespace wanderer
     class ActorModule : public Module
     {
     private:
-        int actor_address_index;
-        int actor_address_center_index;
+        // int actor_address_index;
+        // int actor_address_center_index;
 
         int thread_count_;
         ThreadPool *thread_pool_;

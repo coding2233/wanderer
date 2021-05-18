@@ -36,14 +36,9 @@ namespace wanderer
         //  delete inner_session_;
     }
 
-    // void LoginModule::OnInnerMessageReceive(Session* session, MessageType_ message_type, jsonrpcpp::entity_ptr entity)
-    // {
-
-    // }
-
     // void LoginModule::OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size)
     // {
-    //     if (message_type != MessageType_2L) 
+    //     if (message_type != MessageType_2L)
     //     {
     //         return;
     //     }
@@ -51,9 +46,9 @@ namespace wanderer
     //     LOG(INFO)<<"LoginModule::OnMessageReceive message: "<<std::string(data, size);
 
     //     jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data, size));
-    //     if (entity) 
+    //     if (entity)
     //     {
-    //         if (entity->is_request()) 
+    //         if (entity->is_request())
     //         {
     //             jsonrpcpp::request_ptr request = std::dynamic_pointer_cast<jsonrpcpp::Request>(entity);
     //             if(request->method()=="login")
@@ -62,7 +57,7 @@ namespace wanderer
     //                 auto user_name = request->params().get<std::string>(0);
     //                 LOG(INFO)<<"LOGIN MODULE: "<<request->to_json().dump();
     //                 auto respone= jsonrpcpp::Response(*request,Json({true,"登陆成功！！！dsfsd#"}));
-                   
+
     //                 auto data= respone.to_json().dump();
     //                 std::string message_data(data.c_str(),data.size());
     //                 Message message;
@@ -72,7 +67,7 @@ namespace wanderer
     //             }
     //         }
     //     }
-      
+
     // }
 
 } // namespace wanderer

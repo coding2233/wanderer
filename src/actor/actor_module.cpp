@@ -9,8 +9,8 @@ namespace wanderer
 
     ActorModule::ActorModule(System *system) : Module(system)
     {
-        actor_address_index = 0;
-        actor_address_center_index = (int)ActorAddress_CENTER_START_INDEX;
+        // actor_address_index = 0;
+        // actor_address_center_index = (int)ActorAddress_CENTER_START_INDEX;
         thread_count_ = 16;
 #if __unix__
         //Only Linux gets the number of CPUs
@@ -122,7 +122,7 @@ namespace wanderer
     {
         if (address == 0)
         {
-            address = ++actor_address_index;
+            address = GetNewAddress();
         }
         actor->Setup(address, send_mail_);
         actors_[address] = actor;
@@ -153,7 +153,26 @@ namespace wanderer
 
     int ActorModule::GetNewAddress()
     {
-        return --actor_address_center_index;
+        bool update = true;
+        int new_address = 0;
+        int update_index = 0;
+        do
+        {
+            new_address = rand();
+            auto iter_actor = actors_.find(new_address);
+            auto iter_session = sessions_.find(new_address);
+            if (new_address > 0 && iter_actor == actors_.end() && iter_session == sessions_.end())
+            {
+                update = false;
+            }
+            if (++update_index >= 10)
+            {
+                LOG(WARNING) << "ActorModule fetches a new address more than 10 times at random to confirm whether there is too much data.";
+            }
+
+        } while (update);
+
+        return new_address;
     }
 
     void ActorModule::SendMail(int to_address, int from_address, jsonrpcpp::entity_ptr message_entilty_)

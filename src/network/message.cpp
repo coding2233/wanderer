@@ -30,22 +30,20 @@ namespace wanderer
         return this;
     }
 
-
-    Message *Message::Setup(MessageType_ message_type,int to_address,int from_address,jsonrpcpp::entity_ptr message_entilty)
+    Message *Message::Setup(MessageType_ message_type, int to_address, int from_address, jsonrpcpp::entity_ptr message_entilty)
     {
         buffer_.Flush();
         message_type_ = message_type;
         char to_buffer[4];
         char from_buffer[4];
-        Int2CharPointer(to_buffer,to_address);
-        Int2CharPointer(from_buffer,from_address);
+        Int2CharPointer(to_buffer, to_address);
+        Int2CharPointer(from_buffer, from_address);
         buffer_.Write(to_buffer, 4);
         buffer_.Write(from_buffer, 4);
-        auto message_data= message_entilty->to_json().dump();
-        buffer_.Write(message_data.c_str(),message_data.size());
+        auto message_data = message_entilty->to_json().dump();
+        buffer_.Write(message_data.c_str(), message_data.size());
         return this;
     }
-
 
     const char *Message::Pack(const std::string &secret_key)
     {
@@ -58,7 +56,7 @@ namespace wanderer
             buffer_.Flush();
             buffer_.Write(encrypt_data.c_str(), encrypt_data.size());
         }
-        else if (message_type_ > MessageType_Exchange)
+        else if (message_type_ >= MessageType_Exchange)
         {
             const std::string data(buffer_.Read(), buffer_.Length());
             std::string encrypt_data = openssl_.EncryptAES(data, secret_key);
@@ -92,7 +90,7 @@ namespace wanderer
             buffer_.Flush();
             buffer_.Write(decode_data.c_str(), decode_data.length());
         }
-        else if (message_type_ > MessageType_Exchange)
+        else if (message_type_ >= MessageType_Exchange)
         {
             //AES解密
             const std::string data(buffer_.Read(), buffer_.Length());
