@@ -14,7 +14,7 @@ jobs:
       run: |
         export SRC=./
         export BUILD=build
-        cmake --no-warn-unused-cli -DBUILD_EXEC=ON -DBUILD_SDK=OFF -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
+        cmake --no-warn-unused-cli -DBUILD_EXEC=ON -DBUILD_SDK=OFF -DEXPLAINC=ON -DWEBSERVER=OFF -DLUASCRIPT=ON -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
         ls -alh ${BUILD}
 
   build-sdk-linux:

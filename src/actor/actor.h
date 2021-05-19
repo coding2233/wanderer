@@ -5,8 +5,8 @@
 #include <mutex>
 #include <queue>
 
+#include "base/easylogging++.h"
 #include "base/system.h"
-#include "network/session.h"
 #include "utility/jsonrpcpp.hpp"
 
 namespace wanderer

@@ -2,6 +2,7 @@ include(custom_module.cmake)
 
 # include_directories("./")
 
+
 WriteCustomModule(${CMAKE_CURRENT_SOURCE_DIR})
 SetDefinitions(${CMAKE_CURRENT_SOURCE_DIR})
 

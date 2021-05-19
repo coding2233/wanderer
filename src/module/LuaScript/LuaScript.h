@@ -8,13 +8,16 @@
 
 extern "C"
 {
-#include "lua/lua.h"
 #include "lua/lauxlib.h"
+#include "lua/lua.h"
 #include "lua/lualib.h"
 }
 
+// #include "actor/actor_module.h"
+#include "actor_lua.h"
 #include "base/module.h"
 
+// #include "actor/actor_module.h"
 
 namespace wanderer
 {
@@ -22,7 +25,7 @@ namespace wanderer
     {
     private:
         /* lua_State */
-        lua_State* global_state_ = nullptr;
+        lua_State *global_state_ = nullptr;
         //Registering C functions
         void RegisterCFunction();
         //Set the search Lua file folder
@@ -39,7 +42,6 @@ namespace wanderer
         //关闭
         void OnClose() override;
     };
-
 
 } // namespace wanderer
 
