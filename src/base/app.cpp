@@ -60,7 +60,7 @@ namespace wanderer
         switch (app_config->app_type_)
         {
         case AppType_All:
-            // gateway_module = new GatewayModule(system_);
+            gateway_module = new GatewayModule(system_);
             center_module = new CenterModule(system_);
             login_module = new LoginModule(system_);
             database_module = new DatabaseModule(system_);

@@ -1,6 +1,8 @@
 #ifndef __ACTOR_LOGIN_H__
 #define __ACTOR_LOGIN_H__
 
+#include <map>
+
 #include "actor/actor.h"
 
 namespace wanderer
@@ -9,6 +11,8 @@ namespace wanderer
     {
     private:
         /* data */
+        std::map<std::string, int> login_response;
+
     protected:
         void MailHandler(Mail mail) override;
 

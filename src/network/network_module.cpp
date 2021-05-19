@@ -71,18 +71,7 @@ namespace wanderer
 
     void NetworkModule::OnMessageSend(int fd, const char *message, size_t size)
     {
-        // if (fd == -99)
-        // {
-        //     OnReceiveData(-999, message, size);
-        // }
-        // else if (fd == -999)
-        // {
-        //     OnReceiveData(-99, message, size);
-        // }
-        // else
-        {
-            socket_->SendData(fd, message, size);
-        }
+        socket_->SendData(fd, message, size);
     }
 
     void NetworkModule::OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size)
@@ -105,7 +94,7 @@ namespace wanderer
                 static ActorAuth actor_auth;
                 GetSystem()->GetModule<ActorModule>()->Register(&actor_auth, actor_address);
                 LOG(DEBUG) << "ActorInner actor_inner " << actor_auth.GetAddress();
-                session->Send((int)ActorAddress_CENTER, actor_auth.GetAddress(), "auth", Json({(int)app_type, secret_key}));
+                session->Send((int)ActorAddress_CENTER, actor_auth.GetAddress(), "auth", Json({{"apptype", (int)app_type}, {"secretkey", secret_key}}));
             }
         }
         else if (message_type == MessageType_SecretKey)
@@ -127,19 +116,8 @@ namespace wanderer
         LOG(INFO) << "Waiting for inner session connecting, app_type: "
                   << std::to_string(app_type) << " server: " << server_ip << ":" << server_port;
         inner_session_auth_ = false;
-        int fd_c = -1;
-        // if (app_type == AppType_All)
-        // {
-        //     fd_c = -99;
-        //     int fd_s = -999;
-        //     inner_session_ = SpawnSession(fd_c);
-        //     OnConnected(fd_s);
-        // }
-        // else
-        {
-            fd_c = socket_->CreateConnectSocket(server_ip, server_port);
-            inner_session_ = SpawnSession(fd_c);
-        }
+        int fd_c = socket_->CreateConnectSocket(server_ip, server_port);
+        inner_session_ = SpawnSession(fd_c);
     }
 
     Session *NetworkModule::SpawnSession(int fd)

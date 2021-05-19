@@ -34,25 +34,35 @@ namespace wanderer
     //循环
     void ActorModule::OnUpdate()
     {
-        if (work_actors_.size() == 0)
-            return;
-        // LOG(INFO) << "[00] ActorModule::OnUpdate() work_actors_.size(): " << work_actors_.size();
-
-        for (auto iter = work_actors_.begin(); iter != work_actors_.end(); iter++)
+        if (mail_box_.size() > 0)
         {
-            Actor *actor = (*iter);
-            int state = actor->GetState();
-            if (state == 1)
+            mail_box_mtx_.lock();
+            Mail mail = mail_box_.front();
+            mail_box_.pop();
+            mail_box_mtx_.unlock();
+
+            thread_pool_->enqueue([](Mail mail, ActorModule *am)
+                                  { am->HandleMail(mail); },
+                                  mail, this);
+        }
+
+        if (work_actors_.size() > 0)
+        {
+            for (auto iter = work_actors_.begin(); iter != work_actors_.end(); iter++)
             {
-                thread_pool_->enqueue([](Actor *actor)
-                                      { actor->Handle(); },
-                                      actor);
-            }
-            else if (state == 0)
-            {
-                work_actors_.erase(iter);
-                // work_actors_.erase(iter++);
-                break;
+                Actor *actor = (*iter);
+                int state = actor->GetState();
+                if (state == 1)
+                {
+                    thread_pool_->enqueue([](Actor *actor)
+                                          { actor->Handle(); },
+                                          actor);
+                }
+                else if (state == 0)
+                {
+                    work_actors_.erase(iter);
+                    break;
+                }
             }
         }
     }
@@ -67,16 +77,25 @@ namespace wanderer
         int to_address = CharPointer2Int(data);
         int from_address = CharPointer2Int(data + 4);
 
-        sessions_[from_address] = session;
+        if (session != nullptr)
+        {
+            sessions_[from_address] = session;
+        }
+        jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data + 8, size - 8));
 
-        LOG(INFO) << "ActorModule::HandleMessage to_address: " << to_address << " from_address: " << from_address << " actors_.size(): " << actors_.size();
+        HandleMail(Mail(to_address, from_address, entity));
+    }
+
+    void ActorModule::HandleMail(Mail mail)
+    {
+        //接收邮件和发送邮件都从这里处理，可能有部分冗余的代码和计算
+
+        int to_address = mail.to_address_;
         auto actor_iter = actors_.find(to_address);
         if (actor_iter != actors_.end())
         {
-            LOG(DEBUG) << "actors_ find to_address !!";
-
-            jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(std::string(data + 8, size - 8));
-            actor_iter->second->ToMailBox(Mail(session, entity, from_address));
+            LOG(DEBUG) << "actors_ find to_address !! " << to_address;
+            actor_iter->second->ToMailBox(mail);
             //Add Actor to the Work array.
             bool has_same_actor = false;
             Actor *actor = actor_iter->second;
@@ -97,24 +116,38 @@ namespace wanderer
         }
         else
         {
-            //找不到目标地址，就全由center转发
-            if (GetSystem()->app_config_->app_type_ == AppType_Center)
+            auto session_iter = sessions_.find(to_address);
+            if (session_iter != sessions_.end())
             {
-                int forward_address = GetSystem()->GetModule<CenterModule>()->ForwardAddress(to_address);
-                auto forward_iter = sessions_.find(forward_address);
-                if (forward_iter != sessions_.end())
-                {
-                    forward_iter->second->Send(MessageType_Actor, data, size);
-                }
-                else
-                {
-                    LOG(ERROR) << "The center server does not have a corresponding forwarded Session: "
-                               << " to_address: " << to_address << " from_address: " << from_address;
-                }
+                session_iter->second->Send(to_address, mail.from_address_, mail.message_);
             }
             else
             {
-                LOG(ERROR) << " actors_ not find to_address !! from_address: " << from_address << " to_address: " << to_address;
+                //找不到目标地址，就全由center转发
+                if (GetSystem()->app_config_->app_type_ == AppType_Center)
+                {
+                    int forward_address = GetSystem()->GetModule<CenterModule>()->ForwardAddress(to_address);
+                    auto forward_iter = sessions_.find(forward_address);
+                    if (forward_iter != sessions_.end())
+                    {
+                        std::string json_data = mail.message_->to_json().dump();
+                        forward_iter->second->Send(MessageType_Actor, json_data.c_str(), json_data.size());
+                    }
+                    else
+                    {
+                        LOG(ERROR) << "The center server does not have a corresponding forwarded Session: "
+                                   << " to_address: " << to_address << " from_address: " << mail.from_address_;
+                    }
+                }
+                else if (GetSystem()->app_config_->app_type_ != AppType_All)
+                {
+                    auto inner_session = GetSystem()->GetModule<NetworkModule>()->GetInnerSession();
+                    inner_session->Send(to_address, mail.from_address_, mail.message_);
+                }
+                else
+                {
+                    LOG(ERROR) << " actors_ not find to_address !! from_address: " << mail.from_address_ << " to_address: " << to_address;
+                }
             }
         }
     }
@@ -168,7 +201,7 @@ namespace wanderer
             }
             if (++update_index >= 10)
             {
-                LOG(WARNING) << "ActorModule fetches a new address more than 10 times at random to confirm whether there is too much data.";
+                LOG(WARNING) << "ActorModule fetches a new address more than 10 times at random to confirm whether there is too much data. " << update_index;
             }
 
         } while (update);
@@ -176,26 +209,11 @@ namespace wanderer
         return new_address;
     }
 
-    void ActorModule::SendMail(int to_address, int from_address, jsonrpcpp::entity_ptr message_entilty_)
+    void ActorModule::SendMail(int to_address, int from_address, jsonrpcpp::entity_ptr message)
     {
-        auto iter = sessions_.find(to_address);
-        if (iter != sessions_.end())
-        {
-            iter->second->Send(to_address, from_address, message_entilty_);
-        }
-        else
-        {
-            if (GetSystem()->app_config_->app_type_ != AppType_Center)
-            {
-                auto inner_session = GetSystem()->GetModule<NetworkModule>()->GetInnerSession();
-                inner_session->Send(to_address, from_address, message_entilty_);
-            }
-            else
-            {
-                // GetSystem()->GetModule<CenterModule>()->
-                LOG(ERROR) << "No Session corresponding to the address was found! [" << to_address << "]";
-            }
-        }
+        mail_box_mtx_.lock();
+        mail_box_.push(Mail(to_address, from_address, message));
+        mail_box_mtx_.unlock();
     }
 
 }

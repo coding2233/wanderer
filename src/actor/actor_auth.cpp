@@ -20,13 +20,11 @@ namespace wanderer
         {
             jsonrpcpp::response_ptr response = std::dynamic_pointer_cast<jsonrpcpp::Response>(mail.message_);
             Json result = response->to_json();
-            bool success = result["result"][0].get<bool>();
-            int new_address = result["result"][1].get<int>();
-            // System::GetModule<ActorModule>()->UpdateAddress(GetAddress(), new_address, this);
+            bool success = result["result"].get<bool>();
             System::GetModule<NetworkModule>()->InnerSessionAuth(success);
             if (success)
             {
-                LOG(INFO) << "Authentication is successful and the corresponding Actor address is set: " << new_address;
+                LOG(INFO) << "Authentication is successful . ";
             }
         }
     }

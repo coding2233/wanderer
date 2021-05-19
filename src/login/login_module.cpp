@@ -1,7 +1,4 @@
 #include "login/login_module.h"
-#include "network/message.h"
-#include "utility/jsonrpcpp.hpp"
-#include <string>
 
 namespace wanderer
 {
@@ -16,24 +13,17 @@ namespace wanderer
     //初始化函数
     void LoginModule::OnInit()
     {
-        auto app_config = GetSystem()->app_config_;
-
-        // GetSystem()->GetModule<NetworkModule>()->AddInnerReceiveListener(MessageType_2L,std::bind(&LoginModule::OnInnerMessageReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-        // GetSystem()->GetModule<NetworkModule>()->AddReciveListener(std::bind(&LoginModule::OnMessageReceive, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-
-        // GetSystem()->GetModule<NetworkModule>()->CreateInnerSession(AppType_Login, app_config->center_ip_.c_str(), app_config->center_port_);
+        GetSystem()->GetModule<ActorModule>()->Register(new ActorLogin, ActorAddress_LOGIN);
     }
 
     //循环
     void LoginModule::OnUpdate()
     {
-        //inner_session_->Loop();
     }
 
     //关闭
     void LoginModule::OnClose()
     {
-        //  delete inner_session_;
     }
 
     // void LoginModule::OnMessageReceive(Session *session, MessageType_ message_type, const char *data, size_t size)

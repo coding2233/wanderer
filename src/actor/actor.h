@@ -16,15 +16,15 @@ namespace wanderer
 
     struct Mail
     {
-        Session *session_;
+        int to_address_;
         jsonrpcpp::entity_ptr message_;
         int from_address_;
 
-        Mail(Session *session, jsonrpcpp::entity_ptr message, int from_address)
+        Mail(int to_address, int from_address, jsonrpcpp::entity_ptr message)
         {
-            session_ = session;
-            message_ = message;
+            to_address_ = to_address;
             from_address_ = from_address;
+            message_ = message;
         }
     };
 

@@ -12,6 +12,7 @@ namespace wanderer
     //初始化函数
     void DatabaseModule::OnInit()
     {
+        GetSystem()->GetModule<ActorModule>()->Register(new ActorDatabase, ActorAddress_DATABASE);
     }
 
     //循环

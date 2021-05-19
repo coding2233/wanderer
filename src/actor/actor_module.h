@@ -2,6 +2,8 @@
 #define __ACTOR_MODEUL_H__
 
 #include <map>
+#include <mutex>
+#include <queue>
 #include <utility>
 #include <vector>
 #if __unix__
@@ -37,6 +39,9 @@ namespace wanderer
 
         std::map<int, Session *> sessions_;
 
+        std::queue<Mail> mail_box_;
+        std::mutex mail_box_mtx_;
+
     public:
         ActorModule(System *system);
         ~ActorModule();
@@ -55,6 +60,7 @@ namespace wanderer
         int GetNewAddress();
 
         void HandleMessage(Session *session, const char *data, size_t size);
+        void HandleMail(Mail mail);
 
         void SendMail(int to_address, int from_address, jsonrpcpp::entity_ptr message_entilty_);
     };

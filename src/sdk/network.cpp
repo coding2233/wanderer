@@ -141,7 +141,7 @@ namespace wanderer
             }
             else
             {
-                jsonrpcpp::entity_ptr entity = jsonrpc_parser_.parse(std::string(data_message, data_message_size));
+                jsonrpcpp::entity_ptr entity = jsonrpc_parser_.parse(std::string(data_message + 8, data_message_size - 8));
                 OnJsonRpcReceive(fd, entity);
             }
             delete message;
@@ -186,9 +186,11 @@ namespace wanderer
             return;
         }
 
+        std::string passwd = OpenSSLUtility::Md5(std::string(password));
         login_callback_ = login_callback;
-
-        jsonrpcpp::request_ptr login_request = std::make_shared<jsonrpcpp::Request>(request_index_++, "login", Json({user_name, password}));
+        Json login_json = {{"username", user_name},
+                           {"password", passwd.c_str()}};
+        jsonrpcpp::request_ptr login_request = std::make_shared<jsonrpcpp::Request>(request_index_++, "login", login_json);
         // auto data = login_request.to_json().dump();
         // std::string message_data(data.c_str(), data.size());
         Message message;

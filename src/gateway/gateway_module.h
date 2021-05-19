@@ -11,9 +11,6 @@ namespace wanderer
     class GatewayModule : public Module
     {
     private:
-        /* data */
-        // InnerSession *inner_session_;
-
     public:
         GatewayModule(System *system);
         ~GatewayModule();

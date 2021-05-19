@@ -2,11 +2,15 @@
 #define __LOGIN_MODULE_H__
 
 #include <map>
+#include <string>
 
+#include "actor/actor_module.h"
 #include "base/app_config.h"
 #include "base/module.h"
+#include "login/actor_login.h"
 #include "network/message.h"
 #include "network/network_module.h"
+#include "utility/jsonrpcpp.hpp"
 
 namespace wanderer
 {
@@ -14,7 +18,6 @@ namespace wanderer
     {
     private:
         /* data */
-        // InnerSession *inner_session_;
 
     public:
         LoginModule(System *system);
