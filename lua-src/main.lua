@@ -1,3 +1,5 @@
+require "app_config"
+
 local actor_scripts_={}
 local actors_={}
 actor_scripts_[1]="login"
@@ -12,6 +14,8 @@ function OnRegisterActors(app_type)
     if actor_script == nil then
         
     end
+
+    RegisterActor(ActorAddress_LOGIN);
 end
 
 function showinfo()

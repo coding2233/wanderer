@@ -2,10 +2,13 @@
 
 namespace wanderer
 {
-	// void RegisterActor(int address)
-	// {
-	// 	System::GetModule<ActorModule>()->Register(new ActorLua, address);
-	// }
+	int RegisterActor(lua_State *pL)
+	{
+		int address = lua_tonumber(pL, -1);
+		System::GetModule<ActorModule>()->Register(new ActorLua, address);
+		LOG(INFO) << "int RegisterActor(lua_State *pL)";
+		return 0;
+	}
 
 	LuaScript::LuaScript(System *system) : Module(system)
 	{
@@ -19,6 +22,7 @@ namespace wanderer
 	void LuaScript::OnInit()
 	{
 		global_state_ = luaL_newstate();
+
 		//Load the Lua base library
 		luaL_openlibs(global_state_);
 		//Registering C functions
@@ -34,7 +38,6 @@ namespace wanderer
 		lua_pushinteger(global_state_, GetSystem()->app_config_->app_type_);
 		//cpp 调用无参数的lua函数，无返回值
 		lua_pcall(global_state_, 1, 0, 0);
-
 		/*int num = luaL_dostring(global_state_, R"(print(package.path))");
 		std::cout << "Luascript OnInit!  do lua num: " << num << std::endl;*/
 	}
@@ -56,20 +59,13 @@ namespace wanderer
 		lua_setglobal(global_state_, fn)*/
 		//lua_register(global_state_, "xx", fn);
 
-		// lua_register(global_state_, "RegisterActor", RegisterActor);
+		lua_register(global_state_, "RegisterActor", RegisterActor);
 	}
 
 	void LuaScript::SetLuaSearchPath()
 	{
 		luaL_dostring(global_state_, R"(package.path="./lua-src/?.lua;../lua-src/?.lua;./lua-libs/?.lua;../lua-libs/?.lua;"..package.path)");
 		luaL_dostring(global_state_, R"(package.cpath="./lua-libs/?.so;../lua-libs/?.so;"..package.cpath)");
-
-		// luaL_dostring(global_state_, R"(print(package.path)\nprint(package.cpath))");
-		// luaL_dostring(global_state_, R"(print(package.path))");
-		// luaL_dostring(global_state_, R"(print(package.cpath))");
-
-		//package.cpath
-		//package.path
 	}
 
 } // namespace wanderer

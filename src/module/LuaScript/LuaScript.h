@@ -17,8 +17,6 @@ extern "C"
 #include "actor_lua.h"
 #include "base/module.h"
 
-// #include "actor/actor_module.h"
-
 namespace wanderer
 {
     class LuaScript : public Module
@@ -41,6 +39,8 @@ namespace wanderer
         void OnUpdate() override;
         //关闭
         void OnClose() override;
+
+        // static int RegisterActor(lua_State *pL);
     };
 
 } // namespace wanderer
