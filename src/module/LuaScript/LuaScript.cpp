@@ -2,11 +2,26 @@
 
 namespace wanderer
 {
+	int LuaLog(lua_State *pL)
+	{
+		int argc = lua_gettop(pL);
+		// if (argc > 0)
+		// {
+		// 	LOG(INFO)
+		// }
+		std::string log = "[lua]";
+		for (size_t i = 1; i <= argc; i++)
+		{
+			log += " " + std::string(lua_tostring(pL, i));
+		}
+		LOG(INFO) << log;
+		return 0;
+	}
+
 	int RegisterActor(lua_State *pL)
 	{
 		int address = lua_tonumber(pL, -1);
 		System::GetModule<ActorModule>()->Register(new ActorLua, address);
-		LOG(INFO) << "int RegisterActor(lua_State *pL)";
 		return 0;
 	}
 
@@ -47,9 +62,21 @@ namespace wanderer
 		lua_getglobal(global_state_, "OnRegisterActors");
 		lua_pushinteger(global_state_, GetSystem()->app_config_->app_type_);
 		//cpp 调用无参数的lua函数，无返回值
-		lua_pcall(global_state_, 1, 0, 0);
+		//lua_pcall(global_state_, 1, 0, 0);
+		LuaPCall(global_state_, 1, 0);
 		/*int num = luaL_dostring(global_state_, R"(print(package.path))");
 		std::cout << "Luascript OnInit!  do lua num: " << num << std::endl;*/
+	}
+
+	void LuaScript::LuaPCall(lua_State *pL, int nargs, int nresults)
+	{
+		if (lua_pcall(pL, nargs, nresults, 0) != 0)
+		{
+			// int argc = lua_gettop(pL);
+			// LOG(ERROR) << "[LuaPCall ERROR] " << argc << "  " << lua_tostring(pL, -1);
+			std::string log = "[LuaPCall ERROR] "+std::string(lua_tostring(pL, -1 )+"\n"+std::string(lua_tostring(pL, -2);
+			LOG(ERROR) << log;
+		}
 	}
 
 	//循环
@@ -68,7 +95,7 @@ namespace wanderer
 		/*lua_pushcfunction(global_state_, fn);
 		lua_setglobal(global_state_, fn)*/
 		//lua_register(global_state_, "xx", fn);
-
+		lua_register(global_state_, "log", LuaLog);
 		lua_register(global_state_, "RegisterActor", RegisterActor);
 		lua_register(global_state_, "SendMail", SendMail);
 	}
@@ -85,7 +112,8 @@ namespace wanderer
 		lua_pushinteger(global_state_, mail.to_address_);
 		lua_pushinteger(global_state_, mail.from_address_);
 		lua_pushstring(global_state_, mail.message_->to_json().dump().c_str());
-		lua_pcall(global_state_, 3, 0, 0);
+		//lua_pcall(global_state_, 3, 0, 0);
+		LuaPCall(global_state_, 3, 0);
 	}
 
 } // namespace wanderer

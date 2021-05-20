@@ -88,12 +88,16 @@
         "ranges": "cpp",
         "stop_token": "cpp",
         "threads.h": "c",
-        "lzfindmt.h": "c"
+        "lzfindmt.h": "c",
+        "strstream": "cpp",
+        "cfenv": "cpp",
+        "typeindex": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "Lua.diagnostics.globals": [
         "showinfo",
-        "RegisterActor"
+        "RegisterActor",
+        "log"
     ]
 }

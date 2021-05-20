@@ -29,6 +29,8 @@ namespace wanderer
         //Set the search Lua file folder
         void SetLuaSearchPath();
 
+        void LuaPCall(lua_State *pL, int nargs, int nresults);
+
     public:
         LuaScript(System *system);
         ~LuaScript();
