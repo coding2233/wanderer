@@ -13,7 +13,7 @@ extern "C"
 #include "lua/lualib.h"
 }
 
-// #include "actor/actor_module.h"
+#include "actor/actor_module.h"
 #include "actor_lua.h"
 #include "base/module.h"
 

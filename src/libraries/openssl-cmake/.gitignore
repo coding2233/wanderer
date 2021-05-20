@@ -29,7 +29,7 @@ Makefile
 /crypto/buildinf.h
 /apps/progs.h
 /crypto/include/internal/*_conf.h
-/openssl/include/opensslconf.h
+# /openssl/include/opensslconf.h
 /util/domd
 
 # Executables

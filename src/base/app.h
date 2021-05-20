@@ -1,5 +1,3 @@
-#if !BUILD_SDK
-
 #ifndef __APP_H__
 #define __APP_H__
 
@@ -61,6 +59,4 @@ namespace wanderer
         //Module *GetModule(const std::string &name);
     };
 } // namespace wanderer
-#endif
-
 #endif

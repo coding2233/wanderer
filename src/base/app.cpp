@@ -1,5 +1,3 @@
-#if !BUILD_SDK
-
 #include "base/app.h"
 #include "actor/actor_module.h"
 
@@ -153,5 +151,3 @@ namespace wanderer
     }
 
 } // namespace wanderer
-
-#endif
