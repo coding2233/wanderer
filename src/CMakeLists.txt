@@ -68,8 +68,14 @@ endif(BUILD_EXEC)
 option(BUILD_SDK "The SDK is released simultaneously by default." ON)
 if(BUILD_SDK)
     set(SDK_NAME "${PROJECT_NAME}-sdk")
-    file(GLOB_RECURSE sdk_src "sdk/*.*")
-    add_library(${SDK_NAME} SHARED ${sdk_src} ${base_src} ${src})
+    file(GLOB_RECURSE sdk_src "sdk/*.*"
+                            "utility/*.*"
+                            "base/app_config.*"
+                            "base/easylogging*.*"
+                            "network/message.*"
+                            "network/circle_buffer.*"
+    )
+    add_library(${SDK_NAME} SHARED ${sdk_src} )
   
     target_link_libraries(${SDK_NAME} ${link_libraries} module)  
 endif(BUILD_SDK)
