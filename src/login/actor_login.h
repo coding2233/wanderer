@@ -14,7 +14,7 @@ namespace wanderer
         std::map<std::string, int> login_response;
 
     protected:
-        void MailHandler(Mail mail) override;
+        void OnMailHandle(Mail mail) override;
 
     public:
         ActorLogin(/* args */);

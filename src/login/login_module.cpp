@@ -13,7 +13,7 @@ namespace wanderer
     //初始化函数
     void LoginModule::OnInit()
     {
-        GetSystem()->GetModule<ActorModule>()->Register(new ActorLogin, ActorAddress_LOGIN);
+        // GetSystem()->GetModule<ActorModule>()->Register(new ActorLogin, ActorAddress_LOGIN);
     }
 
     //循环

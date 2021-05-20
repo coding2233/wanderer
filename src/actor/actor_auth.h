@@ -10,7 +10,7 @@ namespace wanderer
     class ActorAuth : public Actor
     {
     protected:
-        void MailHandler(Mail mail) override;
+        void OnMailHandle(Mail mail) override;
 
     public:
         ActorAuth();

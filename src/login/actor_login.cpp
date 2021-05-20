@@ -10,7 +10,7 @@ namespace wanderer
     {
     }
 
-    void ActorLogin::MailHandler(Mail mail)
+    void ActorLogin::OnMailHandle(Mail mail)
     {
         LOG(DEBUG) << mail.message_->to_json().dump();
         if (mail.message_->is_request())

@@ -10,7 +10,7 @@ namespace wanderer
     private:
         /* data */
     protected:
-        void MailHandler(Mail mail) override;
+        void OnMailHandle(Mail mail) override;
 
     public:
         ActorDatabase(/* args */);

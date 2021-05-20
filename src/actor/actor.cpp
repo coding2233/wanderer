@@ -22,7 +22,7 @@ namespace wanderer
         LOG(INFO) << "Actor::ToMailBox(Mail mail)  [mtx_.unlock()]";
     }
 
-    void Actor::MailHandler(Mail mail)
+    void Actor::OnMailHandle(Mail mail)
     {
     }
 
@@ -69,7 +69,7 @@ namespace wanderer
             mtx_.unlock();
             LOG(INFO) << "Actor::Handle()  [mtx_.unlock()]";
             //处理消息
-            MailHandler(mail);
+            OnMailHandle(mail);
         }
         processing_ = false;
     }

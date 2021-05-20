@@ -1,26 +1,37 @@
-require "app_config"
+require "base/app_config"
 
-local actor_scripts_={}
 local actors_={}
-actor_scripts_[1]="login"
-actor_scripts_[2]="gateway"
-actor_scripts_[4]="center"
-actor_scripts_[8]="battle"
--- actor_scripts_[31]="all"
+
 
 function OnRegisterActors(app_type)
-    print("lua RegisterActors",app_type)
-    local actor_script = actor_scripts_[app_type]
-    if actor_script == nil then
-        
+    print("lua RegisterActors")
+    if app_type==AppType_All then
+        for key, value in pairs(Actor_Scripts) do
+            local script = value[1]
+            local address = value[2]
+            RegisterActor(address)
+            local actor = require(script)
+            actors_[address]=actor
+        end
+    else
+        local actor_script = Actor_Scripts[app_type]
+        local script = actor_script[1]
+        local address = actor_script[2]
+        RegisterActor(address)
+        local actor = require(script)
+        actors_[address]=actor
     end
-
-    RegisterActor(ActorAddress_LOGIN);
 end
 
-function showinfo()
-print("main.lua ------------ showinfo")
+
+function OnMailHandle(to_address,from_address,json_message)
+    print("lua---OnMailHandle",json_message)
+    local actor  = actors_[to_address]
+    if actor ~= nil then
+        --actor:OnMailHandle(to_address,from_address,json_message)
+    end
 end
+
 
 
 print("main.lua----hello world")

@@ -40,7 +40,7 @@ namespace wanderer
         //关闭
         void OnClose() override;
 
-        // static int RegisterActor(lua_State *pL);
+        void HandleMail(Mail mail);
     };
 
 } // namespace wanderer

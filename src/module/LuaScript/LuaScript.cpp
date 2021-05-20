@@ -10,6 +10,16 @@ namespace wanderer
 		return 0;
 	}
 
+	int SendMail(lua_State *pL)
+	{
+		int to_address = lua_tonumber(pL, -1);
+		int from_address = lua_tonumber(pL, -2);
+		std::string json_message = lua_tostring(pL, -3);
+		jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(json_message);
+		System::GetModule<ActorModule>()->SendMail(to_address, from_address, entity);
+		return 0;
+	}
+
 	LuaScript::LuaScript(System *system) : Module(system)
 	{
 	}
@@ -60,12 +70,22 @@ namespace wanderer
 		//lua_register(global_state_, "xx", fn);
 
 		lua_register(global_state_, "RegisterActor", RegisterActor);
+		lua_register(global_state_, "SendMail", SendMail);
 	}
 
 	void LuaScript::SetLuaSearchPath()
 	{
 		luaL_dostring(global_state_, R"(package.path="./lua-src/?.lua;../lua-src/?.lua;./lua-libs/?.lua;../lua-libs/?.lua;"..package.path)");
 		luaL_dostring(global_state_, R"(package.cpath="./lua-libs/?.so;../lua-libs/?.so;"..package.cpath)");
+	}
+
+	void LuaScript::HandleMail(Mail mail)
+	{
+		lua_getglobal(global_state_, "OnMailHandle");
+		lua_pushinteger(global_state_, mail.to_address_);
+		lua_pushinteger(global_state_, mail.from_address_);
+		lua_pushstring(global_state_, mail.message_->to_json().dump().c_str());
+		lua_pcall(global_state_, 3, 0, 0);
 	}
 
 } // namespace wanderer

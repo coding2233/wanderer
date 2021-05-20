@@ -10,9 +10,9 @@ namespace wanderer
     {
     }
 
-    void ActorCenter::MailHandler(Mail mail)
+    void ActorCenter::OnMailHandle(Mail mail)
     {
-        LOG(DEBUG) << "ActorCenter::MailHandler(Mail mail): " << mail.from_address_;
+        LOG(DEBUG) << "ActorCenter::OnMailHandle(Mail mail): " << mail.from_address_;
 
         if (mail.message_->is_request())
         {

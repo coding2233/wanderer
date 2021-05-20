@@ -48,7 +48,7 @@ namespace wanderer
         bool processing_;
 
     protected:
-        virtual void MailHandler(Mail mail);
+        virtual void OnMailHandle(Mail mail);
 
         SEND_MAIL send_mail_;
 

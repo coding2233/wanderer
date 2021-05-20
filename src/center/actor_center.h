@@ -12,7 +12,7 @@ namespace wanderer
     class ActorCenter : public Actor
     {
     protected:
-        void MailHandler(Mail mail) override;
+        void OnMailHandle(Mail mail) override;
 
     public:
         ActorCenter();

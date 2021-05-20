@@ -12,7 +12,7 @@ namespace wanderer
     {
     }
 
-    void ActorAuth::MailHandler(Mail mail)
+    void ActorAuth::OnMailHandle(Mail mail)
     {
         LOG(DEBUG) << "from address: " << mail.from_address_ << " message: " << mail.message_->to_json().dump();
 

@@ -15,3 +15,9 @@ ActorAddress_CENTER = -3
 ActorAddress_DATABASE = -4
 ActorAddress_GATEWAY = -5
 ActorAddress_CENTER_START_INDEX = -100
+
+
+Actor_Scripts = {}
+Actor_Scripts[AppType_Login] = {"actor_login",ActorAddress_LOGIN}
+Actor_Scripts[AppType_Gateway] = {"actor_gateway",ActorAddress_GATEWAY}
+Actor_Scripts[AppType_DataBase] = {"actor_database",ActorAddress_GATEWAY}
