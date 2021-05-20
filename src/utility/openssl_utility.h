@@ -11,14 +11,13 @@
 #include <string>
 
 #include "base/easylogging++.h"
-#include "base/system.h"
 #include "utility/base64.h"
 #include "utility/utility.h"
 
 namespace wanderer
 {
 
-//#define byte unsigned char
+    //#define byte unsigned char
 
     class OpenSSLUtility
     {

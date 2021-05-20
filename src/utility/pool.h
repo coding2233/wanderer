@@ -6,7 +6,6 @@
 #include <string>
 #include <utility>
 
-#include "base/object.h"
 #include "base/easylogging++.h"
 
 namespace wanderer 

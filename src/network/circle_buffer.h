@@ -4,7 +4,6 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "base/object.h"
 #include "base/easylogging++.h"
 #include "utility/utility.h"
 
@@ -14,7 +13,7 @@ namespace wanderer
 //1MB
 #define CIRCLE_BUFFER_SIZE 1024 * 1024
 
-    class CircleBuffer:public Object
+    class CircleBuffer
     {
     private:
         /* data */
