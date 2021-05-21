@@ -3,6 +3,23 @@
 local JsonRpc = {}
 local this = JsonRpc
 
+function this:ParseRequest(id,method,params)
+    if id ==nil then
+        log(ERROR,"JSONRPC format error,id cannot be nil.")
+    end
+    local request = {}
+    request.id=id
+    request.jsonrpc="2.0"
+    request.method= method
+    request.params=params
+
+    function request:to_json()
+        return Json.encode(request)
+    end
+
+    return request
+end
+
 function this:ParseResponse(id,result,error)
     if id ==nil then
         log(ERROR,"JSONRPC format error,id cannot be nil.")

@@ -9,7 +9,7 @@ function this:OnMailHandle(to_address,from_address,message)
             local user_name=json.params.username
             local password = json.params.password
             log("Database login",user_name,password)
-            local response= JsonRpc:ParseResponse(json.id,true)
+            local response= JsonRpc:ParseResponse(json.id,{sccuess=true,username=user_name})
             W.SendMail(from_address,to_address,Json.encode(response))
         end
     end
