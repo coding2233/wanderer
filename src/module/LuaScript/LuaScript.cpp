@@ -5,16 +5,52 @@ namespace wanderer
 	int LuaLog(lua_State *pL)
 	{
 		int argc = lua_gettop(pL);
-		// if (argc > 0)
-		// {
-		// 	LOG(INFO)
-		// }
-		std::string log = "[lua]";
-		for (size_t i = 1; i <= argc; i++)
+		if (argc > 0)
 		{
-			log += " " + std::string(lua_tostring(pL, i));
+			int log_type = (int)el::Level::Info;
+			int index = 1;
+			if (lua_isinteger(pL, 1))
+			{
+				log_type = lua_tointeger(pL, 1);
+				index = 2;
+			}
+			std::string log = "[lua]";
+			for (size_t i = index; i <= argc; i++)
+			{
+				log += " " + std::string(lua_tostring(pL, i));
+			}
+
+			switch ((el::Level)log_type)
+			{
+			// case el::Level::Global:
+			// 	LOG(GLOBAL) << log;
+			// 	break;
+			case el::Level::Trace:
+				LOG(TRACE) << log;
+				break;
+			case el::Level::Debug:
+				LOG(DEBUG) << log;
+				break;
+			case el::Level::Fatal:
+				LOG(FATAL) << log;
+				break;
+			case el::Level::Error:
+				LOG(ERROR) << log;
+				break;
+			case el::Level::Warning:
+				LOG(WARNING) << log;
+				break;
+			// case el::Level::Verbose:
+			// 	LOG(VERBOSE) << log;
+			// 	break;
+			case el::Level::Info:
+				LOG(INFO) << log;
+				break;
+				// case el::Level::Unknown:
+				// 	LOG(UNKNOWN) << log;
+				// 	break;
+			}
 		}
-		LOG(INFO) << log;
 		return 0;
 	}
 
@@ -74,7 +110,7 @@ namespace wanderer
 		{
 			// int argc = lua_gettop(pL);
 			// LOG(ERROR) << "[LuaPCall ERROR] " << argc << "  " << lua_tostring(pL, -1);
-			std::string log = "[LuaPCall ERROR] "+std::string(lua_tostring(pL, -1 )+"\n"+std::string(lua_tostring(pL, -2);
+			std::string log = "[LuaPCall ERROR] " + std::string(lua_tostring(pL, -1)) + "\n" + std::string(lua_tostring(pL, -2));
 			LOG(ERROR) << log;
 		}
 	}
@@ -96,6 +132,7 @@ namespace wanderer
 		lua_setglobal(global_state_, fn)*/
 		//lua_register(global_state_, "xx", fn);
 		lua_register(global_state_, "log", LuaLog);
+		lua_register(global_state_, "print", LuaLog);
 		lua_register(global_state_, "RegisterActor", RegisterActor);
 		lua_register(global_state_, "SendMail", SendMail);
 	}

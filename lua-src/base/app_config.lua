@@ -21,3 +21,20 @@ Actor_Scripts = {}
 Actor_Scripts[AppType_Login] = {"actor_login",ActorAddress_LOGIN}
 Actor_Scripts[AppType_Gateway] = {"actor_gateway",ActorAddress_GATEWAY}
 Actor_Scripts[AppType_DataBase] = {"actor_database",ActorAddress_GATEWAY}
+
+
+-- GLOBAL = 1 << 0
+-- @brief Information that can be useful to back-trace certain events - mostly useful than debug logs.
+TRACE = 1 << 1
+--- @brief Informational events most useful for developers to debug application
+DEBUG = 1 << 2
+--- @brief Severe error information that will presumably abort application
+FATAL = 1 <<3
+--- @brief Information representing errors in application but application will keep running
+ERROR  = 1<<4
+--- @brief Useful when application has potentially harmful situations
+WARNING = 1<<5
+-- VERBOSE = 1<< 6
+--- @brief Mainly useful to represent current progress of application
+INFO = 1<<7
+-- UNKNOWN = 1010

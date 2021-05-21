@@ -35,6 +35,5 @@ function OnMailHandle(to_address,from_address,json_message)
 end
 
 
-
 print("main.lua----hello world")
-log("xxx","safsdfs","111111","222222222",50)
+log(INFO,"xxx","safsdfs","111111","222222222",50)
