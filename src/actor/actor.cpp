@@ -14,12 +14,12 @@ namespace wanderer
 
     void Actor::ToMailBox(Mail mail)
     {
-        LOG(INFO) << "Actor::ToMailBox(Mail mail)  [mtx_.lock()]";
+        // LOG(INFO) << "Actor::ToMailBox(Mail mail)  [mtx_.lock()]";
         mtx_.lock();
         mail_box_.push(mail);
-        LOG(INFO) << "Actor::ToMailBox(Mail mail) mail_box_.size(): " << mail_box_.size();
+        // LOG(INFO) << "Actor::ToMailBox(Mail mail) mail_box_.size(): " << mail_box_.size();
         mtx_.unlock();
-        LOG(INFO) << "Actor::ToMailBox(Mail mail)  [mtx_.unlock()]";
+        // LOG(INFO) << "Actor::ToMailBox(Mail mail)  [mtx_.unlock()]";
     }
 
     void Actor::OnMailHandle(Mail mail)
@@ -59,15 +59,15 @@ namespace wanderer
             return;
 
         processing_ = true;
-        LOG(DEBUG) << "Actor::Handle() mail_box_.size(): " << mail_box_.size();
+        // LOG(DEBUG) << "Actor::Handle() mail_box_.size(): " << mail_box_.size();
         if (mail_box_.size() > 0)
         {
-            LOG(INFO) << "Actor::Handle()  [mtx_.lock()]";
+            // LOG(INFO) << "Actor::Handle()  [mtx_.lock()]";
             mtx_.lock();
             Mail mail = mail_box_.front();
             mail_box_.pop();
             mtx_.unlock();
-            LOG(INFO) << "Actor::Handle()  [mtx_.unlock()]";
+            // LOG(INFO) << "Actor::Handle()  [mtx_.unlock()]";
             //处理消息
             OnMailHandle(mail);
         }

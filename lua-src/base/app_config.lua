@@ -1,3 +1,4 @@
+
 -- App type
 AppType_None = 0
 AppType_Login = 1 << 0
@@ -19,8 +20,8 @@ ActorAddress_CENTER_START_INDEX = -100
 
 Actor_Scripts = {}
 Actor_Scripts[AppType_Login] = {"actor_login",ActorAddress_LOGIN}
+Actor_Scripts[AppType_DataBase] = {"actor_database",ActorAddress_DATABASE}
 Actor_Scripts[AppType_Gateway] = {"actor_gateway",ActorAddress_GATEWAY}
-Actor_Scripts[AppType_DataBase] = {"actor_database",ActorAddress_GATEWAY}
 
 
 -- GLOBAL = 1 << 0

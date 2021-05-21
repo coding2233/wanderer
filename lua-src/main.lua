@@ -1,4 +1,7 @@
+require "base/w"
 require "base/app_config"
+Json = require "json"
+JsonRpc = require "json_rpc"
 
 local actors_={}
 
@@ -25,15 +28,13 @@ end
 
 function OnMailHandle(to_address,from_address,json_message)
     local method_name="OnMailHandle"
-    print("lua---",method_name,json_message)
     local actor  = actors_[to_address]
     if actor ~= nil then
         if actor[method_name]~=nil then
-            actor[method_name](to_address,from_address,json_message)
+            actor[method_name](actor,to_address,from_address,JsonRpc:Parse(json_message))
         end
     end
 end
 
 
 print("main.lua----hello world")
-log(INFO,"xxx","safsdfs","111111","222222222",50)

@@ -56,16 +56,19 @@ namespace wanderer
 
 	int RegisterActor(lua_State *pL)
 	{
-		int address = lua_tonumber(pL, -1);
+		int address = lua_tonumber(pL, 1);
+		LOG(DEBUG) << "[Lua call RegisterActor] address:" << address;
 		System::GetModule<ActorModule>()->Register(new ActorLua, address);
 		return 0;
 	}
 
 	int SendMail(lua_State *pL)
 	{
-		int to_address = lua_tonumber(pL, -1);
-		int from_address = lua_tonumber(pL, -2);
-		std::string json_message = lua_tostring(pL, -3);
+		int to_address = lua_tonumber(pL, 1);
+		int from_address = lua_tonumber(pL, 2);
+		std::string json_message = lua_tostring(pL, 3);
+		LOG(DEBUG) << "[Lua call SendMail]"
+				   << " to_address:" << to_address << " from_address:" << from_address << " message:" << json_message;
 		jsonrpcpp::entity_ptr entity = jsonrpcpp::Parser::do_parse(json_message);
 		System::GetModule<ActorModule>()->SendMail(to_address, from_address, entity);
 		return 0;
