@@ -249,6 +249,8 @@ jobs:
         ls -alh
         tar -zxvf sdk-include.tar.gz
         rm sdk-include.tar.gz
+        mv build/include ./
+        rm -rf build
         ls -alh
         ls -alh include/
     - uses: seanmiddleditch/gha-publish-to-git@master
