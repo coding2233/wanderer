@@ -75,6 +75,21 @@ if(BUILD_SDK)
                             "network/message.*"
                             "network/circle_buffer.*"
     )
+    file(GLOB_RECURSE sdk_include "sdk/*.h"
+                                "utility/*.h"
+                                "base/app_config.h"
+                                "base/easylogging*.h"
+                                "network/message.h"
+                                "network/circle_buffer.h"
+    )
+    set(sdk_include_path "${CMAKE_BINARY_DIR}/include")
+    message("sdk_include_path: ${sdk_include_path}")
+    file(MAKE_DIRECTORY "${sdk_include_path}")
+    file(COPY ${sdk_include} DESTINATION "${sdk_include_path}")
+    # foreach(item in ${sdk_include})
+    #     file(COPY ${item} DESTINATION "${sdk_include_path}")
+    #     message("${item}")
+    # endforeach()
     add_library(${SDK_NAME} SHARED ${sdk_src} )
   
     target_link_libraries(${SDK_NAME} ${link_libraries} module)  
