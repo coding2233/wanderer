@@ -31,8 +31,8 @@ jobs:
         export SRC=./
         export BUILD=build
         cmake --no-warn-unused-cli -DBUILD_EXEC=OFF -DBUILD_SDK=ON -DWEBSERVER=OFF -DLUASCRIPT=OFF -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${SRC}/cmake/linux_clang.cmake -S ${SRC} -B ${SRC}/${BUILD} && cmake --build ${SRC}/${BUILD} -j 10
-        ls -alh ${BUILD}/src
         tar -zcvf ${BUILD}/sdk-include.tar.gz ${BUILD}/include
+        ls -alh ${BUILD}/src
     - name: Expose as artifact
       uses: actions/upload-artifact@v2
       with:
@@ -42,7 +42,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: wanderer-sdk-include
-        path: ${BUILD}/sdk-include.tar.gz
+        path: build/sdk-include.tar.gz
 
   build-sdk-windows-x64:
     runs-on: windows-latest
