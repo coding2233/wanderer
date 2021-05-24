@@ -29,7 +29,7 @@ function this:OnMailHandle(to_address,from_address,message)
                 local id = this:RandomId()
                 local request = JsonRpc:ParseRequest(id,"GetToken",{username=message.result.username})
                 token_response_[id]={json.id,message.result.username}
-                W.SendMail(ActorAddress_GATEWAY,)
+                -- W.SendMail(ActorAddress_GATEWAY,)
             end
             -- if login_response[1]==message.result.username then
             --     -- W.SendMail(login_response[2],to_address,Json.encode(json))
