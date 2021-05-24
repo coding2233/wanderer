@@ -70,6 +70,8 @@ if(BUILD_SDK)
     set(SDK_NAME "${PROJECT_NAME}-sdk")
     file(GLOB_RECURSE sdk_src "sdk/*.*"
                             "utility/*.*"
+                            "actor/actor.*"
+                            "base/system.*"
                             "base/app_config.*"
                             "base/easylogging*.*"
                             "network/message.*"
@@ -89,12 +91,16 @@ if(BUILD_SDK)
     file(COPY ${utility_include_files} DESTINATION "${sdk_include_path}/utility")
     # Sdk-base header files
     file(MAKE_DIRECTORY "${sdk_include_path}/base")
-    file(GLOB_RECURSE base_include_files "base/app_config.h" "base/easylogging*.h")
+    file(GLOB_RECURSE base_include_files "base/system.h" "base/app_config.h" "base/easylogging*.h")
     file(COPY ${base_include_files} DESTINATION "${sdk_include_path}/base")
     # Sdk-network header files
     file(MAKE_DIRECTORY "${sdk_include_path}/network")
     file(GLOB_RECURSE network_include_files "network/message.h" "network/circle_buffer.h")
     file(COPY ${network_include_files} DESTINATION "${sdk_include_path}/network")
+    # Sdk-actor header files
+    file(MAKE_DIRECTORY "${sdk_include_path}/actor")
+    file(GLOB_RECURSE actor_include_files "actor/actor.h")
+    file(COPY ${actor_include_files} DESTINATION "${sdk_include_path}/actor")
    
     # foreach(item in ${sdk_include})
     #     file(COPY ${item} DESTINATION "${sdk_include_path}")
