@@ -1,4 +1,6 @@
+
 set(CMAKE_CXX_STANDARD 17)
+
 # set(CMAKE_SYSTEM_NAME linux)
 
 # set(OPENSSL_USE_STATIC_LIBS TRUE)
@@ -77,30 +79,8 @@ if(BUILD_SDK)
                             "network/message.*"
                             "network/circle_buffer.*"
     )
-    #Organize the SDK header files
-    set(sdk_include_path "${CMAKE_BINARY_DIR}/include")
-    message("sdk_include_path: ${sdk_include_path}")
-    file(MAKE_DIRECTORY "${sdk_include_path}")
-    # Sdk-sdk header files
-    file(MAKE_DIRECTORY "${sdk_include_path}/sdk")
-    file(GLOB_RECURSE sdk_include_files "sdk/*.h")
-    file(COPY ${sdk_include_files} DESTINATION "${sdk_include_path}/sdk")
-    # Sdk-utility header files
-    file(MAKE_DIRECTORY "${sdk_include_path}/utility")
-    file(GLOB_RECURSE utility_include_files "utility/*.h")
-    file(COPY ${utility_include_files} DESTINATION "${sdk_include_path}/utility")
-    # Sdk-base header files
-    file(MAKE_DIRECTORY "${sdk_include_path}/base")
-    file(GLOB_RECURSE base_include_files "base/system.h" "base/app_config.h" "base/easylogging*.h")
-    file(COPY ${base_include_files} DESTINATION "${sdk_include_path}/base")
-    # Sdk-network header files
-    file(MAKE_DIRECTORY "${sdk_include_path}/network")
-    file(GLOB_RECURSE network_include_files "network/message.h" "network/circle_buffer.h")
-    file(COPY ${network_include_files} DESTINATION "${sdk_include_path}/network")
-    # Sdk-actor header files
-    file(MAKE_DIRECTORY "${sdk_include_path}/actor")
-    file(GLOB_RECURSE actor_include_files "actor/actor.h")
-    file(COPY ${actor_include_files} DESTINATION "${sdk_include_path}/actor")
+
+    include(../cmake/arrange.sdk.include.cmake)
    
     # foreach(item in ${sdk_include})
     #     file(COPY ${item} DESTINATION "${sdk_include_path}")
