@@ -37,6 +37,7 @@ message("${SRCDIR} -> ${DESTDIR} ${CMAKE_CURRENT_SOURCE_DIR}")
 file(COPY "./libraries/openssl-cmake/include/openssl" DESTINATION "${sdk_include_path}/")
 file(COPY "./libraries/openssl-cmake/include/crypto" DESTINATION "${sdk_include_path}/")
 file(COPY "./libraries/openssl-cmake/include/internal" DESTINATION "${sdk_include_path}/")
+file(COPY "${CMAKE_BINARY_DIR}/src/libraries/openssl-cmake/include/openssl/opensslconf.h" DESTINATION "${sdk_include_path}/openssl/")
 
  # Library-zlib header files
  file(MAKE_DIRECTORY "${sdk_include_path}/zlib")
