@@ -60,7 +60,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: wanderer-sdk-windows-x64
-        path: build/src/Release/wanderer-sdk.dll
+        path: build/src/Release/
   
   build-sdk-windows-x86:
     runs-on: windows-latest
@@ -78,7 +78,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: wanderer-sdk-windows-x86
-        path: build/src/Release/wanderer-sdk.dll
+        path: build/src/Release/
   
   build-sdk-android-armv7:
     runs-on: ubuntu-latest
