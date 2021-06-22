@@ -1,4 +1,6 @@
 #include "export.h"
+#include "network.h"
+
 #include <functional>
 #include <iostream>
 

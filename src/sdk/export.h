@@ -1,7 +1,6 @@
 #ifndef __EXPORT_H__
 #define __EXPORT_H__
 
-#include "network.h"
 #include <iostream>
 #include <string>
 
