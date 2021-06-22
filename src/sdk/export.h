@@ -1,5 +1,5 @@
-#ifndef __EXPORT_H__
-#define __EXPORT_H__
+#ifndef __WANDERER_EXPORT_H__
+#define __WANDERER_EXPORT_H__
 
 #include <iostream>
 #include <string>
@@ -21,26 +21,22 @@
 #define WANDERER_EXPORT extern "C"
 #endif
 
-typedef void (*RECEIVE_FUNC)(int, const char *, int);
-typedef void (*CONNECT_CALLBACK_CFUNC)(bool, const char *);
-typedef void (*LOGIN_CALLBACK_CFUNC)(bool, const char *);
+// typedef void (*WANDERER_RECEIVE)(int, const char *, int);
+typedef void (*WANDERER_CONNECT_CALLBACK)(bool, const char *);
+typedef void (*WANDERER_LOGIN_CALLBACK)(bool, const char *);
 // typedef void (*LOGIN_CALLBACK)(bool, const char *);
 
-WANDERER_EXPORT void Test(const char *data);
+WANDERER_EXPORT void WandererTest(const char *data);
 
-WANDERER_EXPORT void Connect(const char *server_ip, int server_port, CONNECT_CALLBACK_CFUNC connect_callback);
+WANDERER_EXPORT void WandererConnect(const char *server_ip, int server_port, WANDERER_CONNECT_CALLBACK connect_callback);
 
-void ConnectCallback(bool result, std::string messsage);
+WANDERER_EXPORT void WandererDisConnect();
 
-WANDERER_EXPORT void DisConnect();
+WANDERER_EXPORT void WandererUpdate();
 
-WANDERER_EXPORT void Update();
+WANDERER_EXPORT void SendToWanderer(int fd, const char *data, size_t size);
 
-WANDERER_EXPORT void Send(int fd, const char *data, size_t size);
-
-WANDERER_EXPORT void Login(const char *user_name, const char *password, LOGIN_CALLBACK_CFUNC login_callback);
-
-void LoginCallback(bool result, std::string messsage);
+WANDERER_EXPORT void WandererLogin(const char *user_name, const char *password, WANDERER_LOGIN_CALLBACK login_callback);
 
 // #ifdef __cplusplus
 // }
