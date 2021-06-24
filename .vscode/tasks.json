@@ -13,7 +13,7 @@
             ]
         },
         {
-            "label": "build-server-unix",
+            "label": "cmake-server-exec",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -23,7 +23,7 @@
                 "-DWEBSERVER=OFF",
                 "-DLUASCRIPT=ON",
                 "-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true",
-                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_BUILD_TYPE=Debug",
                 // "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/cmake/linux_clang.cmake",
                 "-S",
                 "${workspaceFolder}",
@@ -42,7 +42,7 @@
                 "10"
             ],
             "dependsOn": [
-                "build-server-unix"
+                "cmake-server-exec"
             ]
         },
         {
@@ -56,7 +56,7 @@
                 "-DWEBSERVER=OFF",
                 "-DLUASCRIPT=OFF",
                 "-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true",
-                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_BUILD_TYPE=Debug",
                 // "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/cmake/linux_clang.cmake",
                 "-S",
                 "${workspaceFolder}",

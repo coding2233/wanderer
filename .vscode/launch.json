@@ -7,7 +7,7 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug-All",
+            "name": "Debug-Server",
             "program": "${workspaceFolder}/build/wanderer",
             "args": [
                 "-c",

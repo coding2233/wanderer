@@ -19,6 +19,7 @@ __        __              _
 * ~~[clangd](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd)~~
 * 装`vscode`插件`C++ Intellisense`,并安装`sudo apt install global`,并设置`vscode`配置文件`"C_Cpp.intelliSenseEngine": "Default"
 }`
+* [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb)
 
 ### 内存泄漏检测工具
 * [https://www.valgrind.org/downloads/current.html#current](https://www.valgrind.org/downloads/current.html#current)
