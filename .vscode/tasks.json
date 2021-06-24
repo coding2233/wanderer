@@ -29,11 +29,11 @@
                 "${workspaceFolder}",
                 "-B",
                 "${workspaceFolder}/build"
-            ],
-            // "isBackground": true
+            ]
         },
         {
             "label": "build-server-exec",
+            "type": "shell",
             "command": "cmake",
             "args": [
                 "--build",
@@ -44,6 +44,39 @@
             "dependsOn": [
                 "build-server-unix"
             ]
-        }
+        },
+        {
+            "label": "cmake-linux-sdk",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-DBUILD_EXEC=OFF",
+                "-DBUILD_SDK=ON",
+                "-DEXPLAINC=OFF",
+                "-DWEBSERVER=OFF",
+                "-DLUASCRIPT=OFF",
+                "-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true",
+                "-DCMAKE_BUILD_TYPE=Release",
+                // "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/cmake/linux_clang.cmake",
+                "-S",
+                "${workspaceFolder}",
+                "-B",
+                "${workspaceFolder}/build"
+            ]
+        },
+        {
+            "label": "build-linux-sdk",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "${workspaceFolder}/build",
+                "-j",
+                "10"
+            ],
+            "dependsOn": [
+                "cmake-linux-sdk"
+            ]
+        },
     ]
 }

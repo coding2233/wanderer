@@ -8,13 +8,13 @@
             "type": "lldb",
             "request": "launch",
             "name": "Debug-All",
-            "program": "${workspaceFolder}/out/run/wanderer",
+            "program": "${workspaceFolder}/build/wanderer",
             "args": [
                 "-c",
-                "${workspaceFolder}/out/run/common/conf/all.yml"
+                "${workspaceFolder}/build-run/run/common/conf/all.yml"
             ],
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "auto-build"
+            "preLaunchTask": "build-server-exec"
         }
     ]
 }

@@ -40,6 +40,7 @@ namespace wanderer
             int fd = socket_->Connect(server_ip, server_port);
             login_fd_ = fd;
             login_connected_ = true;
+            return fd;
         }
         catch(const std::exception& e)
         {
@@ -47,7 +48,7 @@ namespace wanderer
             connect_callback(false,e.what());
             std::cout<< e.what() << std::endl;
         }
-        return fd;
+        return -1;
     }
 
     int Network::ConnectGateway(const char *server_ip, int server_port)
