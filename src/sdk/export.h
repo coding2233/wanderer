@@ -12,13 +12,13 @@
 #if WIN32
 #include "windows.h"
 // _declspec(dllexport) _cdecl
-#if BUILD_SDK
-#define WANDERER_EXPORT extern "C" _declspec(dllexport)
-#else
-#define WANDERER_EXPORT extern "C" _declspec(dllimport)
-#endif
+    #if BUILD_SDK
+        #define WANDERER_EXPORT extern "C" _declspec(dllexport)
+    #else
+        #define WANDERER_EXPORT extern "C" _declspec(dllimport)
+    #endif
 #elif __unix__ || __APPLE__
-#define WANDERER_EXPORT extern "C"
+    #define WANDERER_EXPORT extern "C"
 #endif
 
 // typedef void (*WANDERER_RECEIVE)(int, const char *, int);
@@ -34,7 +34,7 @@ WANDERER_EXPORT void WandererDisConnect();
 
 WANDERER_EXPORT void WandererUpdate();
 
-WANDERER_EXPORT void SendToWanderer(int fd, const char *data, size_t size);
+WANDERER_EXPORT void SendToWanderer(const char *data, size_t size);
 
 WANDERER_EXPORT void WandererLogin(const char *user_name, const char *password, WANDERER_LOGIN_CALLBACK login_callback);
 

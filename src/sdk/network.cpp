@@ -54,10 +54,20 @@ namespace wanderer
     int Network::ConnectGateway(const char *server_ip, int server_port)
     {
         std::cout << "Network ConnectGateway !ip:" << server_ip << " port:" << server_port << std::endl;
-        int fd = socket_->Connect(server_ip, server_port);
-        gateway_fd_ = fd;
-        gateway_connected_ = true;
-        return fd;
+        try
+        {
+            int fd = socket_->Connect(server_ip, server_port);
+            gateway_fd_ = fd;
+            gateway_connected_ = true;
+            return fd;
+        }
+        catch(const std::exception& e)
+        {
+            // std::cerr << e.what() << '\n';
+            login_callback_(false,e.what());
+            std::cout<< e.what() << std::endl;
+        }
+        return -1;
     }
 
     void Network::DisConnect()
