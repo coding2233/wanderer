@@ -35,9 +35,18 @@ namespace wanderer
         connect_callback_ = connect_callback;
         std::cout << "Network connect !ip:" << server_ip << " port:" << server_port << std::endl;
 
-        int fd = socket_->Connect(server_ip, server_port);
-        login_fd_ = fd;
-        login_connected_ = true;
+        try
+        {
+            int fd = socket_->Connect(server_ip, server_port);
+            login_fd_ = fd;
+            login_connected_ = true;
+        }
+        catch(const std::exception& e)
+        {
+            // std::cerr << e.what() << '\n';
+            connect_callback(false,e.what());
+            std::cout<< e.what() << std::endl;
+        }
         return fd;
     }
 

@@ -23,6 +23,7 @@ include_directories(libraries/openssl-cmake/include)
 include_directories(libraries/zlib)
 include_directories(libraries/zlib/*)
 include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_BINARY_DIR}/src/libraries/openssl-cmake/include)
 
 if(WIN32)
 # include_directories("/usr/x86_64-w64-mingw32/include")

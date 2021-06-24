@@ -11,6 +11,39 @@
                 "-c",
                 "${workspaceFolder}/auto.sh"
             ]
+        },
+        {
+            "label": "build-server-unix",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-DBUILD_EXEC=ON",
+                "-DBUILD_SDK=OFF",
+                "-DEXPLAINC=OFF",
+                "-DWEBSERVER=OFF",
+                "-DLUASCRIPT=ON",
+                "-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true",
+                "-DCMAKE_BUILD_TYPE=Release",
+                // "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/cmake/linux_clang.cmake",
+                "-S",
+                "${workspaceFolder}",
+                "-B",
+                "${workspaceFolder}/build"
+            ],
+            // "isBackground": true
+        },
+        {
+            "label": "build-server-exec",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "${workspaceFolder}/build",
+                "-j",
+                "10"
+            ],
+            "dependsOn": [
+                "build-server-unix"
+            ]
         }
     ]
 }
