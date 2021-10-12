@@ -6,6 +6,8 @@
 add_subdirectory(yaml-cpp)
 add_subdirectory(openssl-cmake)
 add_subdirectory(zlib)
+add_subdirectory(libevent-2.1.12-stable)
+
 # yaml include
 # set(YAML_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include")
 # 设置第三方的头文件

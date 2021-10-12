@@ -64,7 +64,7 @@ set(link_libraries ${openssl_libs} zlib yaml-cpp)
 
 if(BUILD_EXEC)
     add_library(core STATIC ${base_src} ${src})
-    target_link_libraries(core ${link_libraries} module)
+    target_link_libraries(core ${link_libraries} module event_core_shared event_extra_shared)
 endif(BUILD_EXEC)
 
 option(BUILD_SDK "The SDK is released simultaneously by default." ON)
